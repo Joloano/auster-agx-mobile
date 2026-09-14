@@ -17,14 +17,6 @@ coverage/
 .env.*
 !.env.example
 
-# Platform generated later by `flutter create .`
-android/
-ios/
-linux/
-macos/
-web/
-windows/
-
 # Secrets and local databases
 *.sqlite
 *.sqlite3
