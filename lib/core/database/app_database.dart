@@ -108,7 +108,9 @@ class AppDatabase {
   }
 
   Future<DashboardOverview?> readDashboardOverview() async {
-    final result = _db.select('SELECT payload FROM dashboard_overview WHERE id = 1');
+    final result = _db.select(
+      'SELECT payload FROM dashboard_overview WHERE id = 1',
+    );
     if (result.isEmpty) return null;
     return DashboardOverview.fromJson(_decode(result.first['payload']));
   }
@@ -164,14 +166,12 @@ class AppDatabase {
   }
 
   Future<List<SyncQueueItem>> readPendingSyncOperations() async {
-    final result = _db.select(
-      '''
+    final result = _db.select('''
       SELECT id, operation_type, entity, entity_id, payload, created_at, attempts, status
       FROM sync_queue
       WHERE status = 'pending'
       ORDER BY created_at ASC
-      ''',
-    );
+      ''');
     return result.map(SyncQueueItem.fromRow).toList();
   }
 
@@ -187,10 +187,9 @@ class AppDatabase {
   }
 
   Future<void> markSyncFailed(int id) async {
-    _db.execute(
-      'UPDATE sync_queue SET attempts = attempts + 1 WHERE id = ?',
-      [id],
-    );
+    _db.execute('UPDATE sync_queue SET attempts = attempts + 1 WHERE id = ?', [
+      id,
+    ]);
   }
 
   Future<void> saveLocationCapture(LocationCapture capture) async {

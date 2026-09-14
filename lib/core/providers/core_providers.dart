@@ -24,6 +24,10 @@ final networkStatusProvider = Provider<NetworkStatus>((ref) {
   return NetworkStatus(Connectivity());
 });
 
+final onlineStatusProvider = StreamProvider<bool>((ref) {
+  return ref.watch(networkStatusProvider).onlineChanges;
+});
+
 final apiClientProvider = Provider<ApiClient>((ref) {
   return ApiClient(
     config: ref.watch(appConfigProvider),

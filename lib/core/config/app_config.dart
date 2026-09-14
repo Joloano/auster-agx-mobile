@@ -1,8 +1,5 @@
 class AppConfig {
-  const AppConfig({
-    required this.apiBaseUrl,
-    required this.apiTimeout,
-  });
+  const AppConfig({required this.apiBaseUrl, required this.apiTimeout});
 
   factory AppConfig.fromEnvironment() {
     const apiBaseUrl = String.fromEnvironment(
