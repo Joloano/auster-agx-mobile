@@ -9,16 +9,16 @@ import 'demandas_api.dart';
 
 class DemandaRepository {
   DemandaRepository({
-    required DemandasApi api,
+    required DemandasRemoteDataSource api,
     required AppDatabase database,
-    required NetworkStatus networkStatus,
+    required ConnectivityStatus networkStatus,
   }) : _api = api,
        _database = database,
        _networkStatus = networkStatus;
 
-  final DemandasApi _api;
+  final DemandasRemoteDataSource _api;
   final AppDatabase _database;
-  final NetworkStatus _networkStatus;
+  final ConnectivityStatus _networkStatus;
 
   Future<DemandaDetail?> loadDetail(String id) async {
     final cached = await _database.readDemandaDetail(id);

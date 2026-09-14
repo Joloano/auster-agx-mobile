@@ -4,12 +4,14 @@ import '../domain/auth_user.dart';
 import 'auth_api.dart';
 
 class AuthRepository {
-  AuthRepository({required AuthApi api, required TokenStorage tokenStorage})
-    : _api = api,
-      _tokenStorage = tokenStorage;
+  AuthRepository({
+    required AuthRemoteDataSource api,
+    required TokenStore tokenStorage,
+  }) : _api = api,
+       _tokenStorage = tokenStorage;
 
-  final AuthApi _api;
-  final TokenStorage _tokenStorage;
+  final AuthRemoteDataSource _api;
+  final TokenStore _tokenStorage;
 
   Future<AuthUser?> restoreSession() async {
     final tokens = await _tokenStorage.read();

@@ -11,15 +11,15 @@ import '../network/network_status.dart';
 class SyncService {
   SyncService({
     required AppDatabase database,
-    required DemandasApi demandasApi,
-    required NetworkStatus networkStatus,
+    required DemandasRemoteDataSource demandasApi,
+    required ConnectivityStatus networkStatus,
   }) : _database = database,
        _demandasApi = demandasApi,
        _networkStatus = networkStatus;
 
   final AppDatabase _database;
-  final DemandasApi _demandasApi;
-  final NetworkStatus _networkStatus;
+  final DemandasRemoteDataSource _demandasApi;
+  final ConnectivityStatus _networkStatus;
   StreamSubscription<bool>? _subscription;
   bool _running = false;
 

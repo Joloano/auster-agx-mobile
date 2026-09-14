@@ -2,7 +2,15 @@ import '../../../core/api/api_client.dart';
 import '../../dashboard/domain/dashboard_models.dart';
 import '../domain/demanda_models.dart';
 
-class DemandasApi {
+abstract class DemandasRemoteDataSource {
+  Future<DemandaDetail> getDetail(String id);
+
+  Future<Demanda> update(String id, DemandaUpdateInput input);
+
+  Future<StatusFluxo> getStatusFluxo();
+}
+
+class DemandasApi implements DemandasRemoteDataSource {
   DemandasApi(this._client);
 
   final ApiClient _client;

@@ -2,7 +2,19 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'auth_tokens.dart';
 
-class TokenStorage {
+abstract class TokenStore {
+  Future<AuthTokens?> read();
+
+  Future<String?> readAccessToken();
+
+  Future<String?> readRefreshToken();
+
+  Future<void> save(AuthTokens tokens);
+
+  Future<void> clear();
+}
+
+class TokenStorage implements TokenStore {
   TokenStorage(this._storage);
 
   static const _accessTokenKey = 'auster_agx_access_token';

@@ -7,14 +7,14 @@ class DashboardRepository {
   DashboardRepository({
     required DashboardApi api,
     required AppDatabase database,
-    required NetworkStatus networkStatus,
+    required ConnectivityStatus networkStatus,
   }) : _api = api,
        _database = database,
        _networkStatus = networkStatus;
 
   final DashboardApi _api;
   final AppDatabase _database;
-  final NetworkStatus _networkStatus;
+  final ConnectivityStatus _networkStatus;
 
   Future<DashboardOverview?> loadOverview() async {
     final cached = await _database.readDashboardOverview();

@@ -1,6 +1,12 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-class NetworkStatus {
+abstract class ConnectivityStatus {
+  Stream<bool> get onlineChanges;
+
+  Future<bool> isOnline();
+}
+
+class NetworkStatus implements ConnectivityStatus {
   NetworkStatus(this._connectivity);
 
   final Connectivity _connectivity;

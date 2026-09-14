@@ -3,7 +3,17 @@ import '../../../core/auth/auth_tokens.dart';
 import '../domain/auth_session.dart';
 import '../domain/auth_user.dart';
 
-class AuthApi {
+abstract class AuthRemoteDataSource {
+  Future<AuthSession> login({required String email, required String senha});
+
+  Future<AuthSession> refresh(String refreshToken);
+
+  Future<void> logout(String refreshToken);
+
+  Future<AuthUser> me();
+}
+
+class AuthApi implements AuthRemoteDataSource {
   AuthApi(this._client);
 
   final ApiClient _client;
