@@ -73,20 +73,26 @@ GPS no detalhe da demanda. Como nao foi encontrado endpoint especifico para grav
 
 ## Como executar
 
-O bootstrap do Flutter CLI travou nesta maquina durante a preparacao do SDK portatil. Quando o comando `flutter` estiver funcionando:
+Este workspace usa Flutter e Android SDK portateis em `C:\auster-mobile-tools`, para nao depender de instalacao global nem tocar no sistema oficial:
 
 ```powershell
 cd "C:\Users\Joloano\OneDrive\Área de Trabalho\AusterMobileFaculdade\auster_agx_mobile"
 
-flutter create .
-flutter pub get
-flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8080
+C:\auster-mobile-tools\flutter\bin\flutter.bat pub get
+C:\auster-mobile-tools\flutter\bin\flutter.bat run --dart-define=API_BASE_URL=http://10.0.2.2:8080
+```
+
+Para evitar falhas do analysis server com o caminho acentuado `Área de Trabalho`, tambem existe um junction ASCII:
+
+```powershell
+cd C:\auster-mobile-work\auster_agx_mobile
 ```
 
 ## Testes
 
 ```powershell
-flutter test
+C:\auster-mobile-tools\flutter\bin\flutter.bat analyze
+C:\auster-mobile-tools\flutter\bin\flutter.bat test
 ```
 
 ## Demonstracao
@@ -109,6 +115,7 @@ flutter test
 - GPS nao sincroniza com backend porque nao foi encontrado endpoint real para coordenadas de demanda.
 - Resolucao distribuida de conflito esta fora do MVP.
 - Issues foram criadas como arquivos locais porque `gh` nao esta autenticado nesta maquina.
+- Web/Windows desktop nao sao alvos suportados neste MVP; o app usa SQLite via FFI para o armazenamento offline mobile.
 
 ## Possiveis melhorias
 
