@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -9,8 +10,14 @@ import '../features/demandas/presentation/demandas_screen.dart';
 import 'shell/main_shell.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
+  final routerRefresh = _RouterRefreshNotifier();
+  ref
+    ..listen(authControllerProvider, (_, __) => routerRefresh.notify())
+    ..onDispose(routerRefresh.dispose);
+
   return GoRouter(
     initialLocation: '/dashboard',
+    refreshListenable: routerRefresh,
     redirect: (context, state) {
       final auth = ref.read(authControllerProvider);
       final isLogin = state.matchedLocation == '/login';
@@ -46,3 +53,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+class _RouterRefreshNotifier extends ChangeNotifier {
+  void notify() => notifyListeners();
+}

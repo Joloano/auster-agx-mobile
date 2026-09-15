@@ -1,5 +1,4 @@
 import '../../../core/api/api_client.dart';
-import '../../dashboard/domain/dashboard_models.dart';
 import '../domain/demanda_models.dart';
 
 abstract class DemandasRemoteDataSource {
@@ -15,6 +14,7 @@ class DemandasApi implements DemandasRemoteDataSource {
 
   final ApiClient _client;
 
+  @override
   Future<DemandaDetail> getDetail(String id) async {
     final response = await _client.dio.get<Map<String, dynamic>>(
       '/demandas/$id/detalhe',
@@ -22,6 +22,7 @@ class DemandasApi implements DemandasRemoteDataSource {
     return DemandaDetail.fromJson(response.data!);
   }
 
+  @override
   Future<Demanda> update(String id, DemandaUpdateInput input) async {
     final response = await _client.dio.patch<Map<String, dynamic>>(
       '/demandas/$id',
@@ -30,6 +31,7 @@ class DemandasApi implements DemandasRemoteDataSource {
     return Demanda.fromJson(response.data!);
   }
 
+  @override
   Future<StatusFluxo> getStatusFluxo() async {
     final response = await _client.dio.get<Map<String, dynamic>>(
       '/demandas/status-fluxo',

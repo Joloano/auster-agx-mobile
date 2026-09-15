@@ -11,7 +11,7 @@ class AppConfig {
       defaultValue: 10000,
     );
 
-    return AppConfig(
+    return const AppConfig(
       apiBaseUrl: apiBaseUrl,
       apiTimeout: Duration(milliseconds: timeoutMs),
     );

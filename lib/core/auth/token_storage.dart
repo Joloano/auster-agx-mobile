@@ -22,6 +22,7 @@ class TokenStorage implements TokenStore {
 
   final FlutterSecureStorage _storage;
 
+  @override
   Future<AuthTokens?> read() async {
     final accessToken = await _storage.read(key: _accessTokenKey);
     final refreshToken = await _storage.read(key: _refreshTokenKey);
@@ -29,19 +30,23 @@ class TokenStorage implements TokenStore {
     return AuthTokens(accessToken: accessToken, refreshToken: refreshToken);
   }
 
+  @override
   Future<String?> readAccessToken() {
     return _storage.read(key: _accessTokenKey);
   }
 
+  @override
   Future<String?> readRefreshToken() {
     return _storage.read(key: _refreshTokenKey);
   }
 
+  @override
   Future<void> save(AuthTokens tokens) async {
     await _storage.write(key: _accessTokenKey, value: tokens.accessToken);
     await _storage.write(key: _refreshTokenKey, value: tokens.refreshToken);
   }
 
+  @override
   Future<void> clear() async {
     await _storage.delete(key: _accessTokenKey);
     await _storage.delete(key: _refreshTokenKey);

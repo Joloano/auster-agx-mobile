@@ -1,9 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../../../core/database/app_database.dart';
-import '../../../core/errors/app_exception.dart';
 import '../../../core/network/network_status.dart';
-import '../../dashboard/domain/dashboard_models.dart';
 import '../domain/demanda_models.dart';
 import 'demandas_api.dart';
 
@@ -12,9 +10,9 @@ class DemandaRepository {
     required DemandasRemoteDataSource api,
     required AppDatabase database,
     required ConnectivityStatus networkStatus,
-  }) : _api = api,
-       _database = database,
-       _networkStatus = networkStatus;
+  })  : _api = api,
+        _database = database,
+        _networkStatus = networkStatus;
 
   final DemandasRemoteDataSource _api;
   final AppDatabase _database;

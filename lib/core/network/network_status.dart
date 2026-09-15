@@ -11,10 +11,12 @@ class NetworkStatus implements ConnectivityStatus {
 
   final Connectivity _connectivity;
 
+  @override
   Stream<bool> get onlineChanges {
     return _connectivity.onConnectivityChanged.map(_hasConnection);
   }
 
+  @override
   Future<bool> isOnline() async {
     final result = await _connectivity.checkConnectivity();
     return _hasConnection(result);

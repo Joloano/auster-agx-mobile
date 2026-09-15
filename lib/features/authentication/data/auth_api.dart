@@ -18,6 +18,7 @@ class AuthApi implements AuthRemoteDataSource {
 
   final ApiClient _client;
 
+  @override
   Future<AuthSession> login({
     required String email,
     required String senha,
@@ -29,6 +30,7 @@ class AuthApi implements AuthRemoteDataSource {
     return _sessionFromJson(response.data!);
   }
 
+  @override
   Future<AuthSession> refresh(String refreshToken) async {
     final response = await _client.dio.post<Map<String, dynamic>>(
       '/auth/refresh',
@@ -37,6 +39,7 @@ class AuthApi implements AuthRemoteDataSource {
     return _sessionFromJson(response.data!);
   }
 
+  @override
   Future<void> logout(String refreshToken) async {
     await _client.dio.post<void>(
       '/auth/logout',
@@ -44,6 +47,7 @@ class AuthApi implements AuthRemoteDataSource {
     );
   }
 
+  @override
   Future<AuthUser> me() async {
     final response = await _client.dio.get<Map<String, dynamic>>('/auth/me');
     return AuthUser.fromJson(response.data!);
