@@ -37,6 +37,85 @@ lib/
 
 O shell usa `StatefulShellRoute.indexedStack`, como no app de referencia, para manter pilhas independentes entre Dashboard e Demandas. A barra global de sincronizacao fica em `widgets/sync_status_bar.dart`.
 
+## Modelo ER mobile/offline
+
+O modelo local foi mantido enxuto para proteger a integridade do sistema oficial: o app mobile nao replica todo o ERP, apenas guarda o necessario para login, dashboard, demandas, fila offline e capturas de GPS. Os objetos principais da API ficam cacheados como JSON, preservando compatibilidade com o backend existente.
+
+```mermaid
+erDiagram
+  AUTH_USER ||--|| AUTH_TOKENS : autentica
+  DASHBOARD_OVERVIEW ||--o{ DASHBOARD_ITEM : resume
+  DEMANDA ||--|| DEMANDA_DETAIL : detalha
+  DEMANDA ||--o{ SYNC_QUEUE : gera
+  DEMANDA ||--o{ LOCATION_CAPTURE : registra
+
+  AUTH_USER {
+    string userId PK
+    string nome
+    string email
+    string perfil
+    string authority
+    boolean ativo
+    boolean deveAlterarSenha
+  }
+
+  AUTH_TOKENS {
+    string accessToken
+    string refreshToken
+  }
+
+  DASHBOARD_OVERVIEW {
+    int id PK
+    json payload
+    datetime updated_at
+  }
+
+  DASHBOARD_ITEM {
+    string id PK
+    json payload
+    datetime updated_at
+  }
+
+  DEMANDA {
+    string id PK
+    string pedidoId
+    string codigoDemanda
+    string tipo
+    string status
+    string statusChave
+    string situacaoDados
+    string situacaoMapeamento
+  }
+
+  DEMANDA_DETAIL {
+    string id PK
+    json payload
+    datetime updated_at
+  }
+
+  SYNC_QUEUE {
+    int id PK
+    string operation_type
+    string entity
+    string entity_id
+    json payload
+    datetime created_at
+    int attempts
+    string status
+  }
+
+  LOCATION_CAPTURE {
+    int id PK
+    string demanda_id FK
+    float latitude
+    float longitude
+    float accuracy
+    datetime captured_at
+  }
+```
+
+No SQLite, as tabelas reais sao `dashboard_overview`, `dashboard_items`, `demanda_details`, `sync_queue` e `location_captures`. `AuthTokens` ficam no `flutter_secure_storage`; `AuthUser` e `Demanda` representam modelos da API usados pelo app e serializados nos payloads locais.
+
 ## Tecnologias
 
 - Dio: cliente HTTP e interceptors.
@@ -104,13 +183,13 @@ C:\auster-mobile-tools\flutter\bin\flutter.bat test
 
 ## Publicacao no GitHub
 
-O repositorio local esta pronto para publicacao. Depois de autenticar o GitHub CLI:
+O repositorio academico foi publicado como privado em:
 
-```powershell
-gh auth login
+```text
+https://github.com/Joloano/auster-agx-mobile
 ```
 
-Criar o repositorio remoto, fazer push e abrir as issues versionadas:
+Para repetir a publicacao em outro remoto ou recriar as issues versionadas:
 
 ```powershell
 cd C:\auster-mobile-work\auster_agx_mobile
@@ -142,7 +221,6 @@ Para publicar em um repositorio ja existente:
 
 - GPS nao sincroniza com backend porque nao foi encontrado endpoint real para coordenadas de demanda.
 - Resolucao distribuida de conflito esta fora do MVP.
-- Issues foram criadas como arquivos locais porque `gh` nao esta autenticado nesta maquina.
 - Web/Windows desktop nao sao alvos suportados neste MVP; o app usa SQLite via FFI para o armazenamento offline mobile.
 
 ## Possiveis melhorias
@@ -150,4 +228,3 @@ Para publicar em um repositorio ja existente:
 - Criar endpoint oficial para registrar check-in/localizacao em demanda.
 - Adicionar notificacoes de sincronizacao.
 - Expandir testes de widget.
-- Publicar issues no GitHub quando houver autenticacao do `gh`.
