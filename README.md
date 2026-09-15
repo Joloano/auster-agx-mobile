@@ -217,6 +217,17 @@ Para publicar em um repositorio ja existente:
 11. Abrir detalhe.
 12. Capturar GPS.
 
+## Prints das telas
+
+Prints demonstrativos do fluxo mobile com dados de exemplo:
+
+<p>
+  <img src="docs/screenshots/mobile-login.png" alt="Tela de login do AusterAgX Mobile" width="180">
+  <img src="docs/screenshots/mobile-dashboard.png" alt="Dashboard mobile com resumo e demandas recentes" width="180">
+  <img src="docs/screenshots/mobile-demandas.png" alt="Lista mobile de demandas agrupadas por status" width="180">
+  <img src="docs/screenshots/mobile-detalhe-demanda.png" alt="Detalhe mobile da demanda com status e GPS" width="180">
+</p>
+
 ## Limitacoes
 
 - GPS nao sincroniza com backend porque nao foi encontrado endpoint real para coordenadas de demanda.
