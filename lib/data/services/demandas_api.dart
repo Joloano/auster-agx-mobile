@@ -1,8 +1,11 @@
 import '../models/demanda_models.dart';
+import '../models/demanda_status_rules.dart';
 import 'api_client.dart';
 
 abstract class DemandasRemoteDataSource {
   Future<DemandaDetail> getDetail(String id);
+
+  Future<List<DemandaStatusHistorico>> getHistoricoStatus(String id);
 
   Future<Demanda> update(String id, DemandaUpdateInput input);
 
@@ -23,6 +26,17 @@ class DemandasApi implements DemandasRemoteDataSource {
   }
 
   @override
+  Future<List<DemandaStatusHistorico>> getHistoricoStatus(String id) async {
+    final response = await _client.dio.get<List<dynamic>>(
+      '/demandas/$id/historico-status',
+    );
+    return response.data!
+        .map((value) =>
+            DemandaStatusHistorico.fromJson(value as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
   Future<Demanda> update(String id, DemandaUpdateInput input) async {
     final response = await _client.dio.patch<Map<String, dynamic>>(
       '/demandas/$id',
@@ -38,37 +52,4 @@ class DemandasApi implements DemandasRemoteDataSource {
     );
     return StatusFluxo.fromJson(response.data!);
   }
-}
-
-class StatusFluxo {
-  const StatusFluxo({
-    required this.ordem,
-    required this.transicoesValidas,
-    required this.exigeDadosPreenchidos,
-    required this.exigeMapeamentoConcluido,
-  });
-
-  factory StatusFluxo.fromJson(Map<String, dynamic> json) {
-    final rawTransitions =
-        json['transicoesValidas'] as Map<String, dynamic>? ?? const {};
-    return StatusFluxo(
-      ordem: _stringList(json['ordem']),
-      transicoesValidas: rawTransitions.map(
-        (key, value) => MapEntry(key, _stringList(value)),
-      ),
-      exigeDadosPreenchidos: _stringList(json['exigeDadosPreenchidos']),
-      exigeMapeamentoConcluido: _stringList(json['exigeMapeamentoConcluido']),
-    );
-  }
-
-  final List<String> ordem;
-  final Map<String, List<String>> transicoesValidas;
-  final List<String> exigeDadosPreenchidos;
-  final List<String> exigeMapeamentoConcluido;
-}
-
-List<String> _stringList(Object? value) {
-  return (value as List<dynamic>? ?? const [])
-      .map((item) => item as String)
-      .toList();
 }

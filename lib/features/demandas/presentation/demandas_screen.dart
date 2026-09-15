@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../data/models/dashboard_models.dart';
+import '../../../data/models/demanda_status_rules.dart';
 import '../../dashboard/providers/dashboard_providers.dart';
 
 class DemandasScreen extends ConsumerWidget {
@@ -19,7 +20,7 @@ class DemandasScreen extends ConsumerWidget {
           if (items.isEmpty) {
             return const _CenteredMessage('Nenhuma demanda sincronizada.');
           }
-          final grouped = _groupByStatus(items);
+          final grouped = _groupByGrupoOperacional(items);
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -28,16 +29,32 @@ class DemandasScreen extends ConsumerWidget {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 12),
-              for (final entry in grouped.entries) ...[
-                Padding(
-                  padding: const EdgeInsets.only(top: 14, bottom: 8),
-                  child: Text(
-                    entry.key,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+              for (final grupo in [
+                ...grupoOperacionalOrder,
+                ...grouped.keys.where(
+                  (grupo) => !grupoOperacionalOrder.contains(grupo),
                 ),
-                for (final item in entry.value) _DemandaCard(item: item),
-              ],
+              ])
+                if (grouped.containsKey(grupo)) ...[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 14, bottom: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            grupoOperacionalLabel(grupo),
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                        Chip(
+                          label: Text(grouped[grupo]!.length.toString()),
+                          visualDensity: VisualDensity.compact,
+                        ),
+                      ],
+                    ),
+                  ),
+                  for (final item in grouped[grupo]!) _DemandaCard(item: item),
+                ]
             ],
           );
         },
@@ -47,12 +64,16 @@ class DemandasScreen extends ConsumerWidget {
     );
   }
 
-  Map<String, List<DashboardDemandItem>> _groupByStatus(
+  Map<String, List<DashboardDemandItem>> _groupByGrupoOperacional(
     List<DashboardDemandItem> items,
   ) {
     final result = <String, List<DashboardDemandItem>>{};
     for (final item in items) {
-      result.putIfAbsent(item.status, () => []).add(item);
+      final grupo = grupoDaDemanda(
+        status: item.status,
+        situacaoMapeamento: item.situacaoMapeamento,
+      );
+      result.putIfAbsent(grupo, () => []).add(item);
     }
     return result;
   }
@@ -65,21 +86,79 @@ class _DemandaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final indicadores = derivarIndicadores(
+      status: item.status,
+      situacaoDados: item.situacaoDados,
+      situacaoMapeamento: item.situacaoMapeamento,
+      tipo: item.tipo,
+      metodoMapeamento: item.metodoMapeamento,
+    );
     return Card(
-      child: ListTile(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
         onTap: () => context.go('/demandas/${item.id}'),
-        leading: CircleAvatar(
-          child: Text(item.tipo.replaceAll('SMART_', '').substring(0, 1)),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 18,
+                    child: Text(tipoDemandaLabel(item.tipo).substring(0, 1)),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      item.codigo,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  const Icon(Icons.chevron_right),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                [
+                  item.fazenda,
+                  item.talhoes.isEmpty ? null : item.talhoes.join(', '),
+                  item.dataPrevista,
+                ].whereType<String>().join(' · '),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 6,
+                children: [
+                  Chip(
+                    label: Text(statusDemandaLabel(item.status)),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  Chip(
+                    label: Text(situacaoDadosLabel(item.situacaoDados)),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  Chip(
+                    label: Text(
+                      situacaoMapeamentoLabel(item.situacaoMapeamento),
+                    ),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  if (indicadores != null)
+                    Chip(
+                      label: Text(
+                        indicadores.liberadoParaPrescricao
+                            ? 'Pronto para prescricao'
+                            : 'Aguardando requisitos',
+                      ),
+                      visualDensity: VisualDensity.compact,
+                    ),
+                ],
+              ),
+            ],
+          ),
         ),
-        title: Text(item.codigo),
-        subtitle: Text(
-          [
-            item.fazenda,
-            item.talhoes.isEmpty ? null : item.talhoes.join(', '),
-            item.dataPrevista,
-          ].whereType<String>().join(' · '),
-        ),
-        trailing: const Icon(Icons.chevron_right),
       ),
     );
   }

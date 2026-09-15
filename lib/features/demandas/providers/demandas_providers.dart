@@ -27,3 +27,10 @@ final demandaDetailProvider = FutureProvider.family<DemandaDetail?, String>((
   final repository = await ref.watch(demandaRepositoryProvider.future);
   return repository.loadDetail(id);
 });
+
+final demandaHistoricoStatusProvider =
+    FutureProvider.family<List<DemandaStatusHistorico>, String>(
+        (ref, id) async {
+  final repository = await ref.watch(demandaRepositoryProvider.future);
+  return repository.loadHistoricoStatus(id);
+});

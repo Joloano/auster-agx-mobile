@@ -147,22 +147,42 @@ class DemandaDetail {
     required this.cliente,
     required this.fazendas,
     required this.grupos,
+    required this.sensoriamentos,
     required this.culturas,
+    required this.demandaOrigem,
+    required this.derivadas,
   });
 
   factory DemandaDetail.fromJson(Map<String, dynamic> json) {
     return DemandaDetail(
       demanda: Demanda.fromJson(json['demanda'] as Map<String, dynamic>),
-      pedido: json['pedido'] as Map<String, dynamic>,
-      cliente: json['cliente'] as Map<String, dynamic>?,
+      pedido: PedidoResumo.fromJson(json['pedido'] as Map<String, dynamic>),
+      cliente: json['cliente'] == null
+          ? null
+          : ClienteResumo.fromJson(json['cliente'] as Map<String, dynamic>),
       fazendas: (json['fazendas'] as List<dynamic>? ?? const [])
-          .map((value) => value as Map<String, dynamic>)
+          .map((value) => FazendaResumo.fromJson(value as Map<String, dynamic>))
           .toList(),
       grupos: (json['grupos'] as List<dynamic>? ?? const [])
-          .map((value) => value as Map<String, dynamic>)
+          .map((value) => GrupoResumo.fromJson(value as Map<String, dynamic>))
+          .toList(),
+      sensoriamentos: (json['sensoriamentos'] as List<dynamic>? ?? const [])
+          .map((value) => SensoriamentoResumo.fromJson(
+                value as Map<String, dynamic>,
+              ))
           .toList(),
       culturas: (json['culturas'] as List<dynamic>? ?? const [])
-          .map((value) => value as Map<String, dynamic>)
+          .map((value) => CulturaResumo.fromJson(value as Map<String, dynamic>))
+          .toList(),
+      demandaOrigem: json['demandaOrigem'] == null
+          ? null
+          : DemandaCadeiaResumo.fromJson(
+              json['demandaOrigem'] as Map<String, dynamic>,
+            ),
+      derivadas: (json['derivadas'] as List<dynamic>? ?? const [])
+          .map((value) => DemandaDerivadaResumo.fromJson(
+                value as Map<String, dynamic>,
+              ))
           .toList(),
     );
   }
@@ -170,11 +190,14 @@ class DemandaDetail {
   Map<String, dynamic> toJson() {
     return {
       'demanda': demanda.toJson(),
-      'pedido': pedido,
-      'cliente': cliente,
-      'fazendas': fazendas,
-      'grupos': grupos,
-      'culturas': culturas,
+      'pedido': pedido.toJson(),
+      'cliente': cliente?.toJson(),
+      'fazendas': fazendas.map((value) => value.toJson()).toList(),
+      'grupos': grupos.map((value) => value.toJson()).toList(),
+      'sensoriamentos': sensoriamentos.map((value) => value.toJson()).toList(),
+      'culturas': culturas.map((value) => value.toJson()).toList(),
+      'demandaOrigem': demandaOrigem?.toJson(),
+      'derivadas': derivadas.map((value) => value.toJson()).toList(),
     };
   }
 
@@ -185,16 +208,265 @@ class DemandaDetail {
       cliente: cliente,
       fazendas: fazendas,
       grupos: grupos,
+      sensoriamentos: sensoriamentos,
       culturas: culturas,
+      demandaOrigem: demandaOrigem,
+      derivadas: derivadas,
     );
   }
 
   final Demanda demanda;
-  final Map<String, dynamic> pedido;
-  final Map<String, dynamic>? cliente;
-  final List<Map<String, dynamic>> fazendas;
-  final List<Map<String, dynamic>> grupos;
-  final List<Map<String, dynamic>> culturas;
+  final PedidoResumo pedido;
+  final ClienteResumo? cliente;
+  final List<FazendaResumo> fazendas;
+  final List<GrupoResumo> grupos;
+  final List<SensoriamentoResumo> sensoriamentos;
+  final List<CulturaResumo> culturas;
+  final DemandaCadeiaResumo? demandaOrigem;
+  final List<DemandaDerivadaResumo> derivadas;
+}
+
+class PedidoResumo {
+  const PedidoResumo({required this.id, required this.codigo, this.apelido});
+
+  factory PedidoResumo.fromJson(Map<String, dynamic> json) {
+    return PedidoResumo(
+      id: json['id'] as String,
+      codigo: json['codigo'] as String,
+      apelido: json['apelido'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'codigo': codigo,
+        'apelido': apelido,
+      };
+
+  final String id;
+  final String codigo;
+  final String? apelido;
+}
+
+class ClienteResumo {
+  const ClienteResumo({required this.id, required this.nomeFantasia});
+
+  factory ClienteResumo.fromJson(Map<String, dynamic> json) {
+    return ClienteResumo(
+      id: json['id'] as String,
+      nomeFantasia: json['nomeFantasia'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nomeFantasia': nomeFantasia,
+      };
+
+  final String id;
+  final String nomeFantasia;
+}
+
+class FazendaResumo {
+  const FazendaResumo({required this.id, required this.nome});
+
+  factory FazendaResumo.fromJson(Map<String, dynamic> json) {
+    return FazendaResumo(
+        id: json['id'] as String, nome: json['nome'] as String);
+  }
+
+  Map<String, dynamic> toJson() => {'id': id, 'nome': nome};
+
+  final String id;
+  final String nome;
+}
+
+class TalhaoResumo {
+  const TalhaoResumo({
+    required this.id,
+    required this.nome,
+    required this.fazendaId,
+    required this.fazendaNome,
+  });
+
+  factory TalhaoResumo.fromJson(Map<String, dynamic> json) {
+    return TalhaoResumo(
+      id: json['id'] as String,
+      nome: json['nome'] as String,
+      fazendaId: json['fazendaId'] as String?,
+      fazendaNome: json['fazendaNome'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nome': nome,
+        'fazendaId': fazendaId,
+        'fazendaNome': fazendaNome,
+      };
+
+  final String id;
+  final String nome;
+  final String? fazendaId;
+  final String? fazendaNome;
+}
+
+class GrupoResumo {
+  const GrupoResumo({
+    required this.id,
+    required this.nome,
+    required this.talhoes,
+  });
+
+  factory GrupoResumo.fromJson(Map<String, dynamic> json) {
+    return GrupoResumo(
+      id: json['id'] as String,
+      nome: json['nome'] as String,
+      talhoes: (json['talhoes'] as List<dynamic>? ?? const [])
+          .map((value) => TalhaoResumo.fromJson(value as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nome': nome,
+        'talhoes': talhoes.map((value) => value.toJson()).toList(),
+      };
+
+  final String id;
+  final String nome;
+  final List<TalhaoResumo> talhoes;
+}
+
+class SensoriamentoResumo {
+  const SensoriamentoResumo({
+    required this.id,
+    required this.codigoMapeamento,
+    required this.fonte,
+    required this.pilotoId,
+    required this.pilotoNome,
+    required this.satelite,
+    required this.mapeamentoOrigemId,
+    required this.numeroMapeamento,
+    required this.status,
+  });
+
+  factory SensoriamentoResumo.fromJson(Map<String, dynamic> json) {
+    return SensoriamentoResumo(
+      id: json['id'] as String,
+      codigoMapeamento: json['codigoMapeamento'] as String,
+      fonte: json['fonte'] as String,
+      pilotoId: json['pilotoId'] as String?,
+      pilotoNome: json['pilotoNome'] as String?,
+      satelite: json['satelite'] as String?,
+      mapeamentoOrigemId: json['mapeamentoOrigemId'] as String?,
+      numeroMapeamento: (json['numeroMapeamento'] as num?)?.toInt(),
+      status: json['status'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'codigoMapeamento': codigoMapeamento,
+        'fonte': fonte,
+        'pilotoId': pilotoId,
+        'pilotoNome': pilotoNome,
+        'satelite': satelite,
+        'mapeamentoOrigemId': mapeamentoOrigemId,
+        'numeroMapeamento': numeroMapeamento,
+        'status': status,
+      };
+
+  final String id;
+  final String codigoMapeamento;
+  final String fonte;
+  final String? pilotoId;
+  final String? pilotoNome;
+  final String? satelite;
+  final String? mapeamentoOrigemId;
+  final int? numeroMapeamento;
+  final String status;
+}
+
+class CulturaResumo {
+  const CulturaResumo({required this.id, required this.nome});
+
+  factory CulturaResumo.fromJson(Map<String, dynamic> json) {
+    return CulturaResumo(
+      id: (json['id'] as num).toInt(),
+      nome: json['nome'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {'id': id, 'nome': nome};
+
+  final int id;
+  final String nome;
+}
+
+class DemandaCadeiaResumo {
+  const DemandaCadeiaResumo({
+    required this.id,
+    required this.codigoDemanda,
+    required this.status,
+  });
+
+  factory DemandaCadeiaResumo.fromJson(Map<String, dynamic> json) {
+    return DemandaCadeiaResumo(
+      id: json['id'] as String,
+      codigoDemanda: json['codigoDemanda'] as String,
+      status: json['status'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'codigoDemanda': codigoDemanda,
+        'status': status,
+      };
+
+  final String id;
+  final String codigoDemanda;
+  final String status;
+}
+
+class DemandaDerivadaResumo {
+  const DemandaDerivadaResumo({
+    required this.id,
+    required this.codigoDemanda,
+    required this.tipo,
+    required this.status,
+    required this.numeroAplicacao,
+    required this.retrabalho,
+  });
+
+  factory DemandaDerivadaResumo.fromJson(Map<String, dynamic> json) {
+    return DemandaDerivadaResumo(
+      id: json['id'] as String,
+      codigoDemanda: json['codigoDemanda'] as String,
+      tipo: json['tipo'] as String,
+      status: json['status'] as String,
+      numeroAplicacao: (json['numeroAplicacao'] as num?)?.toInt(),
+      retrabalho: json['retrabalho'] as bool,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'codigoDemanda': codigoDemanda,
+        'tipo': tipo,
+        'status': status,
+        'numeroAplicacao': numeroAplicacao,
+        'retrabalho': retrabalho,
+      };
+
+  final String id;
+  final String codigoDemanda;
+  final String tipo;
+  final String status;
+  final int? numeroAplicacao;
+  final bool retrabalho;
 }
 
 class DemandaUpdateInput {
@@ -230,4 +502,50 @@ class DemandaUpdateInput {
   final String? situacaoDados;
   final String? situacaoMapeamento;
   final bool? retrabalho;
+}
+
+class DemandaStatusHistorico {
+  const DemandaStatusHistorico({
+    required this.demandaId,
+    required this.statusAnterior,
+    required this.statusAnteriorChave,
+    required this.statusNovo,
+    required this.statusNovoChave,
+    required this.alteradoPorId,
+    required this.alteradoPorNome,
+    required this.alteradoEm,
+  });
+
+  factory DemandaStatusHistorico.fromJson(Map<String, dynamic> json) {
+    return DemandaStatusHistorico(
+      demandaId: json['demandaId'] as String,
+      statusAnterior: json['statusAnterior'] as String?,
+      statusAnteriorChave: json['statusAnteriorChave'] as String?,
+      statusNovo: json['statusNovo'] as String,
+      statusNovoChave: json['statusNovoChave'] as String,
+      alteradoPorId: json['alteradoPorId'] as String?,
+      alteradoPorNome: json['alteradoPorNome'] as String,
+      alteradoEm: json['alteradoEm'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        'demandaId': demandaId,
+        'statusAnterior': statusAnterior,
+        'statusAnteriorChave': statusAnteriorChave,
+        'statusNovo': statusNovo,
+        'statusNovoChave': statusNovoChave,
+        'alteradoPorId': alteradoPorId,
+        'alteradoPorNome': alteradoPorNome,
+        'alteradoEm': alteradoEm,
+      };
+
+  final String demandaId;
+  final String? statusAnterior;
+  final String? statusAnteriorChave;
+  final String statusNovo;
+  final String statusNovoChave;
+  final String? alteradoPorId;
+  final String alteradoPorNome;
+  final String alteradoEm;
 }

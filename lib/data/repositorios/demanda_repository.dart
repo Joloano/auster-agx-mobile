@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../core/network/network_status.dart';
 import '../local/app_database.dart';
 import '../models/demanda_models.dart';
+import '../models/demanda_status_rules.dart';
 import '../services/demandas_api.dart';
 
 class DemandaRepository {
@@ -36,13 +37,25 @@ class DemandaRepository {
     required DemandaDetail current,
     required String status,
   }) async {
+    return updateFields(current: current, status: status);
+  }
+
+  Future<DemandaDetail> updateFields({
+    required DemandaDetail current,
+    String? status,
+    String? situacaoDados,
+    String? situacaoMapeamento,
+  }) async {
     final optimistic = current.copyWith(
       demanda: current.demanda.copyWith(
         statusChave: status,
-        status: _statusLabel(status),
+        status: status == null ? null : _statusLabel(status),
+        situacaoDados: situacaoDados,
+        situacaoMapeamento: situacaoMapeamento,
       ),
     );
     await _database.saveDemandaDetail(optimistic);
+    await _database.updateCachedDashboardDemand(optimistic.demanda);
 
     final input = DemandaUpdateInput(
       tipo: current.demanda.tipo,
@@ -50,8 +63,9 @@ class DemandaRepository {
       prazo: current.demanda.prazo,
       areaDeInteresse: current.demanda.areaDeInteresse,
       status: status,
-      situacaoDados: current.demanda.situacaoDados,
-      situacaoMapeamento: current.demanda.situacaoMapeamento,
+      situacaoDados: situacaoDados ?? current.demanda.situacaoDados,
+      situacaoMapeamento:
+          situacaoMapeamento ?? current.demanda.situacaoMapeamento,
       retrabalho: current.demanda.retrabalho,
     );
 
@@ -64,6 +78,7 @@ class DemandaRepository {
       final updated = await _api.update(current.demanda.id, input);
       final synced = current.copyWith(demanda: updated);
       await _database.saveDemandaDetail(synced);
+      await _database.updateCachedDashboardDemand(synced.demanda);
       return synced;
     } on DioException catch (error) {
       if (error.type == DioExceptionType.connectionError ||
@@ -76,11 +91,31 @@ class DemandaRepository {
   }
 
   Future<StatusFluxo?> loadStatusFluxo() async {
-    try {
-      return await _api.getStatusFluxo();
-    } catch (_) {
-      return null;
+    final cached = await _database.readStatusFluxo();
+    if (await _networkStatus.isOnline()) {
+      try {
+        final remote = await _api.getStatusFluxo();
+        await _database.saveStatusFluxo(remote);
+        return remote;
+      } catch (_) {
+        return cached;
+      }
     }
+    return cached;
+  }
+
+  Future<List<DemandaStatusHistorico>> loadHistoricoStatus(String id) async {
+    final cached = await _database.readDemandaStatusHistory(id);
+    if (await _networkStatus.isOnline()) {
+      try {
+        final remote = await _api.getHistoricoStatus(id);
+        await _database.saveDemandaStatusHistory(id, remote);
+        return remote;
+      } catch (_) {
+        return cached;
+      }
+    }
+    return cached;
   }
 
   Future<void> _enqueueUpdate(String demandaId, DemandaUpdateInput input) {
@@ -93,18 +128,6 @@ class DemandaRepository {
   }
 
   String _statusLabel(String status) {
-    return statusLabels[status] ?? status;
+    return statusDemandaLabel(status);
   }
 }
-
-const statusLabels = {
-  'LISTADA': 'Listada',
-  'AGENDADA': 'Agendada',
-  'LIBERADO_PARA_PRESCRICAO': 'Liberado para prescricao',
-  'PREPARACAO_DE_DADOS': 'Preparacao de dados',
-  'PRESCRICAO_EM_ANDAMENTO': 'Prescricao em andamento',
-  'PRESCRICAO_EM_REVISAO': 'Prescricao em revisao',
-  'LIBERADO_PARA_ENTREGA': 'Liberado para a entrega',
-  'ENTREGUE': 'Entregue',
-  'CANCELADA': 'Cancelada',
-};

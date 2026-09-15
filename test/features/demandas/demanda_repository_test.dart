@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:auster_agx_mobile/data/local/app_database.dart';
 import 'package:auster_agx_mobile/core/network/network_status.dart';
+import 'package:auster_agx_mobile/data/models/demanda_status_rules.dart';
 import 'package:auster_agx_mobile/data/repositorios/demanda_repository.dart';
 import 'package:auster_agx_mobile/data/services/demandas_api.dart';
 import 'package:auster_agx_mobile/data/models/demanda_models.dart';
@@ -54,10 +55,61 @@ void main() {
     expect(updated.demanda.statusChave, 'AGENDADA');
     expect(await database.countPendingSyncOperations(), 1);
   });
+
+  test('loadHistoricoStatus usa cache quando esta offline', () async {
+    await database.saveDemandaStatusHistory('demanda-1', [
+      const DemandaStatusHistorico(
+        demandaId: 'demanda-1',
+        statusAnterior: null,
+        statusAnteriorChave: null,
+        statusNovo: 'Listada',
+        statusNovoChave: 'LISTADA',
+        alteradoPorId: 'usuario-1',
+        alteradoPorNome: 'Joloano',
+        alteradoEm: '2026-09-14T00:00:00',
+      ),
+    ]);
+    final repository = DemandaRepository(
+      api: api,
+      database: database,
+      networkStatus: network,
+    );
+
+    final history = await repository.loadHistoricoStatus('demanda-1');
+
+    expect(history, hasLength(1));
+    expect(history.single.statusNovoChave, 'LISTADA');
+    expect(api.historyCalls, 0);
+  });
+
+  test('loadStatusFluxo usa metadados cacheados quando esta offline', () async {
+    await database.saveStatusFluxo(
+      const StatusFluxo(
+        ordem: ['LISTADA', 'AGENDADA'],
+        transicoesValidas: {
+          'LISTADA': ['AGENDADA'],
+        },
+        exigeDadosPreenchidos: [],
+        exigeMapeamentoConcluido: [],
+      ),
+    );
+    final repository = DemandaRepository(
+      api: api,
+      database: database,
+      networkStatus: network,
+    );
+
+    final fluxo = await repository.loadStatusFluxo();
+
+    expect(fluxo?.transicoesValidas['LISTADA'], ['AGENDADA']);
+    expect(api.statusFluxoCalls, 0);
+  });
 }
 
 class _FakeDemandasApi implements DemandasRemoteDataSource {
   int detailCalls = 0;
+  int historyCalls = 0;
+  int statusFluxoCalls = 0;
 
   @override
   Future<DemandaDetail> getDetail(String id) async {
@@ -66,7 +118,14 @@ class _FakeDemandasApi implements DemandasRemoteDataSource {
   }
 
   @override
+  Future<List<DemandaStatusHistorico>> getHistoricoStatus(String id) async {
+    historyCalls++;
+    return const [];
+  }
+
+  @override
   Future<StatusFluxo> getStatusFluxo() async {
+    statusFluxoCalls++;
     return const StatusFluxo(
       ordem: ['LISTADA', 'AGENDADA'],
       transicoesValidas: {
@@ -101,11 +160,20 @@ class _FakeNetwork implements ConnectivityStatus {
 DemandaDetail _detail({required String status}) {
   return DemandaDetail(
     demanda: _demanda(status: status),
-    pedido: const {'id': 'pedido-1', 'codigo': 'PED26001', 'apelido': null},
-    cliente: const {'id': 'cliente-1', 'nomeFantasia': 'Cliente Modelo'},
+    pedido: const PedidoResumo(
+      id: 'pedido-1',
+      codigo: 'PED26001',
+    ),
+    cliente: const ClienteResumo(
+      id: 'cliente-1',
+      nomeFantasia: 'Cliente Modelo',
+    ),
     fazendas: const [],
     grupos: const [],
+    sensoriamentos: const [],
     culturas: const [],
+    demandaOrigem: null,
+    derivadas: const [],
   );
 }
 
@@ -118,7 +186,7 @@ Demanda _demanda({required String status}) {
     fazendaNomes: const ['Fazenda Modelo'],
     codigoDemanda: 'SMN26001001',
     tipo: 'SMART_N',
-    status: statusLabels[status] ?? status,
+    status: statusDemandaLabel(status),
     statusChave: status,
     situacaoDados: 'DADOS_INCOMPLETOS',
     situacaoMapeamento: 'SEM_IMAGENS',

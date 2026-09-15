@@ -7,7 +7,14 @@ class DashboardOverview {
     required this.totalVinculosAtivos,
     required this.areaTotalFazendasHa,
     required this.areaTotalTalhoesHa,
+    required this.areaMediaPorFazendaHa,
+    required this.mediaTalhoesPorFazenda,
     required this.coberturaAreaTalhoesPercentual,
+    required this.fazendasComAreaInformada,
+    required this.talhoesComAreaInformada,
+    required this.fazendasSemAreaInformada,
+    required this.fazendasSemTalhoes,
+    required this.maioresFazendas,
   });
 
   factory DashboardOverview.fromJson(Map<String, dynamic> json) {
@@ -19,9 +26,23 @@ class DashboardOverview {
       totalVinculosAtivos: (json['totalVinculosAtivos'] as num).toInt(),
       areaTotalFazendasHa: _doubleOrNull(json['areaTotalFazendasHa']),
       areaTotalTalhoesHa: _doubleOrNull(json['areaTotalTalhoesHa']),
+      areaMediaPorFazendaHa: _doubleOrNull(json['areaMediaPorFazendaHa']),
+      mediaTalhoesPorFazenda: _doubleOrNull(json['mediaTalhoesPorFazenda']),
       coberturaAreaTalhoesPercentual: _doubleOrNull(
         json['coberturaAreaTalhoesPercentual'],
       ),
+      fazendasComAreaInformada:
+          (json['fazendasComAreaInformada'] as num?)?.toInt() ?? 0,
+      talhoesComAreaInformada:
+          (json['talhoesComAreaInformada'] as num?)?.toInt() ?? 0,
+      fazendasSemAreaInformada:
+          (json['fazendasSemAreaInformada'] as num?)?.toInt() ?? 0,
+      fazendasSemTalhoes: (json['fazendasSemTalhoes'] as num?)?.toInt() ?? 0,
+      maioresFazendas: (json['maioresFazendas'] as List<dynamic>? ?? const [])
+          .map((value) => DashboardTopFazenda.fromJson(
+                value as Map<String, dynamic>,
+              ))
+          .toList(),
     );
   }
 
@@ -34,7 +55,15 @@ class DashboardOverview {
       'totalVinculosAtivos': totalVinculosAtivos,
       'areaTotalFazendasHa': areaTotalFazendasHa,
       'areaTotalTalhoesHa': areaTotalTalhoesHa,
+      'areaMediaPorFazendaHa': areaMediaPorFazendaHa,
+      'mediaTalhoesPorFazenda': mediaTalhoesPorFazenda,
       'coberturaAreaTalhoesPercentual': coberturaAreaTalhoesPercentual,
+      'fazendasComAreaInformada': fazendasComAreaInformada,
+      'talhoesComAreaInformada': talhoesComAreaInformada,
+      'fazendasSemAreaInformada': fazendasSemAreaInformada,
+      'fazendasSemTalhoes': fazendasSemTalhoes,
+      'maioresFazendas':
+          maioresFazendas.map((value) => value.toJson()).toList(),
     };
   }
 
@@ -45,7 +74,50 @@ class DashboardOverview {
   final int totalVinculosAtivos;
   final double? areaTotalFazendasHa;
   final double? areaTotalTalhoesHa;
+  final double? areaMediaPorFazendaHa;
+  final double? mediaTalhoesPorFazenda;
   final double? coberturaAreaTalhoesPercentual;
+  final int fazendasComAreaInformada;
+  final int talhoesComAreaInformada;
+  final int fazendasSemAreaInformada;
+  final int fazendasSemTalhoes;
+  final List<DashboardTopFazenda> maioresFazendas;
+}
+
+class DashboardTopFazenda {
+  const DashboardTopFazenda({
+    required this.fazendaId,
+    required this.nome,
+    required this.areaHa,
+    required this.totalTalhoes,
+    required this.totalVinculosAtivos,
+  });
+
+  factory DashboardTopFazenda.fromJson(Map<String, dynamic> json) {
+    return DashboardTopFazenda(
+      fazendaId: json['fazendaId'] as String,
+      nome: json['nome'] as String,
+      areaHa: _doubleOrNull(json['areaHa']),
+      totalTalhoes: (json['totalTalhoes'] as num).toInt(),
+      totalVinculosAtivos: (json['totalVinculosAtivos'] as num).toInt(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'fazendaId': fazendaId,
+      'nome': nome,
+      'areaHa': areaHa,
+      'totalTalhoes': totalTalhoes,
+      'totalVinculosAtivos': totalVinculosAtivos,
+    };
+  }
+
+  final String fazendaId;
+  final String nome;
+  final double? areaHa;
+  final int totalTalhoes;
+  final int totalVinculosAtivos;
 }
 
 class DashboardDemandItem {

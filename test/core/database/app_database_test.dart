@@ -1,5 +1,6 @@
 import 'package:auster_agx_mobile/data/local/app_database.dart';
 import 'package:auster_agx_mobile/data/models/dashboard_models.dart';
+import 'package:auster_agx_mobile/data/models/demanda_models.dart';
 import 'package:auster_agx_mobile/data/models/location_capture.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -52,6 +53,20 @@ void main() {
     expect(captures, hasLength(1));
     expect(captures.single.latitude, -20.1);
   });
+
+  test('atualiza cache do dashboard ao alterar demanda offline', () async {
+    await database.saveDashboardItems([_dashboardItem()]);
+
+    await database.updateCachedDashboardDemand(
+      _demanda(status: 'ENTREGUE', situacaoDados: 'DADOS_PREENCHIDOS'),
+    );
+
+    final items = await database.readDashboardItems();
+
+    expect(items.single.status, 'ENTREGUE');
+    expect(items.single.situacaoDados, 'DADOS_PREENCHIDOS');
+    expect(items.single.arquivada, isTrue);
+  });
 }
 
 DashboardDemandItem _dashboardItem() {
@@ -74,5 +89,35 @@ DashboardDemandItem _dashboardItem() {
     arquivada: false,
     areaDeInteresse: 'Talhao 1',
     retrabalho: false,
+  );
+}
+
+Demanda _demanda({
+  required String status,
+  required String situacaoDados,
+}) {
+  return Demanda(
+    id: 'demanda-1',
+    pedidoId: 'pedido-1',
+    pedidoCodigo: 'PED26001',
+    clienteNome: 'Cliente Modelo',
+    fazendaNomes: const ['Fazenda Modelo'],
+    codigoDemanda: 'SMN26001001',
+    tipo: 'SMART_N',
+    status: status,
+    statusChave: status,
+    situacaoDados: situacaoDados,
+    situacaoMapeamento: 'IMAGENS_DISPONIVEIS',
+    retrabalho: false,
+    demandaOrigemId: null,
+    numeroAplicacao: 1,
+    representanteId: null,
+    representanteNome: null,
+    prazo: '2026-10-15',
+    areaDeInteresse: 'Talhao 1',
+    grupoIds: const [],
+    sensoriamentoIds: const [],
+    ativo: true,
+    createdAt: '2026-09-14T00:00:00',
   );
 }

@@ -6,6 +6,7 @@ import 'package:sqlite3/sqlite3.dart';
 
 import '../models/dashboard_models.dart';
 import '../models/demanda_models.dart';
+import '../models/demanda_status_rules.dart';
 import '../models/location_capture.dart';
 
 class AppDatabase {
@@ -41,6 +42,18 @@ class AppDatabase {
 
       CREATE TABLE IF NOT EXISTS demanda_details (
         id TEXT PRIMARY KEY,
+        payload TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS demanda_status_history (
+        demanda_id TEXT PRIMARY KEY,
+        payload TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS status_fluxo (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
         payload TEXT NOT NULL,
         updated_at TEXT NOT NULL
       );
@@ -139,6 +152,90 @@ class AppDatabase {
     );
     if (result.isEmpty) return null;
     return DemandaDetail.fromJson(_decode(result.first['payload']));
+  }
+
+  Future<void> saveDemandaStatusHistory(
+    String demandaId,
+    List<DemandaStatusHistorico> history,
+  ) async {
+    _db.execute(
+      '''
+      INSERT INTO demanda_status_history (demanda_id, payload, updated_at)
+      VALUES (?, ?, ?)
+      ON CONFLICT(demanda_id) DO UPDATE SET
+        payload = excluded.payload,
+        updated_at = excluded.updated_at
+      ''',
+      [
+        demandaId,
+        jsonEncode(history.map((item) => item.toJson()).toList()),
+        DateTime.now().toIso8601String(),
+      ],
+    );
+  }
+
+  Future<List<DemandaStatusHistorico>> readDemandaStatusHistory(
+    String demandaId,
+  ) async {
+    final result = _db.select(
+      'SELECT payload FROM demanda_status_history WHERE demanda_id = ?',
+      [demandaId],
+    );
+    if (result.isEmpty) return const [];
+    final decoded = jsonDecode(result.first['payload'] as String) as List;
+    return decoded
+        .map((item) =>
+            DemandaStatusHistorico.fromJson(item as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<void> saveStatusFluxo(StatusFluxo fluxo) async {
+    _db.execute(
+      '''
+      INSERT INTO status_fluxo (id, payload, updated_at)
+      VALUES (1, ?, ?)
+      ON CONFLICT(id) DO UPDATE SET
+        payload = excluded.payload,
+        updated_at = excluded.updated_at
+      ''',
+      [jsonEncode(fluxo.toJson()), DateTime.now().toIso8601String()],
+    );
+  }
+
+  Future<StatusFluxo?> readStatusFluxo() async {
+    final result = _db.select('SELECT payload FROM status_fluxo WHERE id = 1');
+    if (result.isEmpty) return null;
+    return StatusFluxo.fromJson(_decode(result.first['payload']));
+  }
+
+  Future<void> updateCachedDashboardDemand(Demanda demanda) async {
+    final result = _db.select(
+      'SELECT payload FROM dashboard_items WHERE id = ?',
+      [demanda.id],
+    );
+    if (result.isEmpty) return;
+
+    final current =
+        DashboardDemandItem.fromJson(_decode(result.first['payload']));
+    final statusGroup = statusDemandaGrupo[demanda.statusChave];
+    final updated = current.copyWith(
+      status: demanda.statusChave,
+      situacaoDados: demanda.situacaoDados,
+      situacaoMapeamento: demanda.situacaoMapeamento,
+      arquivada: statusGroup == 'ENTREGUE' || statusGroup == 'CANCELADA',
+    );
+    _db.execute(
+      '''
+      UPDATE dashboard_items
+      SET payload = ?, updated_at = ?
+      WHERE id = ?
+      ''',
+      [
+        jsonEncode(updated.toJson()),
+        DateTime.now().toIso8601String(),
+        demanda.id
+      ],
+    );
   }
 
   Future<int> enqueueSyncOperation({

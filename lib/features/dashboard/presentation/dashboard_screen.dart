@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
+import '../../../core/auth/roles.dart';
 import '../../../data/models/dashboard_models.dart';
+import '../../../data/models/demanda_status_rules.dart';
 import '../../authentication/presentation/auth_controller.dart';
 import '../providers/dashboard_providers.dart';
 
@@ -33,7 +36,8 @@ class DashboardScreen extends ConsumerWidget {
                       'Dashboard',
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                    if (auth != null) Text('${auth.nome} · ${auth.perfil}'),
+                    if (auth != null)
+                      Text('${auth.nome} · ${perfilLabel(auth.perfil)}'),
                   ],
                 ),
               ),
@@ -51,7 +55,18 @@ class DashboardScreen extends ConsumerWidget {
           overview.when(
             data: (data) => data == null
                 ? const _EmptyState(text: 'Nenhum resumo salvo ainda.')
-                : _OverviewGrid(overview: data),
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _OverviewGrid(overview: data),
+                      const SizedBox(height: 12),
+                      _AreaSummary(overview: data),
+                      if (data.maioresFazendas.isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        _TopFazendas(fazendas: data.maioresFazendas),
+                      ],
+                    ],
+                  ),
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (error, _) => _EmptyState(text: error.toString()),
           ),
@@ -134,6 +149,78 @@ class _OverviewGrid extends StatelessWidget {
   }
 }
 
+class _AreaSummary extends StatelessWidget {
+  const _AreaSummary({required this.overview});
+
+  final DashboardOverview overview;
+
+  @override
+  Widget build(BuildContext context) {
+    final areaFazendas = _formatArea(overview.areaTotalFazendasHa);
+    final areaTalhoes = _formatArea(overview.areaTotalTalhoesHa);
+    final cobertura = overview.coberturaAreaTalhoesPercentual == null
+        ? '-'
+        : '${overview.coberturaAreaTalhoesPercentual!.toStringAsFixed(1)}%';
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Areas e cobertura',
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 10),
+            _MetricLine(label: 'Area total das fazendas', value: areaFazendas),
+            _MetricLine(label: 'Area total dos talhoes', value: areaTalhoes),
+            _MetricLine(label: 'Cobertura por talhoes', value: cobertura),
+            _MetricLine(
+              label: 'Fazendas sem area',
+              value: overview.fazendasSemAreaInformada.toString(),
+            ),
+            _MetricLine(
+              label: 'Fazendas sem talhoes',
+              value: overview.fazendasSemTalhoes.toString(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TopFazendas extends StatelessWidget {
+  const _TopFazendas({required this.fazendas});
+
+  final List<DashboardTopFazenda> fazendas;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Maiores fazendas',
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            for (final fazenda in fazendas.take(3))
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                dense: true,
+                leading: const Icon(Icons.landscape_outlined),
+                title: Text(fazenda.nome),
+                subtitle: Text(
+                  '${_formatArea(fazenda.areaHa)} · ${fazenda.totalTalhoes} talhoes',
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _DemandPreviewCard extends StatelessWidget {
   const _DemandPreviewCard(this.item);
 
@@ -141,19 +228,92 @@ class _DemandPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final grupo = grupoDaDemanda(
+      status: item.status,
+      situacaoMapeamento: item.situacaoMapeamento,
+    );
+    final indicadores = derivarIndicadores(
+      status: item.status,
+      situacaoDados: item.situacaoDados,
+      situacaoMapeamento: item.situacaoMapeamento,
+      tipo: item.tipo,
+      metodoMapeamento: item.metodoMapeamento,
+    );
     return Card(
-      child: ListTile(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
         onTap: () => context.go('/demandas/${item.id}'),
-        leading: const Icon(Icons.assignment_outlined),
-        title: Text(item.codigo),
-        subtitle: Text(
-          [
-            item.fazenda,
-            item.responsavelNome,
-            item.status,
-          ].whereType<String>().join(' · '),
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      item.codigo,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  const Icon(Icons.chevron_right),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Text(
+                [
+                  item.fazenda,
+                  item.responsavelNome,
+                  statusDemandaLabel(item.status),
+                ].whereType<String>().join(' · '),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 6,
+                children: [
+                  Chip(
+                    label: Text(tipoDemandaLabel(item.tipo)),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  Chip(
+                    label: Text(grupoOperacionalLabel(grupo)),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                  if (indicadores != null)
+                    Chip(
+                      label: Text(
+                        indicadores.liberadoParaPrescricao
+                            ? 'Liberado'
+                            : 'Pendente',
+                      ),
+                      visualDensity: VisualDensity.compact,
+                    ),
+                ],
+              ),
+            ],
+          ),
         ),
-        trailing: const Icon(Icons.chevron_right),
+      ),
+    );
+  }
+}
+
+class _MetricLine extends StatelessWidget {
+  const _MetricLine({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Expanded(child: Text(label)),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.w700)),
+        ],
       ),
     );
   }
@@ -173,4 +333,9 @@ class _EmptyState extends StatelessWidget {
       ),
     );
   }
+}
+
+String _formatArea(double? value) {
+  if (value == null) return '-';
+  return '${NumberFormat.decimalPattern('pt_BR').format(value)} ha';
 }

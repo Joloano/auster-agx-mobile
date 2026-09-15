@@ -1,4 +1,5 @@
 import 'package:auster_agx_mobile/data/models/dashboard_models.dart';
+import 'package:auster_agx_mobile/data/models/demanda_status_rules.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -63,5 +64,57 @@ void main() {
     expect(page.conteudo, hasLength(1));
     expect(page.totalElementos, 1);
     expect(page.pagina, 0);
+  });
+
+  test(
+      'DashboardOverview mapeia metricas completas do endpoint /dashboard/resumo',
+      () {
+    final overview = DashboardOverview.fromJson({
+      'escopo': 'GLOBAL',
+      'totalClientes': 12,
+      'totalFazendas': 5,
+      'totalTalhoes': 41,
+      'totalVinculosAtivos': 9,
+      'areaTotalFazendasHa': 1234.5,
+      'areaTotalTalhoesHa': 900.25,
+      'areaMediaPorFazendaHa': 246.9,
+      'mediaTalhoesPorFazenda': 8.2,
+      'coberturaAreaTalhoesPercentual': 72.9,
+      'fazendasComAreaInformada': 4,
+      'talhoesComAreaInformada': 38,
+      'fazendasSemAreaInformada': 1,
+      'fazendasSemTalhoes': 0,
+      'maioresFazendas': [
+        {
+          'fazendaId': 'fazenda-1',
+          'nome': 'Fazenda Modelo',
+          'areaHa': 640.5,
+          'totalTalhoes': 12,
+          'totalVinculosAtivos': 2,
+        }
+      ],
+    });
+
+    expect(overview.escopo, 'GLOBAL');
+    expect(overview.areaMediaPorFazendaHa, 246.9);
+    expect(overview.maioresFazendas.single.nome, 'Fazenda Modelo');
+  });
+
+  test('regras do painel seguem agrupamento operacional oficial', () {
+    expect(
+      grupoDaDemanda(status: 'AGENDADA', situacaoMapeamento: 'SEM_IMAGENS'),
+      'A_SEGUIR',
+    );
+    expect(
+      grupoDaDemanda(status: 'AGENDADA', situacaoMapeamento: 'EM_ANDAMENTO'),
+      'COLETA_DE_DADOS',
+    );
+    expect(
+      grupoDaDemanda(
+        status: 'PRESCRICAO_EM_ANDAMENTO',
+        situacaoMapeamento: 'IMAGENS_DISPONIVEIS',
+      ),
+      'ANDAMENTO',
+    );
   });
 }

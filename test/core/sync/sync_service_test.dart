@@ -5,6 +5,7 @@ import 'package:auster_agx_mobile/core/network/network_status.dart';
 import 'package:auster_agx_mobile/data/sync/sync_service.dart';
 import 'package:auster_agx_mobile/data/services/demandas_api.dart';
 import 'package:auster_agx_mobile/data/models/demanda_models.dart';
+import 'package:auster_agx_mobile/data/models/demanda_status_rules.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -46,6 +47,11 @@ class _FakeDemandasApi implements DemandasRemoteDataSource {
 
   @override
   Future<DemandaDetail> getDetail(String id) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<DemandaStatusHistorico>> getHistoricoStatus(String id) {
     throw UnimplementedError();
   }
 
