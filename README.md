@@ -95,6 +95,27 @@ C:\auster-mobile-tools\flutter\bin\flutter.bat analyze
 C:\auster-mobile-tools\flutter\bin\flutter.bat test
 ```
 
+## Publicacao no GitHub
+
+O repositorio local esta pronto para publicacao. Depois de autenticar o GitHub CLI:
+
+```powershell
+gh auth login
+```
+
+Criar o repositorio remoto, fazer push e abrir as issues versionadas:
+
+```powershell
+cd C:\auster-mobile-work\auster_agx_mobile
+.\scripts\publish-github.ps1 -RepositoryFullName SEU_USUARIO/auster-agx-mobile -CreateRepo -CreateIssues
+```
+
+Para publicar em um repositorio ja existente:
+
+```powershell
+.\scripts\publish-github.ps1 -RepositoryFullName SEU_USUARIO/auster-agx-mobile -CreateIssues
+```
+
 ## Demonstracao
 
 1. Abrir app.
