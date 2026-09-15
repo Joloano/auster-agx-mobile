@@ -63,6 +63,15 @@ if ($CreateIssues) {
         throw "Diretorio de issues nao encontrado: $issueDir"
     }
 
+    $existingLabels = gh label list --repo $RepositoryFullName --limit 200 --json name | ConvertFrom-Json
+    $existingLabelNames = @($existingLabels | ForEach-Object { $_.name })
+    if ($existingLabelNames -notcontains 'academico') {
+        gh label create 'academico' --repo $RepositoryFullName --description 'Escopo academico do projeto mobile' --color '5319e7'
+    }
+    if ($existingLabelNames -notcontains 'mobile') {
+        gh label create 'mobile' --repo $RepositoryFullName --description 'Funcionalidade do cliente Flutter mobile' --color '0e8a16'
+    }
+
     Get-ChildItem $issueDir -Filter '*.md' |
         Where-Object { $_.Name -ne 'README.md' } |
         Sort-Object Name |
