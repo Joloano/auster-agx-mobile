@@ -10,25 +10,32 @@ Colaboradores podem consultar e atualizar demandas fora do computador, inclusive
 
 ## Arquitetura
 
-A organizacao e feature-first com uma camada `core` compartilhada:
+A organizacao segue o padrao do projeto de referencia `gestao-riscos-mobile`, separando base tecnica, camada de dados, telas por feature, rotas e widgets compartilhados:
 
 ```text
 lib/
   app/
+  routes/
   core/
-    api/
-    auth/
     config/
-    database/
     errors/
     network/
+  data/
+    local/
+    models/
+    repositorios/
+    services/
     sync/
   features/
     authentication/
     dashboard/
     demandas/
     location/
+    shell/
+  widgets/
 ```
+
+O shell usa `StatefulShellRoute.indexedStack`, como no app de referencia, para manter pilhas independentes entre Dashboard e Demandas. A barra global de sincronizacao fica em `widgets/sync_status_bar.dart`.
 
 ## Tecnologias
 
