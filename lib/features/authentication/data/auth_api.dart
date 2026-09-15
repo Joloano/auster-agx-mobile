@@ -55,7 +55,7 @@ class AuthApi implements AuthRemoteDataSource {
         accessToken: json['accessToken'] as String,
         refreshToken: json['refreshToken'] as String,
       ),
-      expiresIn: json['expiresIn'] as int,
+      expiresIn: (json['expiresIn'] as num).toInt(),
       user: AuthUser.fromJson({
         'userId': json['userId'],
         'nome': json['nome'],
