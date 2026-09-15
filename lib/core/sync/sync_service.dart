@@ -13,9 +13,9 @@ class SyncService {
     required AppDatabase database,
     required DemandasRemoteDataSource demandasApi,
     required ConnectivityStatus networkStatus,
-  }) : _database = database,
-       _demandasApi = demandasApi,
-       _networkStatus = networkStatus;
+  })  : _database = database,
+        _demandasApi = demandasApi,
+        _networkStatus = networkStatus;
 
   final AppDatabase _database;
   final DemandasRemoteDataSource _demandasApi;

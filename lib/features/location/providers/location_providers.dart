@@ -11,9 +11,9 @@ final locationServiceProvider = FutureProvider<LocationService>((ref) async {
 
 final locationCapturesProvider =
     FutureProvider.family<List<LocationCapture>, String>((
-      ref,
-      demandaId,
-    ) async {
-      final service = await ref.watch(locationServiceProvider.future);
-      return service.listCaptures(demandaId);
-    });
+  ref,
+  demandaId,
+) async {
+  final service = await ref.watch(locationServiceProvider.future);
+  return service.listCaptures(demandaId);
+});

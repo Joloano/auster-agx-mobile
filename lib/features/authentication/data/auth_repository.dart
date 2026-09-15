@@ -7,8 +7,8 @@ class AuthRepository {
   AuthRepository({
     required AuthRemoteDataSource api,
     required TokenStore tokenStorage,
-  }) : _api = api,
-       _tokenStorage = tokenStorage;
+  })  : _api = api,
+        _tokenStorage = tokenStorage;
 
   final AuthRemoteDataSource _api;
   final TokenStore _tokenStorage;

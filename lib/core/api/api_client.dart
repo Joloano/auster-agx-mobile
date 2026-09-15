@@ -7,16 +7,16 @@ import '../errors/app_exception.dart';
 
 class ApiClient {
   ApiClient({required AppConfig config, required TokenStorage tokenStorage})
-    : _tokenStorage = tokenStorage,
-      dio = Dio(
-        BaseOptions(
-          baseUrl: config.apiBaseUrl,
-          connectTimeout: config.apiTimeout,
-          receiveTimeout: config.apiTimeout,
-          sendTimeout: config.apiTimeout,
-          headers: const {'Accept': 'application/json'},
-        ),
-      ) {
+      : _tokenStorage = tokenStorage,
+        dio = Dio(
+          BaseOptions(
+            baseUrl: config.apiBaseUrl,
+            connectTimeout: config.apiTimeout,
+            receiveTimeout: config.apiTimeout,
+            sendTimeout: config.apiTimeout,
+            headers: const {'Accept': 'application/json'},
+          ),
+        ) {
     dio.interceptors.add(
       InterceptorsWrapper(onRequest: _onRequest, onError: _onError),
     );

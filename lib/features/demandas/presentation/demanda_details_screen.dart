@@ -97,10 +97,8 @@ class _StatusActions extends ConsumerWidget {
         return FutureBuilder<StatusFluxo?>(
           future: repositorySnapshot.data?.loadStatusFluxo(),
           builder: (context, fluxoSnapshot) {
-            final next =
-                fluxoSnapshot.data?.transicoesValidas[detail
-                    .demanda
-                    .statusChave] ??
+            final next = fluxoSnapshot
+                    .data?.transicoesValidas[detail.demanda.statusChave] ??
                 const <String>[];
             return Card(
               child: Padding(

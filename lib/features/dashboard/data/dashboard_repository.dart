@@ -8,9 +8,9 @@ class DashboardRepository {
     required DashboardApi api,
     required AppDatabase database,
     required ConnectivityStatus networkStatus,
-  }) : _api = api,
-       _database = database,
-       _networkStatus = networkStatus;
+  })  : _api = api,
+        _database = database,
+        _networkStatus = networkStatus;
 
   final DashboardApi _api;
   final AppDatabase _database;
