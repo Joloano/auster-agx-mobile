@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'app_router.dart';
-import 'app_theme.dart';
+import '../core/app_theme.dart';
+import '../routes/app_router.dart';
 
 class AusterMobileApp extends ConsumerWidget {
   const AusterMobileApp({super.key});
@@ -15,7 +15,7 @@ class AusterMobileApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'AusterAgX Mobile',
       debugShowCheckedModeBanner: false,
-      theme: buildAppTheme(),
+      theme: AppTheme.light,
       routerConfig: router,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

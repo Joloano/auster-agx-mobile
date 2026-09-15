@@ -7,7 +7,7 @@ import '../features/authentication/presentation/login_screen.dart';
 import '../features/dashboard/presentation/dashboard_screen.dart';
 import '../features/demandas/presentation/demanda_details_screen.dart';
 import '../features/demandas/presentation/demandas_screen.dart';
-import 'shell/main_shell.dart';
+import '../features/shell/app_shell.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final routerRefresh = _RouterRefreshNotifier();
@@ -30,23 +30,34 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     },
     routes: [
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
-      ShellRoute(
-        builder: (context, state, child) => MainShell(child: child),
-        routes: [
-          GoRoute(
-            path: '/dashboard',
-            builder: (context, state) => const DashboardScreen(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            AppShell(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/dashboard',
+                builder: (context, state) => const DashboardScreen(),
+              ),
+            ],
           ),
-          GoRoute(
-            path: '/demandas',
-            builder: (context, state) => const DemandasScreen(),
-          ),
-          GoRoute(
-            path: '/demandas/:id',
-            builder: (context, state) {
-              final id = state.pathParameters['id']!;
-              return DemandaDetailsScreen(demandaId: id);
-            },
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/demandas',
+                builder: (context, state) => const DemandasScreen(),
+                routes: [
+                  GoRoute(
+                    path: ':id',
+                    builder: (context, state) {
+                      final id = state.pathParameters['id']!;
+                      return DemandaDetailsScreen(demandaId: id);
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

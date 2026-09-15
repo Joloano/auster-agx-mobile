@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/providers/core_providers.dart';
-import '../../../core/sync/sync_providers.dart';
 import '../../authentication/presentation/auth_controller.dart';
 import '../domain/dashboard_models.dart';
 import '../providers/dashboard_providers.dart';
@@ -16,8 +14,6 @@ class DashboardScreen extends ConsumerWidget {
     final overview = ref.watch(dashboardOverviewProvider);
     final demandas = ref.watch(dashboardDemandasProvider);
     final auth = ref.watch(authControllerProvider).valueOrNull;
-    final pending = ref.watch(pendingSyncCountProvider);
-    ref.watch(syncServiceProvider);
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -50,18 +46,6 @@ class DashboardScreen extends ConsumerWidget {
                 icon: const Icon(Icons.logout),
               ),
             ],
-          ),
-          const SizedBox(height: 12),
-          const _ConnectivityBanner(),
-          pending.when(
-            data: (count) => count > 0
-                ? _InfoBanner(
-                    icon: Icons.sync_problem,
-                    text: '$count alteracao(es) aguardando sincronizacao.',
-                  )
-                : const SizedBox.shrink(),
-            loading: () => const SizedBox.shrink(),
-            error: (_, __) => const SizedBox.shrink(),
           ),
           const SizedBox(height: 12),
           overview.when(
@@ -97,35 +81,6 @@ class DashboardScreen extends ConsumerWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _ConnectivityBanner extends ConsumerWidget {
-  const _ConnectivityBanner();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final online = ref.watch(onlineStatusProvider).valueOrNull ?? true;
-    if (online) return const SizedBox.shrink();
-    return const _InfoBanner(
-      icon: Icons.wifi_off,
-      text: 'Voce esta offline. Exibindo dados salvos no dispositivo.',
-    );
-  }
-}
-
-class _InfoBanner extends StatelessWidget {
-  const _InfoBanner({required this.icon, required this.text});
-
-  final IconData icon;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).colorScheme.secondaryContainer,
-      child: ListTile(leading: Icon(icon), title: Text(text)),
     );
   }
 }
