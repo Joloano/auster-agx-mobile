@@ -37,6 +37,8 @@ lib/
 
 O shell usa `StatefulShellRoute.indexedStack`, como no app de referencia, para manter pilhas independentes entre Dashboard e Demandas. A barra global de sincronizacao fica em `widgets/sync_status_bar.dart`.
 
+O comportamento de demandas foi alinhado ao AusterAgX oficial: o mobile usa os mesmos endpoints REST, o mesmo contrato de DTOs, os mesmos grupos operacionais do painel e as mesmas regras de transicao vindas de `/demandas/status-fluxo`.
+
 ## Modelo ER mobile/offline
 
 O modelo local foi mantido enxuto para proteger a integridade do sistema oficial: o app mobile nao replica todo o ERP, apenas guarda o necessario para login, dashboard, demandas, fila offline e capturas de GPS. Os objetos principais da API ficam cacheados como JSON, preservando compatibilidade com o backend existente.
@@ -46,8 +48,12 @@ erDiagram
   AUTH_USER ||--|| AUTH_TOKENS : autentica
   DASHBOARD_OVERVIEW ||--o{ DASHBOARD_ITEM : resume
   DEMANDA ||--|| DEMANDA_DETAIL : detalha
+  DEMANDA ||--o{ DEMANDA_STATUS_HISTORY : historico
   DEMANDA ||--o{ SYNC_QUEUE : gera
   DEMANDA ||--o{ LOCATION_CAPTURE : registra
+  DEMANDA_DETAIL ||--o{ SENSORIAMENTO : inclui
+  DEMANDA_DETAIL ||--o{ CULTURA : inclui
+  STATUS_FLUXO ||--o{ SYNC_QUEUE : orienta
 
   AUTH_USER {
     string userId PK
@@ -93,6 +99,30 @@ erDiagram
     datetime updated_at
   }
 
+  DEMANDA_STATUS_HISTORY {
+    string demanda_id PK
+    json payload
+    datetime updated_at
+  }
+
+  STATUS_FLUXO {
+    int id PK
+    json payload
+    datetime updated_at
+  }
+
+  SENSORIAMENTO {
+    string id PK
+    string codigoMapeamento
+    string fonte
+    string status
+  }
+
+  CULTURA {
+    int id PK
+    string nome
+  }
+
   SYNC_QUEUE {
     int id PK
     string operation_type
@@ -114,7 +144,7 @@ erDiagram
   }
 ```
 
-No SQLite, as tabelas reais sao `dashboard_overview`, `dashboard_items`, `demanda_details`, `sync_queue` e `location_captures`. `AuthTokens` ficam no `flutter_secure_storage`; `AuthUser` e `Demanda` representam modelos da API usados pelo app e serializados nos payloads locais.
+No SQLite, as tabelas reais sao `dashboard_overview`, `dashboard_items`, `demanda_details`, `demanda_status_history`, `status_fluxo`, `sync_queue` e `location_captures`. `AuthTokens` ficam no `flutter_secure_storage`; `AuthUser` e `Demanda` representam modelos da API usados pelo app e serializados nos payloads locais.
 
 ## Tecnologias
 
@@ -149,9 +179,13 @@ O login usa `POST /auth/login` com `email` e `senha`. A resposta contem `accessT
 
 Demandas sincronizadas sao salvas no SQLite. A UI le primeiro do banco local; quando existe internet, o repositorio busca a API, atualiza o banco e reflete os dados.
 
+O cache inclui dashboard, detalhes agregados, historico de status e metadados de transicao. Assim, depois da primeira sincronizacao, o app continua mostrando o contexto operacional mesmo sem conexao.
+
 ## Sincronizacao
 
 Alteracoes feitas sem internet entram em `sync_queue`. Ao detectar conectividade, `SyncService` tenta enviar as operacoes pendentes e atualiza o cache local.
+
+O PATCH enviado para `/demandas/{id}` segue o contrato oficial: `tipo`, `representanteId`, `prazo`, `areaDeInteresse`, `status`, `situacaoDados`, `situacaoMapeamento` e `retrabalho`. A tela so oferece alteracao de status/dados/mapeamento para perfis administrativos (`SUPER_ADMIN` e `USUARIO_TECNICO_PRESCRICAO`), como no frontend oficial.
 
 ## Recurso nativo utilizado
 
@@ -210,11 +244,11 @@ Para publicar em um repositorio ja existente:
 4. Ver dashboard/demandas.
 5. Desligar internet.
 6. Continuar vendo dados locais.
-7. Alterar status permitido.
-8. Ver alteracao pendente.
+7. Alterar status, situacao dos dados ou situacao do mapeamento quando o perfil permitir.
+8. Ver alteracao pendente e card local atualizado.
 9. Religar internet.
 10. Sincronizar com servidor.
-11. Abrir detalhe.
+11. Abrir detalhe com resumo, contexto, sensoriamento, cadeia e historico.
 12. Capturar GPS.
 
 ## Prints das telas

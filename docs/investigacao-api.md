@@ -33,7 +33,16 @@ O refresh token e rotacionado: reapresentar refresh token ja usado e tratado com
 | Detalhe demanda | `/demandas/{id}/detalhe` | GET | path `id` UUID | demanda, pedido, cliente, fazendas, grupos, talhoes, sensoriamentos, culturas e cadeia | Sim | Endpoint agregado ideal para tela de detalhe. |
 | Atualizar demanda | `/demandas/{id}` | PATCH | `tipo`, `representanteId`, `prazo`, `areaDeInteresse`, `status`, `situacaoDados`, `situacaoMapeamento`, `retrabalho` | `DemandaResponse` | Sim | Requer `SUPER_ADMIN` ou `USUARIO_TECNICO_PRESCRICAO`. |
 | Fluxo de status | `/demandas/status-fluxo` | GET | sem corpo | `ordem`, `transicoesValidas`, `exigeDadosPreenchidos`, `exigeMapeamentoConcluido` | Sim | Fonte real das transicoes. |
-| Historico status | `/demandas/{id}/historico-status` | GET | path `id` UUID | lista de alteracoes de status | Sim | Util para evolucao futura. |
+| Historico status | `/demandas/{id}/historico-status` | GET | path `id` UUID | lista de alteracoes de status | Sim | Implementado no detalhe mobile com cache offline. |
+
+## Regras espelhadas no mobile
+
+- O painel mobile usa os grupos operacionais do dashboard oficial: `Listada`, `A seguir`, `Coleta de dados`, `Andamento`, `Entregue` e `Cancelada`.
+- `Coleta de dados` e derivado de `AGENDADA` com `situacaoMapeamento` diferente de `SEM_IMAGENS`, igual ao frontend React.
+- As transicoes de status sao lidas de `/demandas/status-fluxo`; o app nao reimplementa a ordem do fluxo manualmente.
+- Avancos que exigem `DADOS_PREENCHIDOS` ou `IMAGENS_DISPONIVEIS` sao filtrados no mobile com as mesmas listas do backend.
+- Alteracao de demanda/status so fica disponivel para `SUPER_ADMIN` e `USUARIO_TECNICO_PRESCRICAO`, conforme `PATCH /demandas/{id}`.
+- `status-fluxo` e `historico-status` ficam cacheados no SQLite para leitura offline depois da primeira sincronizacao.
 
 ## Campos de demanda relevantes
 
@@ -82,6 +91,18 @@ O refresh token e rotacionado: reapresentar refresh token ja usado e tratado com
 - `arquivada`
 - `areaDeInteresse`
 - `retrabalho`
+
+`DemandaDetalheResponse` real contem:
+
+- `demanda`
+- `pedido`
+- `cliente`
+- `fazendas`
+- `grupos`
+- `sensoriamentos`
+- `culturas`
+- `demandaOrigem`
+- `derivadas`
 
 ## Recurso nativo GPS
 
