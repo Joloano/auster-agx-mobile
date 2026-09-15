@@ -2,12 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:auster_agx_mobile/app/auster_mobile_app.dart';
-import 'package:auster_agx_mobile/core/auth/auth_tokens.dart';
-import 'package:auster_agx_mobile/core/auth/token_storage.dart';
-import 'package:auster_agx_mobile/features/authentication/data/auth_api.dart';
-import 'package:auster_agx_mobile/features/authentication/data/auth_repository.dart';
-import 'package:auster_agx_mobile/features/authentication/domain/auth_session.dart';
-import 'package:auster_agx_mobile/features/authentication/domain/auth_user.dart';
+import 'package:auster_agx_mobile/data/models/auth_tokens.dart';
+import 'package:auster_agx_mobile/data/services/token_storage.dart';
+import 'package:auster_agx_mobile/data/services/auth_api.dart';
+import 'package:auster_agx_mobile/data/repositorios/auth_repository.dart';
+import 'package:auster_agx_mobile/data/models/auth_session.dart';
+import 'package:auster_agx_mobile/data/models/auth_user.dart';
 import 'package:auster_agx_mobile/features/authentication/providers/auth_providers.dart';
 
 void main() {

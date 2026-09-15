@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 
-import '../auth/auth_tokens.dart';
-import '../auth/token_storage.dart';
-import '../config/app_config.dart';
-import '../errors/app_exception.dart';
+import '../../core/config/app_config.dart';
+import '../../core/errors/app_exception.dart';
+import '../models/auth_tokens.dart';
+import 'token_storage.dart';
 
 class ApiClient {
   ApiClient({required AppConfig config, required TokenStorage tokenStorage})

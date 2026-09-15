@@ -4,9 +4,9 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-import '../../features/dashboard/domain/dashboard_models.dart';
-import '../../features/demandas/domain/demanda_models.dart';
-import '../../features/location/domain/location_capture.dart';
+import '../models/dashboard_models.dart';
+import '../models/demanda_models.dart';
+import '../models/location_capture.dart';
 
 class AppDatabase {
   AppDatabase(this._db) {

@@ -1,7 +1,7 @@
-import '../../../core/database/app_database.dart';
 import '../../../core/network/network_status.dart';
-import '../domain/dashboard_models.dart';
-import 'dashboard_api.dart';
+import '../local/app_database.dart';
+import '../models/dashboard_models.dart';
+import '../services/dashboard_api.dart';
 
 class DashboardRepository {
   DashboardRepository({

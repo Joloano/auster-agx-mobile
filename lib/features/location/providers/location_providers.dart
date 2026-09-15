@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
-import '../data/location_service.dart';
-import '../domain/location_capture.dart';
+import '../../../data/models/location_capture.dart';
+import '../../../data/services/location_service.dart';
 
 final locationServiceProvider = FutureProvider<LocationService>((ref) async {
   final database = await ref.watch(appDatabaseProvider.future);

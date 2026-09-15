@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../domain/auth_user.dart';
+import '../../../data/models/auth_user.dart';
 import '../providers/auth_providers.dart';
 
 final authControllerProvider = AsyncNotifierProvider<AuthController, AuthUser?>(

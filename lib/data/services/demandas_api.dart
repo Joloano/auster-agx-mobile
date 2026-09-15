@@ -1,5 +1,5 @@
-import '../../../core/api/api_client.dart';
-import '../domain/demanda_models.dart';
+import '../models/demanda_models.dart';
+import 'api_client.dart';
 
 abstract class DemandasRemoteDataSource {
   Future<DemandaDetail> getDetail(String id);

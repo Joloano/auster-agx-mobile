@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 
-import '../../features/demandas/data/demandas_api.dart';
-import '../../features/demandas/domain/demanda_models.dart';
-import '../database/app_database.dart';
-import '../errors/app_exception.dart';
-import '../network/network_status.dart';
+import '../../core/errors/app_exception.dart';
+import '../../core/network/network_status.dart';
+import '../local/app_database.dart';
+import '../models/demanda_models.dart';
+import '../services/demandas_api.dart';
 
 class SyncService {
   SyncService({

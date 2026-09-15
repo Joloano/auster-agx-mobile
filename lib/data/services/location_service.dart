@@ -1,9 +1,9 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart' as permissions;
 
-import '../../../core/database/app_database.dart';
 import '../../../core/errors/app_exception.dart';
-import '../domain/location_capture.dart';
+import '../local/app_database.dart';
+import '../models/location_capture.dart';
 
 class LocationService {
   LocationService(this._database);

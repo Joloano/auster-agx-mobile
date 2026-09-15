@@ -2,11 +2,11 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../api/api_client.dart';
-import '../auth/token_storage.dart';
 import '../config/app_config.dart';
-import '../database/app_database.dart';
 import '../network/network_status.dart';
+import '../../data/local/app_database.dart';
+import '../../data/services/api_client.dart';
+import '../../data/services/token_storage.dart';
 
 final appConfigProvider = Provider<AppConfig>((ref) {
   return AppConfig.fromEnvironment();

@@ -1,4 +1,4 @@
-import 'package:auster_agx_mobile/features/dashboard/domain/dashboard_models.dart';
+import 'package:auster_agx_mobile/data/models/dashboard_models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

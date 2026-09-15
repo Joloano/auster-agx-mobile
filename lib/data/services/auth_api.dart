@@ -1,7 +1,7 @@
-import '../../../core/api/api_client.dart';
-import '../../../core/auth/auth_tokens.dart';
-import '../domain/auth_session.dart';
-import '../domain/auth_user.dart';
+import '../models/auth_session.dart';
+import '../models/auth_tokens.dart';
+import '../models/auth_user.dart';
+import 'api_client.dart';
 
 abstract class AuthRemoteDataSource {
   Future<AuthSession> login({required String email, required String senha});

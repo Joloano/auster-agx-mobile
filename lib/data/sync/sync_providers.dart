@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/providers/core_providers.dart';
 import '../../features/demandas/providers/demandas_providers.dart';
-import '../providers/core_providers.dart';
 import 'sync_service.dart';
 
 final syncServiceProvider = FutureProvider<SyncService>((ref) async {

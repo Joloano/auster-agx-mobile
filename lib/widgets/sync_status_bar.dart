@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/providers/core_providers.dart';
-import '../core/sync/sync_providers.dart';
+import '../data/sync/sync_providers.dart';
 
 class SyncStatusBar extends ConsumerWidget {
   const SyncStatusBar({super.key});

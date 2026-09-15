@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../dashboard/domain/dashboard_models.dart';
+import '../../../data/models/dashboard_models.dart';
 import '../../dashboard/providers/dashboard_providers.dart';
 
 class DemandasScreen extends ConsumerWidget {

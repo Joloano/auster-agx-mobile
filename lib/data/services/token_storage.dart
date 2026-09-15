@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'auth_tokens.dart';
+import '../models/auth_tokens.dart';
 
 abstract class TokenStore {
   Future<AuthTokens?> read();

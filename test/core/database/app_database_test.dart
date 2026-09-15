@@ -1,6 +1,6 @@
-import 'package:auster_agx_mobile/core/database/app_database.dart';
-import 'package:auster_agx_mobile/features/dashboard/domain/dashboard_models.dart';
-import 'package:auster_agx_mobile/features/location/domain/location_capture.dart';
+import 'package:auster_agx_mobile/data/local/app_database.dart';
+import 'package:auster_agx_mobile/data/models/dashboard_models.dart';
+import 'package:auster_agx_mobile/data/models/location_capture.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

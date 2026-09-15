@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 
-import '../../../core/database/app_database.dart';
 import '../../../core/network/network_status.dart';
-import '../domain/demanda_models.dart';
-import 'demandas_api.dart';
+import '../local/app_database.dart';
+import '../models/demanda_models.dart';
+import '../services/demandas_api.dart';
 
 class DemandaRepository {
   DemandaRepository({

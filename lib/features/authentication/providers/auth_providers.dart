@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
-import '../data/auth_api.dart';
-import '../data/auth_repository.dart';
+import '../../../data/services/auth_api.dart';
+import '../../../data/repositorios/auth_repository.dart';
 
 final authApiProvider = Provider<AuthApi>((ref) {
   return AuthApi(ref.watch(apiClientProvider));

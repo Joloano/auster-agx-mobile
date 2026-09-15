@@ -1,7 +1,7 @@
-import '../../../core/auth/token_storage.dart';
-import '../domain/auth_session.dart';
-import '../domain/auth_user.dart';
-import 'auth_api.dart';
+import '../models/auth_session.dart';
+import '../models/auth_user.dart';
+import '../services/auth_api.dart';
+import '../services/token_storage.dart';
 
 class AuthRepository {
   AuthRepository({

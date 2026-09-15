@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/sync/sync_providers.dart';
+import '../../../data/models/demanda_models.dart';
+import '../../../data/models/location_capture.dart';
+import '../../../data/repositorios/demanda_repository.dart';
+import '../../../data/services/demandas_api.dart';
+import '../../../data/sync/sync_providers.dart';
 import '../../dashboard/providers/dashboard_providers.dart';
-import '../../location/domain/location_capture.dart';
 import '../../location/providers/location_providers.dart';
-import '../data/demanda_repository.dart';
-import '../data/demandas_api.dart';
-import '../domain/demanda_models.dart';
 import '../providers/demandas_providers.dart';
 
 class DemandaDetailsScreen extends ConsumerWidget {
