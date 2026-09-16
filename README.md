@@ -73,10 +73,17 @@ Credenciais e tokens não aparecem no modelo porque não são persistidos no SQL
 
 Endpoints reais documentados em `docs/investigacao-api.md`.
 
+## Configuração da API
+
 Durante desenvolvimento:
 
 - Android Emulator: `http://10.0.2.2:8080`
 - Celular físico: usar o IP da máquina na rede local.
+
+As opções são definidas em tempo de compilação por `--dart-define`:
+
+- `API_BASE_URL`: endereço base do backend; o padrão local é `http://10.0.2.2:8080`.
+- `API_TIMEOUT_MS`: timeout das chamadas HTTP em milissegundos; o padrão é `10000`.
 
 Configurar URL com:
 
@@ -210,6 +217,19 @@ Capturas reais dos widgets Flutter, renderizadas em viewport mobile de 390 x 844
 - Fila offline persistente, consolidada por demanda, com sincronização automática quando a conexão volta.
 - Captura GPS local no detalhe da demanda usando permissões nativas Android.
 - README, modelo ER do brModelo, investigação de API, issues versionadas e prints mobile mantidos no próprio repositório.
+
+## Limitações conhecidas
+
+- A localização GPS permanece no banco local porque o AUSTER oficial não possui um endpoint específico para associá-la à demanda. O backend não foi alterado nem recebeu campos inventados.
+- A estratégia de conflito offline consolida a última alteração pendente por demanda. Mesclagem distribuída e versionamento de registros exigiriam suporte contratual do servidor.
+- A entrega foi validada no Android. Uma publicação iOS ainda exige configuração, assinatura e validação em ambiente Apple.
+
+## Possíveis melhorias
+
+- Sincronizar capturas GPS quando existir um endpoint oficial aprovado para esse contrato.
+- Adicionar testes de integração contra um ambiente controlado do backend e uma suíte automatizada em dispositivo físico.
+- Criar pipelines de assinatura, distribuição interna e validação também para iOS.
+- Avaliar sincronização periódica em segundo plano após definir requisitos de bateria, rede e política operacional.
 
 ## Premissas de integridade do AUSTER oficial
 
