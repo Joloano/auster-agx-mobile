@@ -11,13 +11,33 @@ class AuthUser {
 
   factory AuthUser.fromJson(Map<String, dynamic> json) {
     return AuthUser(
-      userId: json['userId'] as String,
+      userId: json['userId'].toString(),
       nome: json['nome'] as String,
       email: json['email'] as String,
       perfil: json['perfil'] as String,
       authority: json['authority'] as String,
       ativo: (json['ativo'] as bool?) ?? true,
-      deveAlterarSenha: json['deveAlterarSenha'] as bool,
+      deveAlterarSenha: (json['deveAlterarSenha'] as bool?) ?? false,
+    );
+  }
+
+  AuthUser copyWith({
+    String? userId,
+    String? nome,
+    String? email,
+    String? perfil,
+    String? authority,
+    bool? ativo,
+    bool? deveAlterarSenha,
+  }) {
+    return AuthUser(
+      userId: userId ?? this.userId,
+      nome: nome ?? this.nome,
+      email: email ?? this.email,
+      perfil: perfil ?? this.perfil,
+      authority: authority ?? this.authority,
+      ativo: ativo ?? this.ativo,
+      deveAlterarSenha: deveAlterarSenha ?? this.deveAlterarSenha,
     );
   }
 

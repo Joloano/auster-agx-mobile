@@ -11,6 +11,11 @@ abstract class AuthRemoteDataSource {
   Future<void> logout(String refreshToken);
 
   Future<AuthUser> me();
+
+  Future<AuthUser> changePassword({
+    String? senhaAtual,
+    required String novaSenha,
+  });
 }
 
 class AuthApi implements AuthRemoteDataSource {
@@ -51,6 +56,25 @@ class AuthApi implements AuthRemoteDataSource {
   Future<AuthUser> me() async {
     final response = await _client.dio.get<Map<String, dynamic>>('/auth/me');
     return AuthUser.fromJson(response.data!);
+  }
+
+  @override
+  Future<AuthUser> changePassword({
+    String? senhaAtual,
+    required String novaSenha,
+  }) async {
+    final payload = <String, dynamic>{'novaSenha': novaSenha};
+    if (senhaAtual != null && senhaAtual.trim().isNotEmpty) {
+      payload['senhaAtual'] = senhaAtual;
+    }
+
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      '/auth/change-password',
+      data: payload,
+    );
+    final data = response.data;
+    if (data == null) return me();
+    return AuthUser.fromJson(data);
   }
 
   AuthSession _sessionFromJson(Map<String, dynamic> json) {

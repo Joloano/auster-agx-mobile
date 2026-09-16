@@ -18,7 +18,7 @@ void main() {
           authRepositoryProvider.overrideWithValue(
             AuthRepository(
               api: _FakeAuthApi(),
-              tokenStorage: _EmptyTokenStore(),
+              tokenStorage: _MemoryTokenStore(),
             ),
           ),
         ],
@@ -31,41 +31,117 @@ void main() {
     expect(find.text('Entrar'), findsOneWidget);
     expect(find.text('AusterAgX Mobile'), findsOneWidget);
   });
+
+  testWidgets('direciona senha temporaria para troca obrigatoria',
+      (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(
+            AuthRepository(
+              api: _FakeAuthApi(
+                user: _user(
+                  'admin@auster.local',
+                  deveAlterarSenha: true,
+                ),
+              ),
+              tokenStorage: _MemoryTokenStore(
+                const AuthTokens(
+                  accessToken: 'access-token',
+                  refreshToken: 'refresh-token',
+                ),
+              ),
+            ),
+          ),
+        ],
+        child: const AusterMobileApp(),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(find.text('Troca de senha'), findsOneWidget);
+    expect(find.text('Senha provisoria'), findsOneWidget);
+    expect(find.text('Alterar senha'), findsOneWidget);
+  });
 }
 
-class _EmptyTokenStore implements TokenStore {
-  @override
-  Future<void> clear() async {}
+class _MemoryTokenStore implements TokenStore {
+  _MemoryTokenStore([this.saved]);
+
+  AuthTokens? saved;
 
   @override
-  Future<AuthTokens?> read() async => null;
+  Future<void> clear() async {
+    saved = null;
+  }
 
   @override
-  Future<String?> readAccessToken() async => null;
+  Future<AuthTokens?> read() async => saved;
 
   @override
-  Future<String?> readRefreshToken() async => null;
+  Future<String?> readAccessToken() async => saved?.accessToken;
 
   @override
-  Future<void> save(AuthTokens tokens) async {}
+  Future<String?> readRefreshToken() async => saved?.refreshToken;
+
+  @override
+  Future<void> save(AuthTokens tokens) async {
+    saved = tokens;
+  }
 }
 
 class _FakeAuthApi implements AuthRemoteDataSource {
+  _FakeAuthApi({AuthUser? user}) : user = user ?? _user('admin@auster.local');
+
+  AuthUser user;
+
   @override
   Future<AuthSession> login({required String email, required String senha}) {
-    throw UnimplementedError();
+    user = _user(email);
+    return Future.value(
+      AuthSession(
+        tokens: const AuthTokens(
+          accessToken: 'access-token',
+          refreshToken: 'refresh-token',
+        ),
+        user: user,
+        expiresIn: 3600,
+      ),
+    );
   }
 
   @override
   Future<void> logout(String refreshToken) async {}
 
   @override
-  Future<AuthUser> me() {
-    throw UnimplementedError();
+  Future<AuthUser> me() async {
+    return user;
   }
 
   @override
   Future<AuthSession> refresh(String refreshToken) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<AuthUser> changePassword({
+    String? senhaAtual,
+    required String novaSenha,
+  }) async {
+    user = user.copyWith(deveAlterarSenha: false);
+    return user;
+  }
+}
+
+AuthUser _user(String email, {bool deveAlterarSenha = false}) {
+  return AuthUser(
+    userId: '01900000-0000-7000-8000-000000000001',
+    nome: 'Admin',
+    email: email,
+    perfil: 'SUPER_ADMIN',
+    authority: 'ROLE_SUPER_ADMIN',
+    ativo: true,
+    deveAlterarSenha: deveAlterarSenha,
+  );
 }

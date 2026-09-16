@@ -38,4 +38,14 @@ class AuthRepository {
       await _api.logout(refreshToken).catchError((_) {});
     }
   }
+
+  Future<AuthUser> changePassword({
+    String? senhaAtual,
+    required String novaSenha,
+  }) {
+    return _api.changePassword(
+      senhaAtual: senhaAtual,
+      novaSenha: novaSenha,
+    );
+  }
 }

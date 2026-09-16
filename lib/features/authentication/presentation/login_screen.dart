@@ -29,7 +29,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     ref.listen(authControllerProvider, (previous, next) {
       if (next.hasValue && next.value != null && mounted) {
-        context.go('/dashboard');
+        context.go(
+          next.value!.deveAlterarSenha ? '/change-password' : '/dashboard',
+        );
       }
     });
 
