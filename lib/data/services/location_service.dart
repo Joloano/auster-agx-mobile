@@ -14,18 +14,18 @@ class LocationService {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       throw const AppException(
-        'GPS desligado. Ative a localizacao do aparelho.',
+        'GPS desligado. Ative a localização do aparelho.',
       );
     }
 
     final permission = await permissions.Permission.locationWhenInUse.request();
     if (permission.isPermanentlyDenied) {
       throw const AppException(
-        'Permissao de localizacao negada permanentemente.',
+        'Permissão de localização negada permanentemente.',
       );
     }
     if (!permission.isGranted) {
-      throw const AppException('Permissao de localizacao negada.');
+      throw const AppException('Permissão de localização negada.');
     }
 
     final position = await Geolocator.getCurrentPosition(

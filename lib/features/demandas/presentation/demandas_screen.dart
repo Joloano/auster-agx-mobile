@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/app_theme.dart';
 import '../../../data/models/dashboard_models.dart';
 import '../../../data/models/demanda_status_rules.dart';
+import '../../../widgets/auster_page_header.dart';
 import '../../dashboard/providers/dashboard_providers.dart';
 
 class DemandasScreen extends ConsumerWidget {
@@ -24,11 +26,12 @@ class DemandasScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Text(
-                'Demandas',
-                style: Theme.of(context).textTheme.headlineSmall,
+              const AusterPageHeader(
+                icon: Icons.assignment_rounded,
+                title: 'DEMANDAS',
+                subtitle: 'Acompanhamento operacional por etapa e status.',
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 22),
               for (final grupo in [
                 ...grupoOperacionalOrder,
                 ...grouped.keys.where(
@@ -36,19 +39,37 @@ class DemandasScreen extends ConsumerWidget {
                 ),
               ])
                 if (grouped.containsKey(grupo)) ...[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 14, bottom: 8),
+                  Container(
+                    margin: const EdgeInsets.only(top: 12, bottom: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AusterColors.neutral100,
+                      border: Border.all(color: AusterColors.neutral300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
                             grupoOperacionalLabel(grupo),
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: AusterColors.neutral900,
+                                ),
                           ),
                         ),
                         Chip(
                           label: Text(grouped[grupo]!.length.toString()),
                           visualDensity: VisualDensity.compact,
+                          backgroundColor: AusterColors.primary100,
+                          side: const BorderSide(
+                            color: AusterColors.primary300,
+                          ),
                         ),
                       ],
                     ),
@@ -93,75 +114,148 @@ class _DemandaCard extends StatelessWidget {
       tipo: item.tipo,
       metodoMapeamento: item.metodoMapeamento,
     );
-    return Card(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: () => context.go('/demandas/${item.id}'),
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 18,
-                    child: Text(tipoDemandaLabel(item.tipo).substring(0, 1)),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      item.codigo,
-                      style: Theme.of(context).textTheme.titleMedium,
+    final tone = _statusTone(item.status);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => context.go('/demandas/${item.id}'),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(width: 5, color: tone.foreground),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 38,
+                              height: 38,
+                              decoration: BoxDecoration(
+                                color: tone.background,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.assignment_outlined,
+                                size: 20,
+                                color: tone.foreground,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                item.codigo,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                      color: AusterColors.primary700,
+                                    ),
+                              ),
+                            ),
+                            const Icon(
+                              Icons.chevron_right_rounded,
+                              color: AusterColors.primary700,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          [
+                            item.fazenda,
+                            item.talhoes.isEmpty
+                                ? null
+                                : item.talhoes.join(', '),
+                            item.dataPrevista,
+                          ].whereType<String>().join(' · '),
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
+                          children: [
+                            Chip(
+                              label: Text(statusDemandaLabel(item.status)),
+                              visualDensity: VisualDensity.compact,
+                              backgroundColor: tone.background,
+                              side: BorderSide(color: tone.border),
+                              labelStyle: TextStyle(
+                                color: tone.foreground,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Chip(
+                              label:
+                                  Text(situacaoDadosLabel(item.situacaoDados)),
+                              visualDensity: VisualDensity.compact,
+                            ),
+                            Chip(
+                              label: Text(
+                                situacaoMapeamentoLabel(
+                                    item.situacaoMapeamento),
+                              ),
+                              visualDensity: VisualDensity.compact,
+                            ),
+                            if (indicadores != null)
+                              Chip(
+                                label: Text(
+                                  indicadores.liberadoParaPrescricao
+                                      ? 'Pronto para prescrição'
+                                      : 'Aguardando requisitos',
+                                ),
+                                visualDensity: VisualDensity.compact,
+                              ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  const Icon(Icons.chevron_right),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                [
-                  item.fazenda,
-                  item.talhoes.isEmpty ? null : item.talhoes.join(', '),
-                  item.dataPrevista,
-                ].whereType<String>().join(' · '),
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 6,
-                children: [
-                  Chip(
-                    label: Text(statusDemandaLabel(item.status)),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                  Chip(
-                    label: Text(situacaoDadosLabel(item.situacaoDados)),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                  Chip(
-                    label: Text(
-                      situacaoMapeamentoLabel(item.situacaoMapeamento),
-                    ),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                  if (indicadores != null)
-                    Chip(
-                      label: Text(
-                        indicadores.liberadoParaPrescricao
-                            ? 'Pronto para prescricao'
-                            : 'Aguardando requisitos',
-                      ),
-                      visualDensity: VisualDensity.compact,
-                    ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+}
+
+({Color background, Color foreground, Color border}) _statusTone(
+  String status,
+) {
+  final normalized = status.toUpperCase();
+  if (normalized.contains('CONCLUID')) {
+    return (
+      background: AusterColors.successBackground,
+      foreground: const Color(0xFF006B3A),
+      border: const Color(0xFF9BD9BE),
+    );
+  }
+  if (normalized.contains('CANCEL')) {
+    return (
+      background: AusterColors.errorBackground,
+      foreground: const Color(0xFF8F231D),
+      border: const Color(0xFFE8A39E),
+    );
+  }
+  if (normalized.contains('AGEND') || normalized.contains('ANDAMENTO')) {
+    return (
+      background: AusterColors.infoBackground,
+      foreground: AusterColors.primary700,
+      border: const Color(0xFF9BC8EF),
+    );
+  }
+  return (
+    background: AusterColors.warningBackground,
+    foreground: const Color(0xFF7A5200),
+    border: const Color(0xFFF0CF7A),
+  );
 }
 
 class _CenteredMessage extends StatelessWidget {

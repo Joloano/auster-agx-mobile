@@ -9,7 +9,7 @@ class AppException implements Exception {
 }
 
 class OfflineException extends AppException {
-  const OfflineException() : super('Sem conexao com a internet.');
+  const OfflineException() : super('Sem conexão com a internet.');
 }
 
 class UnauthorizedException extends AppException {

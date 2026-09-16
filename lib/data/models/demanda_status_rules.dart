@@ -1,10 +1,10 @@
 const statusDemandaLabels = {
   'LISTADA': 'Listada',
   'AGENDADA': 'Agendada',
-  'LIBERADO_PARA_PRESCRICAO': 'Liberado para prescricao',
-  'PREPARACAO_DE_DADOS': 'Preparacao de dados',
-  'PRESCRICAO_EM_ANDAMENTO': 'Prescricao em andamento',
-  'PRESCRICAO_EM_REVISAO': 'Prescricao em revisao',
+  'LIBERADO_PARA_PRESCRICAO': 'Liberado para prescrição',
+  'PREPARACAO_DE_DADOS': 'Preparação de dados',
+  'PRESCRICAO_EM_ANDAMENTO': 'Prescrição em andamento',
+  'PRESCRICAO_EM_REVISAO': 'Prescrição em revisão',
   'LIBERADO_PARA_ENTREGA': 'Liberado para a entrega',
   'ENTREGUE': 'Entregue',
   'CANCELADA': 'Cancelada',
@@ -21,7 +21,7 @@ const situacaoMapeamentoLabels = {
   'SEM_IMAGENS': 'Sem imagens',
   'AGENDADO': 'Agendado',
   'EM_ANDAMENTO': 'Em andamento',
-  'IMAGENS_DISPONIVEIS': 'Imagens disponiveis',
+  'IMAGENS_DISPONIVEIS': 'Imagens disponíveis',
 };
 
 const situacaoMapeamentoValues = [
@@ -183,7 +183,7 @@ String? bloqueioParaStatus({
   if (situacaoMapeamento != 'IMAGENS_DISPONIVEIS' &&
       !demandaSemMapeamento(tipo: tipo, metodoMapeamento: metodoMapeamento) &&
       statusFluxo.exigeMapeamentoConcluido.contains(proximoStatus)) {
-    return 'Exige imagens disponiveis.';
+    return 'Exige imagens disponíveis.';
   }
   return null;
 }

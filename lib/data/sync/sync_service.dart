@@ -77,7 +77,7 @@ class SyncService {
     }
 
     throw AppException(
-      'Operacao de sincronizacao desconhecida: ${operation.operationType}',
+      'Operação de sincronização desconhecida: ${operation.operationType}',
     );
   }
 }

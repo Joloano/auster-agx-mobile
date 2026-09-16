@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/app_theme.dart';
 import '../core/providers/core_providers.dart';
 import '../data/sync/sync_providers.dart';
 
@@ -50,22 +51,21 @@ class SyncStatusBar extends ConsumerWidget {
     required bool online,
     required int pending,
   }) {
-    final colors = Theme.of(context).colorScheme;
     if (!online) {
       return (
-        icon: Icons.cloud_off,
+        icon: Icons.cloud_off_rounded,
         text: pending > 0
-            ? 'Offline · $pending ${pending == 1 ? "alteracao" : "alteracoes"} aguardando envio'
+            ? 'Offline · $pending ${pending == 1 ? "alteração" : "alterações"} aguardando envio'
             : 'Offline · exibindo dados salvos',
-        color: colors.onSurfaceVariant,
+        color: AusterColors.neutral700,
       );
     }
     if (pending > 0) {
       return (
-        icon: Icons.cloud_upload_outlined,
+        icon: Icons.cloud_upload_rounded,
         text:
-            '$pending ${pending == 1 ? "alteracao pendente" : "alteracoes pendentes"} · toque para enviar',
-        color: colors.primary,
+            '$pending ${pending == 1 ? "alteração pendente" : "alterações pendentes"} · toque para enviar',
+        color: AusterColors.primary700,
       );
     }
     return null;

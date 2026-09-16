@@ -1,6 +1,6 @@
 const perfilLabels = {
   'SUPER_ADMIN': 'Super administrador',
-  'USUARIO_TECNICO_PRESCRICAO': 'Tecnico de prescricao',
+  'USUARIO_TECNICO_PRESCRICAO': 'Técnico de prescrição',
   'USUARIO_CONSULTOR_CTV': 'Consultor CTV',
   'USUARIO_ASSISTENTE_ATV': 'Assistente ATV',
   'USUARIO_GESTOR_ADMINISTRATIVO': 'Gestor administrativo',
