@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Aplicativo Flutter academico para acompanhamento mobile de demandas do AusterAgX, com login REST, JWT, armazenamento offline, fila de sincronizacao e captura de GPS.
+Aplicativo Flutter academico para acompanhamento mobile de demandas do AusterAgX, com login REST, JWT, troca obrigatoria de senha temporaria, armazenamento offline, fila de sincronizacao e captura de GPS.
 
 ## Motivacao para versao mobile
 
@@ -175,6 +175,10 @@ flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8080
 
 O login usa `POST /auth/login` com `email` e `senha`. A resposta contem `accessToken`, `refreshToken` e dados do usuario. Tokens ficam no armazenamento seguro, nunca em SharedPreferences.
 
+Quando o backend retorna `deveAlterarSenha = true`, o app segue o comportamento do AUSTER oficial e bloqueia a navegacao operacional ate concluir `POST /auth/change-password`. O payload usa o contrato oficial (`novaSenha` e, quando aplicavel, `senhaAtual`) e a resposta atualiza o usuario autenticado no estado da aplicacao.
+
+Durante a restauracao da sessao, o roteador mantem uma tela neutra de carregamento. Dashboard, demandas e plugins operacionais so sao montados depois da validacao do usuario; links internos validos sao retomados apos a autenticacao.
+
 ## Funcionamento offline
 
 Demandas sincronizadas sao salvas no SQLite. A UI le primeiro do banco local; quando existe internet, o repositorio busca a API, atualiza o banco e reflete os dados.
@@ -185,11 +189,11 @@ O cache inclui dashboard, detalhes agregados, historico de status e metadados de
 
 Alteracoes feitas sem internet entram em `sync_queue`. Ao detectar conectividade, `SyncService` tenta enviar as operacoes pendentes e atualiza o cache local.
 
-O PATCH enviado para `/demandas/{id}` segue o contrato oficial: `tipo`, `representanteId`, `prazo`, `areaDeInteresse`, `status`, `situacaoDados`, `situacaoMapeamento` e `retrabalho`. A tela so oferece alteracao de status/dados/mapeamento para perfis administrativos (`SUPER_ADMIN` e `USUARIO_TECNICO_PRESCRICAO`), como no frontend oficial.
+Para evitar envio redundante, a fila consolida a ultima operacao pendente de uma mesma demanda antes da sincronizacao. O PATCH enviado para `/demandas/{id}` segue o contrato oficial: `tipo`, `representanteId`, `prazo`, `areaDeInteresse`, `status`, `situacaoDados`, `situacaoMapeamento` e `retrabalho`. A tela so oferece alteracao de status/dados/mapeamento para perfis administrativos (`SUPER_ADMIN` e `USUARIO_TECNICO_PRESCRICAO`), como no frontend oficial.
 
 ## Recurso nativo utilizado
 
-GPS no detalhe da demanda. Como nao foi encontrado endpoint especifico para gravar coordenadas na demanda, a captura fica armazenada localmente no MVP.
+GPS no detalhe da demanda. A captura funciona como evidencia local de campo e fica separada do payload REST oficial para preservar o contrato atual do AUSTER.
 
 ## Como executar
 
@@ -241,35 +245,42 @@ Para publicar em um repositorio ja existente:
 1. Abrir app.
 2. Login via API REST.
 3. Receber JWT.
-4. Ver dashboard/demandas.
-5. Desligar internet.
-6. Continuar vendo dados locais.
-7. Alterar status, situacao dos dados ou situacao do mapeamento quando o perfil permitir.
-8. Ver alteracao pendente e card local atualizado.
-9. Religar internet.
-10. Sincronizar com servidor.
-11. Abrir detalhe com resumo, contexto, sensoriamento, cadeia e historico.
-12. Capturar GPS.
+4. Trocar senha provisoria quando `deveAlterarSenha` estiver ativo.
+5. Ver dashboard/demandas.
+6. Desligar internet.
+7. Continuar vendo dados locais.
+8. Alterar status, situacao dos dados ou situacao do mapeamento quando o perfil permitir.
+9. Ver alteracao pendente consolidada e card local atualizado.
+10. Religar internet.
+11. Sincronizar com servidor.
+12. Abrir detalhe com resumo, contexto, sensoriamento, cadeia e historico.
+13. Capturar GPS.
 
 ## Prints das telas
 
-Prints demonstrativos do fluxo mobile com dados de exemplo:
+Prints demonstrativos das principais telas mobile com dados de exemplo:
 
 <p>
   <img src="docs/screenshots/mobile-login.png" alt="Tela de login do AusterAgX Mobile" width="180">
+  <img src="docs/screenshots/mobile-troca-senha.png" alt="Tela de troca obrigatoria de senha do AusterAgX Mobile" width="180">
   <img src="docs/screenshots/mobile-dashboard.png" alt="Dashboard mobile com resumo e demandas recentes" width="180">
   <img src="docs/screenshots/mobile-demandas.png" alt="Lista mobile de demandas agrupadas por status" width="180">
   <img src="docs/screenshots/mobile-detalhe-demanda.png" alt="Detalhe mobile da demanda com status e GPS" width="180">
 </p>
 
-## Limitacoes
+## Entrega consolidada
 
-- GPS nao sincroniza com backend porque nao foi encontrado endpoint real para coordenadas de demanda.
-- Resolucao distribuida de conflito esta fora do MVP.
-- Web/Windows desktop nao sao alvos suportados neste MVP; o app usa SQLite via FFI para o armazenamento offline mobile.
+- Login, refresh token, logout e troca obrigatoria de senha temporaria conforme o AUSTER oficial.
+- Dashboard mobile com resumo operacional, cards de demandas, grupos de status e metricas de area.
+- Lista e detalhe de demandas com cache offline, historico de status, sensoriamentos, culturas e cadeia origem/derivadas.
+- Atualizacao de status, situacao dos dados e situacao do mapeamento com as mesmas regras de transicao do backend.
+- Fila offline persistente, consolidada por demanda, com sincronizacao automatica quando a conexao volta.
+- Captura GPS local no detalhe da demanda usando permissoes nativas Android.
+- README, modelo ER, investigacao de API, issues versionadas e prints mobile mantidos no proprio repositorio.
 
-## Possiveis melhorias
+## Premissas de integridade do AUSTER oficial
 
-- Criar endpoint oficial para registrar check-in/localizacao em demanda.
-- Adicionar notificacoes de sincronizacao.
-- Expandir testes de widget.
+- O app mobile consome endpoints REST existentes e nao altera tabelas, migrations ou regras do sistema oficial.
+- O payload enviado ao backend respeita os DTOs ja aceitos por `/auth`, `/dashboard` e `/demandas`.
+- Dados locais existem para operacao mobile/offline e nao substituem a base transacional do AUSTER.
+- O build validado e Android, usando Flutter e Android SDK portateis em `C:\auster-mobile-tools`.
