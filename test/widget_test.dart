@@ -31,7 +31,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Entrar'), findsOneWidget);
-    expect(find.text('AusterAgX Mobile'), findsOneWidget);
+    expect(find.text('ACESSAR PLATAFORMA'), findsOneWidget);
   });
 
   testWidgets('protege dashboard durante restauracao da sessao',
@@ -89,8 +89,8 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(find.text('Troca de senha'), findsOneWidget);
-    expect(find.text('Senha provisoria'), findsOneWidget);
+    expect(find.text('TROCA DE SENHA'), findsOneWidget);
+    expect(find.textContaining('Senha provisória detectada'), findsOneWidget);
     expect(find.text('Alterar senha'), findsOneWidget);
   });
 }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'auth_controller.dart';
+import 'widgets/auth_shell.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -15,6 +16,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -35,82 +37,75 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     });
 
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 420),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Icon(Icons.agriculture, size: 54),
-                    const SizedBox(height: 20),
-                    Text(
-                      'AusterAgX Mobile',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Demandas no campo, mesmo com conectividade limitada.',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: 28),
-                    TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      autofillHints: const [AutofillHints.email],
-                      decoration: const InputDecoration(
-                        labelText: 'E-mail',
-                        prefixIcon: Icon(Icons.mail_outline),
-                      ),
-                      validator: (value) => value == null || value.isEmpty
-                          ? 'Informe o e-mail'
-                          : null,
-                    ),
-                    const SizedBox(height: 14),
-                    TextFormField(
-                      controller: _senhaController,
-                      obscureText: true,
-                      autofillHints: const [AutofillHints.password],
-                      decoration: const InputDecoration(
-                        labelText: 'Senha',
-                        prefixIcon: Icon(Icons.lock_outline),
-                      ),
-                      validator: (value) => value == null || value.isEmpty
-                          ? 'Informe a senha'
-                          : null,
-                    ),
-                    const SizedBox(height: 20),
-                    FilledButton.icon(
-                      onPressed: auth.isLoading ? null : _submit,
-                      icon: auth.isLoading
-                          ? const SizedBox.square(
-                              dimension: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.login),
-                      label: const Text('Entrar'),
-                    ),
-                    if (auth.hasError) ...[
-                      const SizedBox(height: 16),
-                      Text(
-                        'Nao foi possivel autenticar. Verifique credenciais, servidor e conexao.',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ],
+    return AuthShell(
+      title: 'ACESSAR PLATAFORMA',
+      subtitle: 'Acompanhe as demandas do AusterAgX onde estiver.',
+      child: AutofillGroup(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                autofillHints: const [AutofillHints.email],
+                decoration: authFieldDecoration(
+                  hint: 'E-mail',
+                  icon: Icons.email_rounded,
                 ),
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Informe o e-mail' : null,
               ),
-            ),
+              const SizedBox(height: 14),
+              TextFormField(
+                controller: _senhaController,
+                obscureText: _obscurePassword,
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (_) => auth.isLoading ? null : _submit(),
+                autofillHints: const [AutofillHints.password],
+                decoration: authFieldDecoration(
+                  hint: 'Senha',
+                  icon: Icons.lock_rounded,
+                  suffixIcon: IconButton(
+                    tooltip:
+                        _obscurePassword ? 'Mostrar senha' : 'Ocultar senha',
+                    onPressed: () {
+                      setState(() => _obscurePassword = !_obscurePassword);
+                    },
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_rounded
+                          : Icons.visibility_off_rounded,
+                    ),
+                  ),
+                ),
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Informe a senha' : null,
+              ),
+              const SizedBox(height: 22),
+              FilledButton.icon(
+                style: authPrimaryButtonStyle(),
+                onPressed: auth.isLoading ? null : _submit,
+                icon: auth.isLoading
+                    ? const SizedBox.square(
+                        dimension: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Icon(Icons.login_rounded),
+                label: Text(auth.isLoading ? 'Entrando...' : 'Entrar'),
+              ),
+              if (auth.hasError) ...[
+                const SizedBox(height: 16),
+                const AuthErrorMessage(
+                  'Não foi possível entrar. Verifique suas credenciais, o servidor e a conexão.',
+                ),
+              ],
+            ],
           ),
         ),
       ),

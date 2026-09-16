@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'auth_controller.dart';
+import 'widgets/auth_shell.dart';
 
 class ChangePasswordScreen extends ConsumerStatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -17,6 +18,8 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   final _novaSenhaController = TextEditingController();
   final _confirmacaoController = TextEditingController();
   bool _submitting = false;
+  bool _obscureNewPassword = true;
+  bool _obscureConfirmation = true;
   String? _error;
 
   @override
@@ -30,117 +33,123 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(authControllerProvider).valueOrNull;
 
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Troca de senha'),
-        actions: [
-          IconButton(
-            tooltip: 'Sair',
-            onPressed: _submitting
-                ? null
-                : () async {
-                    await ref.read(authControllerProvider.notifier).logout();
-                    if (context.mounted) context.go('/login');
-                  },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
+    return AuthShell(
+      title: 'TROCA DE SENHA',
+      subtitle: user == null
+          ? 'Defina uma nova senha para continuar.'
+          : 'Senha provisória detectada para ${user.email}.',
+      action: IconButton(
+        tooltip: 'Sair',
+        onPressed: _submitting
+            ? null
+            : () async {
+                await ref.read(authControllerProvider.notifier).logout();
+                if (context.mounted) context.go('/login');
+              },
+        icon: const Icon(Icons.logout_rounded),
       ),
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 420),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Icon(
-                      Icons.lock_reset,
-                      size: 52,
-                      color: Theme.of(context).colorScheme.primary,
+      child: AutofillGroup(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: _novaSenhaController,
+                obscureText: _obscureNewPassword,
+                textInputAction: TextInputAction.next,
+                autofillHints: const [AutofillHints.newPassword],
+                decoration: authFieldDecoration(
+                  hint: 'Nova senha',
+                  icon: Icons.lock_reset_rounded,
+                  suffixIcon: IconButton(
+                    tooltip:
+                        _obscureNewPassword ? 'Mostrar senha' : 'Ocultar senha',
+                    onPressed: () {
+                      setState(() {
+                        _obscureNewPassword = !_obscureNewPassword;
+                      });
+                    },
+                    icon: Icon(
+                      _obscureNewPassword
+                          ? Icons.visibility_rounded
+                          : Icons.visibility_off_rounded,
                     ),
-                    const SizedBox(height: 18),
-                    Text(
-                      'Senha provisoria',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    if (user != null) ...[
-                      const SizedBox(height: 6),
-                      Text(
-                        user.email,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                    const SizedBox(height: 26),
-                    TextFormField(
-                      controller: _novaSenhaController,
-                      obscureText: true,
-                      autofillHints: const [AutofillHints.newPassword],
-                      decoration: const InputDecoration(
-                        labelText: 'Nova senha',
-                        helperText: 'Minimo de 6 caracteres',
-                        prefixIcon: Icon(Icons.lock_outline),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Informe a nova senha';
-                        }
-                        if (value.length < 6) {
-                          return 'Use pelo menos 6 caracteres';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 14),
-                    TextFormField(
-                      controller: _confirmacaoController,
-                      obscureText: true,
-                      autofillHints: const [AutofillHints.newPassword],
-                      decoration: const InputDecoration(
-                        labelText: 'Confirmar senha',
-                        prefixIcon: Icon(Icons.verified_user_outlined),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Confirme a nova senha';
-                        }
-                        if (value != _novaSenhaController.text) {
-                          return 'As senhas nao conferem';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    FilledButton.icon(
-                      onPressed: _submitting ? null : _submit,
-                      icon: _submitting
-                          ? const SizedBox.square(
-                              dimension: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.check),
-                      label: const Text('Alterar senha'),
-                    ),
-                    if (_error != null) ...[
-                      const SizedBox(height: 16),
-                      Text(
-                        _error!,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ],
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Informe a nova senha';
+                  }
+                  if (value.length < 6) {
+                    return 'Use pelo menos 6 caracteres';
+                  }
+                  return null;
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 18, top: 6),
+                child: Text(
+                  'Mínimo de 6 caracteres',
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
-            ),
+              const SizedBox(height: 14),
+              TextFormField(
+                controller: _confirmacaoController,
+                obscureText: _obscureConfirmation,
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (_) => _submitting ? null : _submit(),
+                autofillHints: const [AutofillHints.newPassword],
+                decoration: authFieldDecoration(
+                  hint: 'Confirmar senha',
+                  icon: Icons.verified_user_rounded,
+                  suffixIcon: IconButton(
+                    tooltip: _obscureConfirmation
+                        ? 'Mostrar confirmação'
+                        : 'Ocultar confirmação',
+                    onPressed: () {
+                      setState(() {
+                        _obscureConfirmation = !_obscureConfirmation;
+                      });
+                    },
+                    icon: Icon(
+                      _obscureConfirmation
+                          ? Icons.visibility_rounded
+                          : Icons.visibility_off_rounded,
+                    ),
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Confirme a nova senha';
+                  }
+                  if (value != _novaSenhaController.text) {
+                    return 'As senhas não conferem';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 22),
+              FilledButton.icon(
+                style: authPrimaryButtonStyle(),
+                onPressed: _submitting ? null : _submit,
+                icon: _submitting
+                    ? const SizedBox.square(
+                        dimension: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Icon(Icons.check_rounded),
+                label: Text(_submitting ? 'Alterando...' : 'Alterar senha'),
+              ),
+              if (_error != null) ...[
+                const SizedBox(height: 16),
+                AuthErrorMessage(_error!),
+              ],
+            ],
           ),
         ),
       ),
@@ -162,7 +171,7 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _error = 'Nao foi possivel alterar a senha.';
+        _error = 'Não foi possível alterar a senha.';
       });
     } finally {
       if (mounted) {
