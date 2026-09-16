@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,11 +28,37 @@ void main() {
         child: const AusterMobileApp(),
       ),
     );
-    await tester.pump();
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     expect(find.text('Entrar'), findsOneWidget);
     expect(find.text('AusterAgX Mobile'), findsOneWidget);
+  });
+
+  testWidgets('protege dashboard durante restauracao da sessao',
+      (tester) async {
+    final tokenStore = _DelayedTokenStore();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authRepositoryProvider.overrideWithValue(
+            AuthRepository(
+              api: _FakeAuthApi(),
+              tokenStorage: tokenStore,
+            ),
+          ),
+        ],
+        child: const AusterMobileApp(),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.text('Dashboard'), findsNothing);
+
+    tokenStore.complete(null);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Entrar'), findsOneWidget);
   });
 
   testWidgets('direciona senha temporaria para troca obrigatoria',
@@ -89,6 +118,27 @@ class _MemoryTokenStore implements TokenStore {
   Future<void> save(AuthTokens tokens) async {
     saved = tokens;
   }
+}
+
+class _DelayedTokenStore implements TokenStore {
+  final _readCompleter = Completer<AuthTokens?>();
+
+  void complete(AuthTokens? tokens) => _readCompleter.complete(tokens);
+
+  @override
+  Future<void> clear() async {}
+
+  @override
+  Future<AuthTokens?> read() => _readCompleter.future;
+
+  @override
+  Future<String?> readAccessToken() async => null;
+
+  @override
+  Future<String?> readRefreshToken() async => null;
+
+  @override
+  Future<void> save(AuthTokens tokens) async {}
 }
 
 class _FakeAuthApi implements AuthRemoteDataSource {

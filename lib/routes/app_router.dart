@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/authentication/presentation/auth_controller.dart';
+import '../features/authentication/presentation/auth_loading_screen.dart';
 import '../features/authentication/presentation/change_password_screen.dart';
 import '../features/authentication/presentation/login_screen.dart';
 import '../features/dashboard/presentation/dashboard_screen.dart';
@@ -17,15 +18,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ..onDispose(routerRefresh.dispose);
 
   return GoRouter(
-    initialLocation: '/dashboard',
+    initialLocation: '/loading',
     refreshListenable: routerRefresh,
     redirect: (context, state) {
       final auth = ref.read(authControllerProvider);
       final currentLocation = state.matchedLocation;
+      final isLoading = currentLocation == '/loading';
       final isLogin = currentLocation == '/login';
       final isChangePassword = currentLocation == '/change-password';
 
-      if (auth.isLoading) return null;
+      if (auth.isLoading) {
+        if (isLoading) return null;
+        return Uri(
+          path: '/loading',
+          queryParameters: {'redirect': state.uri.toString()},
+        ).toString();
+      }
       final user = auth.valueOrNull;
       final authenticated = user != null;
       if (!authenticated && !isLogin) return '/login';
@@ -34,12 +42,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       if (user.deveAlterarSenha && !isChangePassword) {
         return '/change-password';
       }
+      if (!user.deveAlterarSenha && isLoading) {
+        return _safeRedirectTarget(state) ?? '/dashboard';
+      }
       if (!user.deveAlterarSenha && (isLogin || isChangePassword)) {
         return '/dashboard';
       }
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/loading',
+        builder: (context, state) => const AuthLoadingScreen(),
+      ),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/change-password',
@@ -79,6 +94,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+String? _safeRedirectTarget(GoRouterState state) {
+  final target = state.uri.queryParameters['redirect'];
+  if (target == null || target.isEmpty || target.startsWith('//')) return null;
+
+  final uri = Uri.tryParse(target);
+  if (uri == null ||
+      uri.hasScheme ||
+      uri.hasAuthority ||
+      !uri.path.startsWith('/')) {
+    return null;
+  }
+  if (uri.path == '/loading') return null;
+  return uri.toString();
+}
 
 class _RouterRefreshNotifier extends ChangeNotifier {
   void notify() => notifyListeners();
