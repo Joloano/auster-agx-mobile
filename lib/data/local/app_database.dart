@@ -244,6 +244,34 @@ class AppDatabase {
     required String entityId,
     required Map<String, dynamic> payload,
   }) async {
+    final encodedPayload = jsonEncode(payload);
+    final now = DateTime.now().toIso8601String();
+    final pending = _db.select(
+      '''
+      SELECT id
+      FROM sync_queue
+      WHERE operation_type = ?
+        AND entity = ?
+        AND entity_id = ?
+        AND status = 'pending'
+      ORDER BY created_at DESC
+      LIMIT 1
+      ''',
+      [operationType, entity, entityId],
+    );
+    if (pending.isNotEmpty) {
+      final id = pending.first['id'] as int;
+      _db.execute(
+        '''
+        UPDATE sync_queue
+        SET payload = ?, created_at = ?, attempts = 0
+        WHERE id = ?
+        ''',
+        [encodedPayload, now, id],
+      );
+      return id;
+    }
+
     final result = _db.select(
       '''
       INSERT INTO sync_queue
@@ -255,8 +283,8 @@ class AppDatabase {
         operationType,
         entity,
         entityId,
-        jsonEncode(payload),
-        DateTime.now().toIso8601String(),
+        encodedPayload,
+        now,
       ],
     );
     return result.first['id'] as int;

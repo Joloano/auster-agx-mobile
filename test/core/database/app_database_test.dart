@@ -37,6 +37,30 @@ void main() {
     expect(operations.single.payload['status'], 'AGENDADA');
   });
 
+  test('fila de sincronizacao consolida ultima operacao pendente', () async {
+    final firstId = await database.enqueueSyncOperation(
+      operationType: 'update_demanda',
+      entity: 'demanda',
+      entityId: 'demanda-1',
+      payload: {'tipo': 'SMART_N', 'status': 'AGENDADA'},
+    );
+    await database.markSyncFailed(firstId);
+
+    final secondId = await database.enqueueSyncOperation(
+      operationType: 'update_demanda',
+      entity: 'demanda',
+      entityId: 'demanda-1',
+      payload: {'tipo': 'SMART_N', 'status': 'CANCELADA'},
+    );
+
+    final operations = await database.readPendingSyncOperations();
+
+    expect(secondId, firstId);
+    expect(await database.countPendingSyncOperations(), 1);
+    expect(operations.single.payload['status'], 'CANCELADA');
+    expect(operations.single.attempts, 0);
+  });
+
   test('capturas GPS ficam vinculadas a demanda', () async {
     await database.saveLocationCapture(
       LocationCapture(
