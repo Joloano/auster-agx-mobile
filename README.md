@@ -177,14 +177,35 @@ cd C:\auster-mobile-work\auster_agx_mobile
 C:\auster-mobile-tools\flutter\bin\flutter.bat run -d ID_DO_DISPOSITIVO --dart-define=API_BASE_URL=http://IP_DO_COMPUTADOR:8080
 ```
 
-Para gerar e instalar um APK release configurado para o celular:
+Para gerar e instalar um APK de desenvolvimento no celular sem manter o cabo conectado:
+
+```powershell
+C:\auster-mobile-tools\flutter\bin\flutter.bat build apk --debug --dart-define=API_BASE_URL=http://IP_DO_COMPUTADOR:8080
+adb install -r build\app\outputs\flutter-apk\app-debug.apk
+```
+
+O APK precisa ter sido gerado com o `API_BASE_URL` acessível pelo celular; `10.0.2.2` funciona apenas no emulador Android. HTTP local é aceito somente em debug; builds release exigem HTTPS por padrão.
+
+## Assinatura Android de produção
+
+O build release nunca usa a chave de debug. Antes da primeira distribuição, gere e mantenha uma chave privada fora do Git:
+
+```powershell
+New-Item -ItemType Directory -Force android\keystore
+keytool -genkeypair -v -keystore android\keystore\auster-upload-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+Copy-Item android\key.properties.example android\key.properties
+```
+
+Edite `android/key.properties` com as senhas escolhidas. O arquivo de propriedades e os arquivos `*.jks` já estão ignorados pelo Git; mantenha um backup seguro da chave, porque atualizações futuras do aplicativo dependem dela.
+
+Com a assinatura configurada, gere o APK ou o Android App Bundle usando uma API HTTPS:
 
 ```powershell
 C:\auster-mobile-tools\flutter\bin\flutter.bat build apk --release --dart-define=API_BASE_URL=https://api.exemplo.com
-adb install -r build\app\outputs\flutter-apk\app-release.apk
+C:\auster-mobile-tools\flutter\bin\flutter.bat build appbundle --release --dart-define=API_BASE_URL=https://api.exemplo.com
 ```
 
-O APK precisa ter sido gerado com o `API_BASE_URL` acessível pelo celular; `10.0.2.2` funciona apenas no emulador Android. Para testar contra HTTP local, use `flutter run` em modo debug; o APK release exige HTTPS por padrão.
+Sem `android/key.properties`, com propriedade ausente ou com caminho de chave inválido, o build release falha explicitamente em vez de produzir um pacote assinado como desenvolvimento.
 
 ## Testes
 

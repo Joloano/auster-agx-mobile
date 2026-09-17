@@ -1,0 +1,6 @@
+# Copy this file to android/key.properties and replace every secret value.
+# Both key.properties and *.jks files are ignored by Git.
+storePassword=CHANGE_ME
+keyPassword=CHANGE_ME
+keyAlias=upload
+storeFile=../keystore/auster-upload-key.jks
