@@ -4,6 +4,7 @@ import '../../../core/providers/core_providers.dart';
 import '../../../data/models/demanda_models.dart';
 import '../../../data/repositorios/demanda_repository.dart';
 import '../../../data/services/demandas_api.dart';
+import '../../authentication/providers/current_user_provider.dart';
 
 final demandasApiProvider = Provider<DemandasApi>((ref) {
   return DemandasApi(ref.watch(apiClientProvider));
@@ -12,7 +13,8 @@ final demandasApiProvider = Provider<DemandasApi>((ref) {
 final demandaRepositoryProvider = FutureProvider<DemandaRepository>((
   ref,
 ) async {
-  final database = await ref.watch(appDatabaseProvider.future);
+  final userId = ref.watch(currentUserIdProvider);
+  final database = await ref.watch(appDatabaseProvider(userId).future);
   return DemandaRepository(
     api: ref.watch(demandasApiProvider),
     database: database,

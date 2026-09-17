@@ -4,6 +4,7 @@ import '../../../core/providers/core_providers.dart';
 import '../../../data/models/dashboard_models.dart';
 import '../../../data/repositorios/dashboard_repository.dart';
 import '../../../data/services/dashboard_api.dart';
+import '../../authentication/providers/current_user_provider.dart';
 
 final dashboardApiProvider = Provider<DashboardApi>((ref) {
   return DashboardApi(ref.watch(apiClientProvider));
@@ -12,7 +13,8 @@ final dashboardApiProvider = Provider<DashboardApi>((ref) {
 final dashboardRepositoryProvider = FutureProvider<DashboardRepository>((
   ref,
 ) async {
-  final database = await ref.watch(appDatabaseProvider.future);
+  final userId = ref.watch(currentUserIdProvider);
+  final database = await ref.watch(appDatabaseProvider(userId).future);
   return DashboardRepository(
     api: ref.watch(dashboardApiProvider),
     database: database,

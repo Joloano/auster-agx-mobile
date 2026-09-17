@@ -24,6 +24,17 @@ void main() {
     expect(items.single.codigo, 'SMN26001001');
   });
 
+  test('nome do banco local e estavel e isolado por usuario', () {
+    final first = AppDatabase.databaseFileNameForUser('user-1');
+    final repeated = AppDatabase.databaseFileNameForUser('user-1');
+    final second = AppDatabase.databaseFileNameForUser('user-2');
+
+    expect(first, repeated);
+    expect(first, isNot(second));
+    expect(first, isNot(contains('user-1')));
+    expect(first, matches(RegExp(r'^auster_agx_mobile_[a-f0-9]{24}\.sqlite$')));
+  });
+
   test('fila de sincronizacao registra operacoes pendentes', () async {
     await database.enqueueSyncOperation(
       operationType: 'update_demanda',

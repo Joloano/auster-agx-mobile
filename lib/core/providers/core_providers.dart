@@ -52,8 +52,9 @@ final apiClientProvider = Provider<ApiClient>((ref) {
   return client;
 });
 
-final appDatabaseProvider = FutureProvider<AppDatabase>((ref) async {
-  final database = await AppDatabase.openDefault();
+final appDatabaseProvider =
+    FutureProvider.autoDispose.family<AppDatabase, String>((ref, userId) async {
+  final database = await AppDatabase.openForUser(userId);
   ref.onDispose(database.dispose);
   return database;
 });

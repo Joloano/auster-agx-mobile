@@ -80,6 +80,8 @@ O segundo modelo reproduz literalmente as sete tabelas criadas em `lib/data/loca
 
 O SQLite atual não declara nenhuma `FOREIGN KEY`. Por isso, `demanda_id` e `entity_id` não são marcados como FKs e o modelo físico não desenha relacionamentos inexistentes. As associações aparecem somente no MER conceitual. Os payloads da API permanecem em JSON para preservar o contrato do backend e evitar duplicar o esquema transacional do ERP.
 
+Cada usuário autenticado utiliza um arquivo SQLite próprio, com nome derivado de um hash SHA-256 do `userId`. O identificador não fica exposto no nome do arquivo e caches, fila offline e capturas GPS permanecem isolados entre contas no mesmo aparelho. A separação é física; o esquema de sete tabelas documentado abaixo continua idêntico em cada arquivo.
+
 Credenciais, tokens e o último perfil autenticado não aparecem nos modelos porque ficam no `flutter_secure_storage`, fora do SQLite. Os objetos de demanda são reconstruídos a partir dos payloads da API e mantidos apenas como cache operacional.
 
 ## Tecnologias
@@ -131,7 +133,7 @@ O último perfil autenticado também é guardado no armazenamento seguro para pe
 
 Demandas sincronizadas são salvas no SQLite. A UI lê primeiro do banco local; quando existe internet, o repositório busca a API, atualiza o banco e reflete os dados.
 
-O cache inclui dashboard, detalhes agregados, histórico de status e metadados de transição. Assim, depois da primeira sincronização, o app continua mostrando o contexto operacional mesmo sem conexão.
+O cache inclui dashboard, detalhes agregados, histórico de status e metadados de transição. Assim, depois da primeira sincronização, o app continua mostrando o contexto operacional mesmo sem conexão. O cache é aberto somente depois da autenticação e é particionado por usuário para impedir exposição cruzada entre contas.
 
 ## Sincronização
 

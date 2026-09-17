@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/providers/core_providers.dart';
+import '../../features/authentication/providers/current_user_provider.dart';
 import '../../features/demandas/providers/demandas_providers.dart';
 import 'sync_service.dart';
 
 final syncServiceProvider = FutureProvider<SyncService>((ref) async {
-  final database = await ref.watch(appDatabaseProvider.future);
+  final userId = ref.watch(currentUserIdProvider);
+  final database = await ref.watch(appDatabaseProvider(userId).future);
   final service = SyncService(
     database: database,
     demandasApi: ref.watch(demandasApiProvider),

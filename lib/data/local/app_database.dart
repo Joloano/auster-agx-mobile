@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3/sqlite3.dart';
@@ -16,10 +17,19 @@ class AppDatabase {
 
   factory AppDatabase.inMemory() => AppDatabase(sqlite3.openInMemory());
 
-  static Future<AppDatabase> openDefault() async {
+  static Future<AppDatabase> openForUser(String userId) async {
     final directory = await getApplicationDocumentsDirectory();
-    final path = p.join(directory.path, 'auster_agx_mobile.sqlite');
+    final path = p.join(directory.path, databaseFileNameForUser(userId));
     return AppDatabase(sqlite3.open(path));
+  }
+
+  static String databaseFileNameForUser(String userId) {
+    final normalized = userId.trim();
+    if (normalized.isEmpty) {
+      throw ArgumentError.value(userId, 'userId', 'must not be empty');
+    }
+    final digest = sha256.convert(utf8.encode(normalized));
+    return 'auster_agx_mobile_${digest.toString().substring(0, 24)}.sqlite';
   }
 
   final Database _db;

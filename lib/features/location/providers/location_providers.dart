@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/core_providers.dart';
 import '../../../data/models/location_capture.dart';
 import '../../../data/services/location_service.dart';
+import '../../authentication/providers/current_user_provider.dart';
 
 final locationServiceProvider = FutureProvider<LocationService>((ref) async {
-  final database = await ref.watch(appDatabaseProvider.future);
+  final userId = ref.watch(currentUserIdProvider);
+  final database = await ref.watch(appDatabaseProvider(userId).future);
   return LocationService(database);
 });
 
