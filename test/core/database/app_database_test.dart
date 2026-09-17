@@ -72,6 +72,32 @@ void main() {
     expect(operations.single.attempts, 0);
   });
 
+  test('nova edicao reativa operacao rejeitada sem duplicar fila', () async {
+    final id = await database.enqueueSyncOperation(
+      operationType: 'update_demanda',
+      entity: 'demanda',
+      entityId: 'demanda-1',
+      payload: {'tipo': 'SMART_N', 'status': 'AGENDADA'},
+    );
+    await database.markSyncRejected(id);
+
+    expect(await database.countPendingSyncOperations(), 0);
+    expect(await database.countFailedSyncOperations(), 1);
+
+    final reactivatedId = await database.enqueueSyncOperation(
+      operationType: 'update_demanda',
+      entity: 'demanda',
+      entityId: 'demanda-1',
+      payload: {'tipo': 'SMART_N', 'status': 'CANCELADA'},
+    );
+    final operations = await database.readPendingSyncOperations();
+
+    expect(reactivatedId, id);
+    expect(await database.countFailedSyncOperations(), 0);
+    expect(operations.single.payload['status'], 'CANCELADA');
+    expect(operations.single.attempts, 0);
+  });
+
   test('capturas GPS ficam vinculadas a demanda', () async {
     await database.saveLocationCapture(
       LocationCapture(

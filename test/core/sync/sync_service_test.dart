@@ -7,6 +7,7 @@ import 'package:auster_agx_mobile/data/sync/sync_service.dart';
 import 'package:auster_agx_mobile/data/services/demandas_api.dart';
 import 'package:auster_agx_mobile/data/models/demanda_models.dart';
 import 'package:auster_agx_mobile/data/models/demanda_status_rules.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -96,12 +97,68 @@ void main() {
     database.dispose();
     network.dispose();
   });
+
+  test('SyncService mantem falha transitoria pendente para nova tentativa',
+      () async {
+    final database = AppDatabase.inMemory();
+    final api = _FakeDemandasApi(
+      updateError: DioException.connectionError(
+        requestOptions: RequestOptions(path: '/demandas/demanda-1'),
+        reason: 'offline',
+      ),
+    );
+    final network = _FakeNetwork(online: true);
+    final service = SyncService(
+      database: database,
+      demandasApi: api,
+      networkStatus: network,
+    );
+    await _enqueueUpdate(database);
+
+    await service.processPending();
+
+    final operations = await database.readPendingSyncOperations();
+    expect(operations.single.attempts, 1);
+    expect(await database.countFailedSyncOperations(), 0);
+
+    database.dispose();
+    network.dispose();
+  });
+
+  test('SyncService bloqueia rejeicao permanente para evitar loop', () async {
+    final database = AppDatabase.inMemory();
+    final options = RequestOptions(path: '/demandas/demanda-1');
+    final api = _FakeDemandasApi(
+      updateError: DioException.badResponse(
+        requestOptions: options,
+        response: Response<void>(requestOptions: options, statusCode: 422),
+        statusCode: 422,
+      ),
+    );
+    final network = _FakeNetwork(online: true);
+    final service = SyncService(
+      database: database,
+      demandasApi: api,
+      networkStatus: network,
+    );
+    await _enqueueUpdate(database);
+
+    await service.processPending();
+
+    final summary = await service.queueSummary();
+    expect(summary.pending, 0);
+    expect(summary.failed, 1);
+
+    database.dispose();
+    network.dispose();
+  });
 }
 
 class _FakeDemandasApi implements DemandasRemoteDataSource {
-  _FakeDemandasApi({this.updateResult});
+  _FakeDemandasApi({this.updateResult, this.updateError});
 
   final Demanda? updateResult;
+  final Object? updateError;
   final updatedIds = <String>[];
 
   @override
@@ -122,6 +179,7 @@ class _FakeDemandasApi implements DemandasRemoteDataSource {
   @override
   Future<Demanda> update(String id, DemandaUpdateInput input) async {
     updatedIds.add(id);
+    if (updateError != null) throw updateError!;
     return updateResult ??
         _demanda(
           status: input.status ?? 'Listada',
@@ -130,6 +188,21 @@ class _FakeDemandasApi implements DemandasRemoteDataSource {
           situacaoMapeamento: input.situacaoMapeamento ?? 'SEM_IMAGENS',
         );
   }
+}
+
+Future<void> _enqueueUpdate(AppDatabase database) {
+  return database.enqueueSyncOperation(
+    operationType: 'update_demanda',
+    entity: 'demanda',
+    entityId: 'demanda-1',
+    payload: {
+      'tipo': 'SMART_N',
+      'status': 'AGENDADA',
+      'situacaoDados': 'DADOS_INCOMPLETOS',
+      'situacaoMapeamento': 'SEM_IMAGENS',
+      'retrabalho': false,
+    },
+  );
 }
 
 class _FakeNetwork implements ConnectivityStatus {

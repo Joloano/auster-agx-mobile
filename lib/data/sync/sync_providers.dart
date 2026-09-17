@@ -22,7 +22,10 @@ final syncServiceProvider = FutureProvider<SyncService>((ref) async {
   return service;
 });
 
-final pendingSyncCountProvider = FutureProvider<int>((ref) async {
+final syncQueueSummaryProvider = StreamProvider<SyncQueueSummary>((ref) async* {
   final service = await ref.watch(syncServiceProvider.future);
-  return service.pendingCount();
+  yield await service.queueSummary();
+  await for (final _ in service.changes) {
+    yield await service.queueSummary();
+  }
 });

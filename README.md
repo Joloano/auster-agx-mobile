@@ -141,6 +141,8 @@ Alterações feitas sem internet entram em `sync_queue`. Ao detectar conectivida
 
 Para evitar envio redundante, a fila consolida a última operação pendente de uma mesma demanda antes da sincronização. O PATCH enviado para `/demandas/{id}` segue o contrato oficial: `tipo`, `representanteId`, `prazo`, `areaDeInteresse`, `status`, `situacaoDados`, `situacaoMapeamento` e `retrabalho`. A tela só oferece alteração de status, dados ou mapeamento para perfis administrativos (`SUPER_ADMIN` e `USUARIO_TECNICO_PRESCRICAO`), como no frontend oficial.
 
+Falhas transitórias e `401` incrementam a tentativa e mantêm a operação pendente. Rejeições permanentes (`403`, `404`, `409`, `422` e demais `4xx`) mudam a operação para `failed`, aparecem na barra global e não entram em repetição infinita. Uma nova edição da mesma demanda substitui o payload rejeitado e reativa a operação para sincronização.
+
 ## Recurso nativo utilizado
 
 GPS no detalhe da demanda. A captura funciona como evidência local de campo e fica separada do payload REST oficial para preservar o contrato atual do AUSTER.

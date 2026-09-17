@@ -364,7 +364,7 @@ class _StatusActions extends ConsumerWidget {
     ref.invalidate(demandaDetailProvider(detail.demanda.id));
     ref.invalidate(demandaHistoricoStatusProvider(detail.demanda.id));
     ref.invalidate(dashboardDemandasProvider);
-    ref.invalidate(pendingSyncCountProvider);
+    ref.invalidate(syncQueueSummaryProvider);
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Demanda atualizada ou enfileirada.')),

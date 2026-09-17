@@ -263,7 +263,7 @@ class AppDatabase {
       WHERE operation_type = ?
         AND entity = ?
         AND entity_id = ?
-        AND status = 'pending'
+        AND status IN ('pending', 'failed')
       ORDER BY created_at DESC
       LIMIT 1
       ''',
@@ -274,7 +274,7 @@ class AppDatabase {
       _db.execute(
         '''
         UPDATE sync_queue
-        SET payload = ?, created_at = ?, attempts = 0
+        SET payload = ?, created_at = ?, attempts = 0, status = 'pending'
         WHERE id = ?
         ''',
         [encodedPayload, now, id],
@@ -317,6 +317,13 @@ class AppDatabase {
     return result.first['total'] as int;
   }
 
+  Future<int> countFailedSyncOperations() async {
+    final result = _db.select(
+      "SELECT COUNT(*) AS total FROM sync_queue WHERE status = 'failed'",
+    );
+    return result.first['total'] as int;
+  }
+
   Future<void> markSyncDone(int id) async {
     _db.execute("UPDATE sync_queue SET status = 'done' WHERE id = ?", [id]);
   }
@@ -325,6 +332,17 @@ class AppDatabase {
     _db.execute('UPDATE sync_queue SET attempts = attempts + 1 WHERE id = ?', [
       id,
     ]);
+  }
+
+  Future<void> markSyncRejected(int id) async {
+    _db.execute(
+      '''
+      UPDATE sync_queue
+      SET attempts = attempts + 1, status = 'failed'
+      WHERE id = ?
+      ''',
+      [id],
+    );
   }
 
   Future<void> saveLocationCapture(LocationCapture capture) async {

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 
 import '../../core/errors/app_exception.dart';
+import '../../core/network/api_failure_policy.dart';
 import '../../core/network/network_status.dart';
 import '../local/app_database.dart';
 import '../models/demanda_models.dart';
@@ -21,17 +22,22 @@ class SyncService {
   final DemandasRemoteDataSource _demandasApi;
   final ConnectivityStatus _networkStatus;
   StreamSubscription<bool>? _subscription;
+  final StreamController<void> _changes = StreamController<void>.broadcast();
   bool _running = false;
+
+  Stream<void> get changes => _changes.stream;
 
   void start() {
     _subscription ??= _networkStatus.onlineChanges.listen((online) {
       if (online) unawaited(processPending());
     });
+    unawaited(processPending());
   }
 
   Future<void> stop() async {
     await _subscription?.cancel();
     _subscription = null;
+    await _changes.close();
   }
 
   Future<void> processPending() async {
@@ -43,17 +49,28 @@ class SyncService {
         try {
           await _process(operation);
           await _database.markSyncDone(operation.id);
-        } on DioException {
-          await _database.markSyncFailed(operation.id);
+        } on DioException catch (error) {
+          if (ApiFailurePolicy.isTransient(error) ||
+              error.response?.statusCode == 401) {
+            await _database.markSyncFailed(operation.id);
+          } else {
+            await _database.markSyncRejected(operation.id);
+          }
+        } on AppException {
+          await _database.markSyncRejected(operation.id);
         }
       }
     } finally {
       _running = false;
+      if (!_changes.isClosed) _changes.add(null);
     }
   }
 
-  Future<int> pendingCount() {
-    return _database.countPendingSyncOperations();
+  Future<SyncQueueSummary> queueSummary() async {
+    return SyncQueueSummary(
+      pending: await _database.countPendingSyncOperations(),
+      failed: await _database.countFailedSyncOperations(),
+    );
   }
 
   Future<void> _process(SyncQueueItem operation) async {
@@ -88,4 +105,11 @@ class SyncService {
       'Operação de sincronização desconhecida: ${operation.operationType}',
     );
   }
+}
+
+class SyncQueueSummary {
+  const SyncQueueSummary({required this.pending, required this.failed});
+
+  final int pending;
+  final int failed;
 }
