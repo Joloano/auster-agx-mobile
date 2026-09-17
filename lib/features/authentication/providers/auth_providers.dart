@@ -12,5 +12,6 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepository(
     api: ref.watch(authApiProvider),
     tokenStorage: ref.watch(tokenStorageProvider),
+    userStorage: ref.watch(authUserStorageProvider),
   );
 });

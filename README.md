@@ -17,6 +17,7 @@ lib/
   app/
   routes/
   core/
+    auth/
     config/
     errors/
     network/
@@ -79,21 +80,21 @@ O segundo modelo reproduz literalmente as sete tabelas criadas em `lib/data/loca
 
 O SQLite atual não declara nenhuma `FOREIGN KEY`. Por isso, `demanda_id` e `entity_id` não são marcados como FKs e o modelo físico não desenha relacionamentos inexistentes. As associações aparecem somente no MER conceitual. Os payloads da API permanecem em JSON para preservar o contrato do backend e evitar duplicar o esquema transacional do ERP.
 
-Credenciais e tokens não aparecem nos modelos porque ficam no `flutter_secure_storage`, fora do SQLite. O usuário autenticado e os objetos internos de demanda são reconstruídos a partir dos payloads da API.
+Credenciais, tokens e o último perfil autenticado não aparecem nos modelos porque ficam no `flutter_secure_storage`, fora do SQLite. Os objetos de demanda são reconstruídos a partir dos payloads da API e mantidos apenas como cache operacional.
 
 ## Tecnologias
 
 - Dio: cliente HTTP e interceptors.
 - Riverpod: estado assíncrono e injeção de dependências.
 - GoRouter: navegação declarativa.
-- flutter_secure_storage: armazenamento seguro de JWT e refresh token.
+- flutter_secure_storage: armazenamento seguro de JWT, refresh token e perfil mínimo da sessão.
 - SQLite via sqlite3: cache local e fila de sincronização.
 - connectivity_plus: monitoramento de conectividade.
 - geolocator e permission_handler: GPS e permissões nativas.
 
 ## Integração com API
 
-Endpoints reais documentados em `docs/investigacao-api.md`.
+Endpoints reais documentados em `docs/investigacao-api.md`. O aplicativo não replica validações transacionais do ERP: autenticação, autorização, transições de status e pré-requisitos continuam sendo validados pelo backend existente. O mobile consome `/demandas/status-fluxo` para projetar as ações permitidas e sempre submete a alteração ao endpoint oficial antes de considerá-la confirmada.
 
 ## Configuração da API
 
@@ -120,6 +121,8 @@ O login usa `POST /auth/login` com `email` e `senha`. A resposta contém `access
 Quando o backend retorna `deveAlterarSenha = true`, o app segue o comportamento do AUSTER oficial e bloqueia a navegação operacional até concluir `POST /auth/change-password`. O payload usa o contrato oficial (`novaSenha` e, quando aplicável, `senhaAtual`) e a resposta atualiza o usuário autenticado no estado da aplicação.
 
 Durante a restauração da sessão, o roteador mantém uma tela neutra de carregamento. Dashboard, demandas e recursos operacionais só são montados depois da validação do usuário; links internos válidos são retomados após a autenticação.
+
+O último perfil autenticado também é guardado no armazenamento seguro para permitir a abertura offline depois de um login validado. Falhas transitórias de conexão, timeout, `408`, `429` ou respostas `5xx` preservam tokens e usam esse perfil local. Somente ausência de refresh token ou rejeições definitivas `401/403` removem toda a sessão e notificam o estado global do aplicativo. Requisições concorrentes compartilham uma única renovação de token para evitar refresh duplicado.
 
 ## Funcionamento offline
 

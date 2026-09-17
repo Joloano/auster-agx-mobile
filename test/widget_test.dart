@@ -8,6 +8,7 @@ import 'package:auster_agx_mobile/app/auster_mobile_app.dart';
 import 'package:auster_agx_mobile/data/models/auth_tokens.dart';
 import 'package:auster_agx_mobile/data/services/token_storage.dart';
 import 'package:auster_agx_mobile/data/services/auth_api.dart';
+import 'package:auster_agx_mobile/data/services/auth_user_storage.dart';
 import 'package:auster_agx_mobile/data/repositorios/auth_repository.dart';
 import 'package:auster_agx_mobile/data/models/auth_session.dart';
 import 'package:auster_agx_mobile/data/models/auth_user.dart';
@@ -22,6 +23,7 @@ void main() {
             AuthRepository(
               api: _FakeAuthApi(),
               tokenStorage: _MemoryTokenStore(),
+              userStorage: _MemoryAuthUserStore(),
             ),
           ),
         ],
@@ -44,6 +46,7 @@ void main() {
             AuthRepository(
               api: _FakeAuthApi(),
               tokenStorage: tokenStore,
+              userStorage: _MemoryAuthUserStore(),
             ),
           ),
         ],
@@ -80,6 +83,7 @@ void main() {
                   refreshToken: 'refresh-token',
                 ),
               ),
+              userStorage: _MemoryAuthUserStore(),
             ),
           ),
         ],
@@ -93,6 +97,23 @@ void main() {
     expect(find.textContaining('Senha provisória detectada'), findsOneWidget);
     expect(find.text('Alterar senha'), findsOneWidget);
   });
+}
+
+class _MemoryAuthUserStore implements AuthUserStore {
+  AuthUser? saved;
+
+  @override
+  Future<void> clear() async {
+    saved = null;
+  }
+
+  @override
+  Future<AuthUser?> read() async => saved;
+
+  @override
+  Future<void> save(AuthUser user) async {
+    saved = user;
+  }
 }
 
 class _MemoryTokenStore implements TokenStore {

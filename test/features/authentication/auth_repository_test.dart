@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:auster_agx_mobile/data/models/auth_tokens.dart';
 import 'package:auster_agx_mobile/data/services/token_storage.dart';
 import 'package:auster_agx_mobile/data/services/auth_api.dart';
+import 'package:auster_agx_mobile/data/services/auth_user_storage.dart';
 import 'package:auster_agx_mobile/data/repositorios/auth_repository.dart';
 import 'package:auster_agx_mobile/data/models/auth_session.dart';
 import 'package:auster_agx_mobile/data/models/auth_user.dart';
@@ -10,29 +12,79 @@ void main() {
   test('login salva access token e refresh token no storage seguro', () async {
     final api = _FakeAuthApi();
     final storage = _FakeTokenStore();
-    final repository = AuthRepository(api: api, tokenStorage: storage);
+    final userStorage = _FakeAuthUserStore();
+    final repository = AuthRepository(
+      api: api,
+      tokenStorage: storage,
+      userStorage: userStorage,
+    );
 
     final session = await repository.login('admin@auster.local', 'auster');
 
     expect(session.user.email, 'admin@auster.local');
     expect(storage.saved?.accessToken, 'access-token');
     expect(storage.saved?.refreshToken, 'refresh-token');
+    expect(userStorage.saved?.email, 'admin@auster.local');
   });
 
-  test('restoreSession limpa tokens quando GET /auth/me falha', () async {
-    final api = _FakeAuthApi(throwOnMe: true);
+  test('restoreSession usa usuario seguro quando API esta indisponivel',
+      () async {
+    final api = _FakeAuthApi(
+      meError: DioException.connectionError(
+        requestOptions: RequestOptions(path: '/auth/me'),
+        reason: 'offline',
+      ),
+    );
     final storage = _FakeTokenStore(
       saved: const AuthTokens(
         accessToken: 'access-token',
         refreshToken: 'refresh-token',
       ),
     );
-    final repository = AuthRepository(api: api, tokenStorage: storage);
+    final cachedUser = _user('admin@auster.local');
+    final userStorage = _FakeAuthUserStore(saved: cachedUser);
+    final repository = AuthRepository(
+      api: api,
+      tokenStorage: storage,
+      userStorage: userStorage,
+    );
+
+    final user = await repository.restoreSession();
+
+    expect(user, same(cachedUser));
+    expect(storage.saved, isNotNull);
+    expect(userStorage.saved, same(cachedUser));
+  });
+
+  test('restoreSession limpa sessao somente em rejeicao definitiva', () async {
+    final options = RequestOptions(path: '/auth/me');
+    final api = _FakeAuthApi(
+      meError: DioException.badResponse(
+        requestOptions: options,
+        response: Response<void>(requestOptions: options, statusCode: 401),
+        statusCode: 401,
+      ),
+    );
+    final storage = _FakeTokenStore(
+      saved: const AuthTokens(
+        accessToken: 'access-token',
+        refreshToken: 'refresh-token',
+      ),
+    );
+    final userStorage = _FakeAuthUserStore(
+      saved: _user('admin@auster.local'),
+    );
+    final repository = AuthRepository(
+      api: api,
+      tokenStorage: storage,
+      userStorage: userStorage,
+    );
 
     final user = await repository.restoreSession();
 
     expect(user, isNull);
     expect(storage.saved, isNull);
+    expect(userStorage.saved, isNull);
   });
 
   test('changePassword envia contrato oficial e atualiza usuario', () async {
@@ -42,6 +94,7 @@ void main() {
     final repository = AuthRepository(
       api: api,
       tokenStorage: _FakeTokenStore(),
+      userStorage: _FakeAuthUserStore(),
     );
 
     final user = await repository.changePassword(
@@ -56,10 +109,10 @@ void main() {
 }
 
 class _FakeAuthApi implements AuthRemoteDataSource {
-  _FakeAuthApi({this.throwOnMe = false, AuthUser? meUser})
+  _FakeAuthApi({this.meError, AuthUser? meUser})
       : meUser = meUser ?? _user('admin@auster.local');
 
-  final bool throwOnMe;
+  final Object? meError;
   AuthUser meUser;
   String? lastSenhaAtual;
   String? lastNovaSenha;
@@ -84,7 +137,7 @@ class _FakeAuthApi implements AuthRemoteDataSource {
 
   @override
   Future<AuthUser> me() async {
-    if (throwOnMe) throw Exception('401');
+    if (meError != null) throw meError!;
     return meUser;
   }
 
@@ -102,6 +155,25 @@ class _FakeAuthApi implements AuthRemoteDataSource {
     lastNovaSenha = novaSenha;
     meUser = meUser.copyWith(deveAlterarSenha: false);
     return meUser;
+  }
+}
+
+class _FakeAuthUserStore implements AuthUserStore {
+  _FakeAuthUserStore({this.saved});
+
+  AuthUser? saved;
+
+  @override
+  Future<void> clear() async {
+    saved = null;
+  }
+
+  @override
+  Future<AuthUser?> read() async => saved;
+
+  @override
+  Future<void> save(AuthUser user) async {
+    saved = user;
   }
 }
 

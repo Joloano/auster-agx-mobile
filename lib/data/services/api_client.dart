@@ -1,13 +1,18 @@
 import 'package:dio/dio.dart';
 
+import '../../core/auth/auth_session_events.dart';
 import '../../core/config/app_config.dart';
 import '../../core/errors/app_exception.dart';
 import '../models/auth_tokens.dart';
 import 'token_storage.dart';
 
 class ApiClient {
-  ApiClient({required AppConfig config, required TokenStorage tokenStorage})
-      : _tokenStorage = tokenStorage,
+  ApiClient({
+    required AppConfig config,
+    required TokenStore tokenStorage,
+    required AuthSessionEvents sessionEvents,
+  })  : _sessionEvents = sessionEvents,
+        _tokenStorage = tokenStorage,
         dio = Dio(
           BaseOptions(
             baseUrl: config.apiBaseUrl,
@@ -23,7 +28,8 @@ class ApiClient {
   }
 
   final Dio dio;
-  final TokenStorage _tokenStorage;
+  final TokenStore _tokenStorage;
+  final AuthSessionEvents _sessionEvents;
   Future<void>? _refreshInFlight;
 
   Future<void> _onRequest(
@@ -46,16 +52,36 @@ class ApiClient {
 
     if (statusCode == 401 &&
         request.extra['retriedAfterRefresh'] != true &&
+        request.extra['skipRefresh'] != true &&
         !_isPublicAuthRoute(request.path)) {
       request.extra['retriedAfterRefresh'] = true;
       try {
         await _refreshTokens();
+        final accessToken = await _tokenStorage.readAccessToken();
+        if (accessToken == null) throw const UnauthorizedException();
+        request.headers['Authorization'] = 'Bearer $accessToken';
         final response = await dio.fetch<dynamic>(request);
         handler.resolve(response);
         return;
-      } catch (_) {
-        await _tokenStorage.clear();
-        handler.reject(error);
+      } catch (refreshError) {
+        if (_isDefinitiveAuthFailure(refreshError)) {
+          try {
+            await _tokenStorage.clear();
+          } finally {
+            _sessionEvents.notifySessionExpired();
+          }
+          handler.reject(error);
+          return;
+        }
+
+        handler.reject(
+          refreshError is DioException
+              ? refreshError
+              : DioException(
+                  requestOptions: request,
+                  error: refreshError,
+                ),
+        );
         return;
       }
     }
@@ -81,16 +107,35 @@ class ApiClient {
     );
     final data = response.data;
     if (data == null) throw const UnauthorizedException();
+    final accessToken = data['accessToken'];
+    final nextRefreshToken = data['refreshToken'];
+    if (accessToken is! String ||
+        accessToken.isEmpty ||
+        nextRefreshToken is! String ||
+        nextRefreshToken.isEmpty) {
+      throw const UnauthorizedException();
+    }
 
     await _tokenStorage.save(
       AuthTokens(
-        accessToken: data['accessToken'] as String,
-        refreshToken: data['refreshToken'] as String,
+        accessToken: accessToken,
+        refreshToken: nextRefreshToken,
       ),
     );
   }
 
+  bool _isDefinitiveAuthFailure(Object error) {
+    if (error is UnauthorizedException) return true;
+    if (error is! DioException) return false;
+    final statusCode = error.response?.statusCode;
+    return statusCode == 401 || statusCode == 403;
+  }
+
   bool _isPublicAuthRoute(String path) {
     return path.startsWith('/auth/login') || path.startsWith('/auth/refresh');
+  }
+
+  void close() {
+    dio.close(force: true);
   }
 }
