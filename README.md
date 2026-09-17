@@ -10,7 +10,7 @@ Colaboradores podem consultar e atualizar demandas fora do computador, inclusive
 
 ## Arquitetura
 
-A organização segue o padrão do projeto de referência `gestao-riscos-mobile`, separando base técnica, camada de dados, telas por feature, rotas e widgets compartilhados:
+A arquitetura é modular e separa base técnica, acesso a dados, serviços, sincronização, telas por funcionalidade, rotas e componentes compartilhados:
 
 ```text
 lib/
