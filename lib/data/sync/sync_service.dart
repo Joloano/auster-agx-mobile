@@ -59,7 +59,7 @@ class SyncService {
   Future<void> _process(SyncQueueItem operation) async {
     if (operation.operationType == 'update_demanda' &&
         operation.entity == 'demanda') {
-      await _demandasApi.update(
+      final updated = await _demandasApi.update(
         operation.entityId,
         DemandaUpdateInput(
           tipo: operation.payload['tipo'] as String,
@@ -73,6 +73,14 @@ class SyncService {
           retrabalho: operation.payload['retrabalho'] as bool?,
         ),
       );
+      final cachedDetail =
+          await _database.readDemandaDetail(operation.entityId);
+      if (cachedDetail != null) {
+        await _database.saveDemandaDetail(
+          cachedDetail.copyWith(demanda: updated),
+        );
+      }
+      await _database.updateCachedDashboardDemand(updated);
       return;
     }
 

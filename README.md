@@ -132,7 +132,7 @@ O cache inclui dashboard, detalhes agregados, histórico de status e metadados d
 
 ## Sincronização
 
-Alterações feitas sem internet entram em `sync_queue`. Ao detectar conectividade, `SyncService` tenta enviar as operações pendentes e atualiza o cache local.
+Alterações feitas sem internet entram em `sync_queue`. Ao detectar conectividade, `SyncService` tenta enviar as operações pendentes. Depois de um PATCH aceito, detalhe e dashboard são reconciliados com a `Demanda` devolvida pelo backend antes de a operação ser concluída; assim, normalizações e decisões do servidor substituem corretamente o estado otimista local.
 
 Para evitar envio redundante, a fila consolida a última operação pendente de uma mesma demanda antes da sincronização. O PATCH enviado para `/demandas/{id}` segue o contrato oficial: `tipo`, `representanteId`, `prazo`, `areaDeInteresse`, `status`, `situacaoDados`, `situacaoMapeamento` e `retrabalho`. A tela só oferece alteração de status, dados ou mapeamento para perfis administrativos (`SUPER_ADMIN` e `USUARIO_TECNICO_PRESCRICAO`), como no frontend oficial.
 
