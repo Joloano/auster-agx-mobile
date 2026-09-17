@@ -42,7 +42,7 @@ O comportamento de demandas foi alinhado ao AusterAgX oficial: o mobile usa os m
 
 ## Identidade visual AUSTER
 
-A interface reutiliza o logo bicolor oficial do AUSTER em `assets/branding/auster-logo-bicolor.png`, além das cores institucionais azul (`#0261BD`) e verde (`#00B37B`). Títulos usam Bebas Neue e os demais textos usam Inter, acompanhando o frontend oficial. Login, troca de senha, cabeçalho, navegação, dashboard, demandas e detalhes compartilham os mesmos componentes de identidade visual.
+A interface reutiliza o logo bicolor oficial do AUSTER em `assets/branding/auster-logo-bicolor.png`, além das cores institucionais azul (`#0261BD`) e verde (`#00B37B`). Títulos usam Bebas Neue e os demais textos usam Inter, acompanhando o frontend oficial. Login, troca de senha, cabeçalho, navegação, dashboard, demandas e detalhes compartilham os mesmos componentes de identidade visual. O launcher Android e o AppIcon iOS são gerados a partir do símbolo oficial em `assets/branding/auster-launcher-icon.png`, sem o ícone padrão do Flutter.
 
 ## Modelo ER e esquema local
 

@@ -29,13 +29,23 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.4
   flutter_lints: ^4.0.0
   mocktail: ^1.0.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/branding/auster-launcher-icon.png
+  adaptive_icon_background: '#FFFFFF'
+  adaptive_icon_foreground: assets/branding/auster-launcher-icon.png
+  remove_alpha_ios: true
 
 flutter:
   uses-material-design: true
   assets:
     - assets/branding/auster-logo-bicolor.png
+    - assets/branding/auster-launcher-icon.png
   fonts:
     - family: BebasNeue
       fonts:
