@@ -107,12 +107,15 @@ As opções são definidas em tempo de compilação por `--dart-define`:
 
 - `API_BASE_URL`: endereço base do backend; o padrão local é `http://10.0.2.2:8080`.
 - `API_TIMEOUT_MS`: timeout das chamadas HTTP em milissegundos; o padrão é `10000`.
+- `ALLOW_INSECURE_HTTP`: libera HTTP explicitamente. Em debug o padrão é `true`; em release, `false`.
 
 Configurar URL com:
 
 ```powershell
 flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8080
 ```
+
+O manifesto Android permite tráfego HTTP somente no build `debug`, para testes com a API na rede local. Builds de produção devem usar uma origem HTTPS sem caminho, query ou credenciais; a configuração é validada antes de o cliente HTTP ser criado.
 
 ## Autenticação
 
@@ -171,11 +174,11 @@ C:\auster-mobile-tools\flutter\bin\flutter.bat run -d ID_DO_DISPOSITIVO --dart-d
 Para gerar e instalar um APK release configurado para o celular:
 
 ```powershell
-C:\auster-mobile-tools\flutter\bin\flutter.bat build apk --release --dart-define=API_BASE_URL=http://IP_DO_COMPUTADOR:8080
+C:\auster-mobile-tools\flutter\bin\flutter.bat build apk --release --dart-define=API_BASE_URL=https://api.exemplo.com
 adb install -r build\app\outputs\flutter-apk\app-release.apk
 ```
 
-O APK precisa ter sido gerado com o `API_BASE_URL` acessível pelo celular; `10.0.2.2` funciona apenas no emulador Android.
+O APK precisa ter sido gerado com o `API_BASE_URL` acessível pelo celular; `10.0.2.2` funciona apenas no emulador Android. Para testar contra HTTP local, use `flutter run` em modo debug; o APK release exige HTTPS por padrão.
 
 ## Testes
 

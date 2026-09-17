@@ -24,9 +24,9 @@ void main() {
     );
     sessionEvents = AuthSessionEvents();
     client = ApiClient(
-      config: const AppConfig(
+      config: AppConfig(
         apiBaseUrl: 'https://api.auster.test',
-        apiTimeout: Duration(seconds: 1),
+        apiTimeout: const Duration(seconds: 1),
       ),
       tokenStorage: tokenStore,
       sessionEvents: sessionEvents,
