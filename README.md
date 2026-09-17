@@ -43,21 +43,43 @@ O comportamento de demandas foi alinhado ao AusterAgX oficial: o mobile usa os m
 
 A interface reutiliza o logo bicolor oficial do AUSTER em `assets/branding/auster-logo-bicolor.png`, além das cores institucionais azul (`#0261BD`) e verde (`#00B37B`). Títulos usam Bebas Neue e os demais textos usam Inter, acompanhando o frontend oficial. Login, troca de senha, cabeçalho, navegação, dashboard, demandas e detalhes compartilham os mesmos componentes de identidade visual.
 
-## Modelo ER mobile/offline
+## Modelo ER e esquema local
 
-O diagrama abaixo é uma exportação real do modelo lógico criado no [brModelo desktop](https://github.com/chcandido/brModelo), e não uma aproximação em Mermaid. Os arquivos `.brM3` e XML foram reabertos e validados pelo motor do brModelo 3.x após a geração.
+Os dados foram documentados em dois níveis para não misturar o domínio do aplicativo com sua estratégia de cache. Ambos foram criados no [brModelo desktop](https://github.com/chcandido/brModelo) e os arquivos `.brM3` e XML foram reabertos e validados pelo motor do brModelo 3.2.0.
 
-**Arquivos do modelo:** [editar no brModelo (`.brM3`)](docs/modelo-er/auster-agx-mobile.brM3) · [fonte XML do brModelo](docs/modelo-er/auster-agx-mobile.xml) · [imagem em alta resolução](docs/modelo-er/auster-agx-mobile.png)
+### MER conceitual
+
+O MER apresenta as entidades do domínio offline e suas cardinalidades. Uma `DEMANDA` pode ter zero ou um `DETALHE_DEMANDA` e zero ou muitas ocorrências de `HISTORICO_STATUS`, `CAPTURA_LOCALIZACAO` e `OPERACAO_SINCRONIZACAO`. Cada ocorrência dependente pertence a exatamente uma demanda.
+
+**Arquivos conceituais:** [editar no brModelo (`.brM3`)](docs/modelo-er/auster-agx-mobile.brM3) · [fonte XML](docs/modelo-er/auster-agx-mobile.xml) · [imagem em alta resolução](docs/modelo-er/auster-agx-mobile.png)
 
 <p align="center">
-  <img src="docs/modelo-er/auster-agx-mobile.png" alt="Modelo ER do armazenamento SQLite do AusterAgX Mobile criado no brModelo" width="100%">
+  <img src="docs/modelo-er/auster-agx-mobile.png" alt="MER conceitual do AusterAgX Mobile criado no brModelo" width="100%">
 </p>
 
-O modelo representa exatamente as tabelas criadas em `lib/data/local/app_database.dart`: `dashboard_overview`, `dashboard_items`, `demanda_details`, `demanda_status_history`, `status_fluxo`, `sync_queue` e `location_captures`. As ligações documentam as associações lógicas entre a lista de demandas, o detalhe agregado, o histórico, as capturas de campo e a fila de sincronização.
+### Esquema físico SQLite
 
-Os payloads completos recebidos da API são armazenados como JSON para preservar o contrato do backend oficial e permitir evolução sem duplicar o esquema transacional do ERP. As associações não criam chaves estrangeiras no SQLite, evitando que uma atualização parcial de cache bloqueie a operação offline.
+O segundo modelo reproduz literalmente as sete tabelas criadas em `lib/data/local/app_database.dart`, incluindo tipos, chaves primárias, nulabilidade, valores padrão, `CHECK` e `AUTOINCREMENT`.
 
-Credenciais e tokens não aparecem no modelo porque não são persistidos no SQLite: eles permanecem no `flutter_secure_storage`. O usuário autenticado e os objetos internos de demanda são modelos de domínio reconstruídos a partir dos payloads da API.
+**Arquivos físicos:** [editar no brModelo (`.brM3`)](docs/modelo-er/auster-agx-mobile-fisico.brM3) · [fonte XML](docs/modelo-er/auster-agx-mobile-fisico.xml) · [imagem em alta resolução](docs/modelo-er/auster-agx-mobile-fisico.png)
+
+<p align="center">
+  <img src="docs/modelo-er/auster-agx-mobile-fisico.png" alt="Esquema físico do SQLite offline do AusterAgX Mobile no brModelo" width="100%">
+</p>
+
+| Conceito | Persistência física offline |
+| --- | --- |
+| Resumo de demanda | `dashboard_items.payload`, um JSON por `id` de demanda |
+| Detalhe de demanda | `demanda_details.payload`, um JSON por `id` de demanda |
+| Histórico de status | `demanda_status_history.payload`, uma lista JSON por `demanda_id` |
+| Operação de sincronização | Uma linha em `sync_queue`; `entity` e `entity_id` identificam o agregado |
+| Captura de localização | Uma linha em `location_captures` associada logicamente por `demanda_id` |
+| Resumo do dashboard | Snapshot JSON único em `dashboard_overview`, com `id = 1` |
+| Regras de transição | Snapshot JSON único em `status_fluxo`, com `id = 1` |
+
+O SQLite atual não declara nenhuma `FOREIGN KEY`. Por isso, `demanda_id` e `entity_id` não são marcados como FKs e o modelo físico não desenha relacionamentos inexistentes. As associações aparecem somente no MER conceitual. Os payloads da API permanecem em JSON para preservar o contrato do backend e evitar duplicar o esquema transacional do ERP.
+
+Credenciais e tokens não aparecem nos modelos porque ficam no `flutter_secure_storage`, fora do SQLite. O usuário autenticado e os objetos internos de demanda são reconstruídos a partir dos payloads da API.
 
 ## Tecnologias
 

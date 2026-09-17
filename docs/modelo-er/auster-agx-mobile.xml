@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<DIAGRAMA ID="1" TIPO="tpLogico" UniversalUnicID="BB75-B4-6B58-21-A794-B5-7D">
+<DIAGRAMA ID="1" TIPO="tpConceitual" UniversalUnicID="2644-E4-D1EE-15-C917-1-FE">
     <InfoDiagrama ID="1">
         <Versao Valor="3.2.0"/>
         <Autores/>
@@ -12,744 +12,1323 @@
         <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
         <Localizacao Left="0" Top="0"/>
         <Realce Valor="false"/>
-        <SeparatorSQL Valor=";"/>
-        <Prefixo Valor=""/>
     </InfoDiagrama>
-    <Tabela ID="2">
-        <Bounds Height="127" Left="70" Top="90" Width="360"/>
+    <Texto ID="2">
+        <Bounds Height="48" Left="570" Top="18" Width="960"/>
         <DisablePainted Valor="false"/>
-        <Texto>dashboard_overview</Texto>
+        <Texto>MER CONCEITUAL - AUSTERAGX MOBILE OFFLINE</Texto>
         <Observacao/>
-        <Dicionario/>
-        <Fonte Estilo="1" Nome="Arial" Tamanho="13"/>
+        <Fonte Estilo="1" Nome="Arial" Tamanho="24"/>
         <ForeColor Valor="0,54,111,255"/>
         <Ancorado Valor="false"/>
-        <Delimite Valor="true"/>
-        <Roundrect Valor="22"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <CorBorda Valor="0,0,0,255"/>
+        <Titulo>diagrama.MER CONCEITUAL - AUSTERAGX MOBILE OFFLINE.nome_1</Titulo>
+        <PaintTitulo Valor="false"/>
+        <Alinhamento Valor="0"/>
+        <CentrarVertical Valor="false"/>
+        <Tipo Valor="1"/>
+        <BackColor Valor="255,255,255,255"/>
+        <Sombra Valor="true"/>
+        <CorSombra Valor="51,51,51,255"/>
+        <Gradiente Valor="false"/>
+        <GradienteStartColor Valor="0,0,0,255"/>
+        <GradienteEndColor Valor="204,204,204,255"/>
+        <GradientePinteDetalhe Valor="true"/>
+        <GradienteCorDetalhe Valor="102,102,102,255"/>
         <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
+        <Alfa Valor="80"/>
         <Autosize Valor="false"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <ShowDDL Valor="false"/>
-        <ShowInPlain Valor="false"/>
-        <MostrarConstraints Valor="true"/>
-        <PlainIR Valor="true"/>
-        <Campos>
-            <Campo>
-                <Texto>id</Texto>
-                <Tipo>INTEGER</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="true"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>payload</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>updated_at</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-        </Campos>
-        <Constraints/>
-    </Tabela>
-    <Tabela ID="3">
-        <Bounds Height="127" Left="560" Top="90" Width="360"/>
+        <MovimentacaoManual Valor="false"/>
+    </Texto>
+    <Entidade ID="3">
+        <Bounds Height="76" Left="870" Top="590" Width="300"/>
         <DisablePainted Valor="false"/>
-        <Texto>dashboard_items</Texto>
+        <Texto>DEMANDA</Texto>
         <Observacao/>
         <Dicionario/>
-        <Fonte Estilo="1" Nome="Arial" Tamanho="13"/>
+        <Fonte Estilo="1" Nome="Arial" Tamanho="14"/>
         <ForeColor Valor="0,54,111,255"/>
         <Ancorado Valor="false"/>
-        <Delimite Valor="true"/>
-        <Roundrect Valor="22"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <CorBorda Valor="0,0,0,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <Autosize Valor="false"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <ShowDDL Valor="false"/>
-        <ShowInPlain Valor="false"/>
-        <MostrarConstraints Valor="true"/>
-        <PlainIR Valor="true"/>
-        <Campos>
-            <Campo>
-                <Texto>id</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="true"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>payload</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>updated_at</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-        </Campos>
-        <Constraints/>
-    </Tabela>
-    <Tabela ID="4">
-        <Bounds Height="127" Left="560" Top="400" Width="390"/>
+        <AtributosOcultos Valor=""/>
+    </Entidade>
+    <Entidade ID="4">
+        <Bounds Height="76" Left="180" Top="205" Width="320"/>
         <DisablePainted Valor="false"/>
-        <Texto>demanda_details</Texto>
+        <Texto>DETALHE_DEMANDA</Texto>
         <Observacao/>
         <Dicionario/>
-        <Fonte Estilo="1" Nome="Arial" Tamanho="13"/>
+        <Fonte Estilo="1" Nome="Arial" Tamanho="14"/>
         <ForeColor Valor="0,54,111,255"/>
         <Ancorado Valor="false"/>
-        <Delimite Valor="true"/>
-        <Roundrect Valor="22"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <CorBorda Valor="0,0,0,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <Autosize Valor="false"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <ShowDDL Valor="false"/>
-        <ShowInPlain Valor="false"/>
-        <MostrarConstraints Valor="true"/>
-        <PlainIR Valor="true"/>
-        <Campos>
-            <Campo>
-                <Texto>id</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="true"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>payload</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>updated_at</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-        </Campos>
-        <Constraints/>
-    </Tabela>
-    <Tabela ID="5">
-        <Bounds Height="127" Left="70" Top="790" Width="360"/>
+        <AtributosOcultos Valor=""/>
+    </Entidade>
+    <Entidade ID="5">
+        <Bounds Height="76" Left="1530" Top="205" Width="390"/>
         <DisablePainted Valor="false"/>
-        <Texto>status_fluxo</Texto>
+        <Texto>OPERACAO_SINCRONIZACAO</Texto>
         <Observacao/>
         <Dicionario/>
-        <Fonte Estilo="1" Nome="Arial" Tamanho="13"/>
+        <Fonte Estilo="1" Nome="Arial" Tamanho="14"/>
         <ForeColor Valor="0,54,111,255"/>
         <Ancorado Valor="false"/>
-        <Delimite Valor="true"/>
-        <Roundrect Valor="22"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <CorBorda Valor="0,0,0,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <Autosize Valor="false"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <ShowDDL Valor="false"/>
-        <ShowInPlain Valor="false"/>
-        <MostrarConstraints Valor="true"/>
-        <PlainIR Valor="true"/>
-        <Campos>
-            <Campo>
-                <Texto>id</Texto>
-                <Tipo>INTEGER</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="true"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>payload</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>updated_at</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-        </Campos>
-        <Constraints/>
-    </Tabela>
-    <Tabela ID="6">
-        <Bounds Height="252" Left="530" Top="700" Width="400"/>
+        <AtributosOcultos Valor=""/>
+    </Entidade>
+    <Entidade ID="6">
+        <Bounds Height="76" Left="180" Top="1050" Width="320"/>
         <DisablePainted Valor="false"/>
-        <Texto>sync_queue</Texto>
+        <Texto>HISTORICO_STATUS</Texto>
         <Observacao/>
         <Dicionario/>
-        <Fonte Estilo="1" Nome="Arial" Tamanho="13"/>
+        <Fonte Estilo="1" Nome="Arial" Tamanho="14"/>
         <ForeColor Valor="0,54,111,255"/>
         <Ancorado Valor="false"/>
-        <Delimite Valor="true"/>
-        <Roundrect Valor="22"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <CorBorda Valor="0,0,0,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <Autosize Valor="false"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <ShowDDL Valor="false"/>
-        <ShowInPlain Valor="false"/>
-        <MostrarConstraints Valor="true"/>
-        <PlainIR Valor="true"/>
-        <Campos>
-            <Campo>
-                <Texto>id</Texto>
-                <Tipo>INTEGER</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="true"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>operation_type</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>entity</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>entity_id</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="true"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>payload</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>created_at</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>attempts</Texto>
-                <Tipo>INTEGER</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>status</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-        </Campos>
-        <Constraints/>
-    </Tabela>
-    <Tabela ID="7">
-        <Bounds Height="127" Left="1070" Top="90" Width="420"/>
+        <AtributosOcultos Valor=""/>
+    </Entidade>
+    <Entidade ID="7">
+        <Bounds Height="76" Left="1510" Top="1045" Width="390"/>
         <DisablePainted Valor="false"/>
-        <Texto>demanda_status_history</Texto>
+        <Texto>CAPTURA_LOCALIZACAO</Texto>
         <Observacao/>
         <Dicionario/>
-        <Fonte Estilo="1" Nome="Arial" Tamanho="13"/>
+        <Fonte Estilo="1" Nome="Arial" Tamanho="14"/>
         <ForeColor Valor="0,54,111,255"/>
         <Ancorado Valor="false"/>
-        <Delimite Valor="true"/>
-        <Roundrect Valor="22"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <CorBorda Valor="0,0,0,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <Autosize Valor="false"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <ShowDDL Valor="false"/>
-        <ShowInPlain Valor="false"/>
-        <MostrarConstraints Valor="true"/>
-        <PlainIR Valor="true"/>
-        <Campos>
-            <Campo>
-                <Texto>demanda_id</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="true"/>
-                <Fkey Valor="true"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>payload</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>updated_at</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-        </Campos>
-        <Constraints/>
-    </Tabela>
-    <Tabela ID="8">
-        <Bounds Height="202" Left="1070" Top="690" Width="420"/>
+        <AtributosOcultos Valor=""/>
+    </Entidade>
+    <Relacionamento ID="8">
+        <Bounds Height="70" Left="615" Top="385" Width="205"/>
         <DisablePainted Valor="false"/>
-        <Texto>location_captures</Texto>
+        <Texto>TEM_DETALHE</Texto>
         <Observacao/>
         <Dicionario/>
-        <Fonte Estilo="1" Nome="Arial" Tamanho="13"/>
-        <ForeColor Valor="0,54,111,255"/>
+        <Fonte Estilo="1" Nome="Arial" Tamanho="14"/>
+        <ForeColor Valor="0,101,72,255"/>
         <Ancorado Valor="false"/>
-        <Delimite Valor="true"/>
-        <Roundrect Valor="22"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <CorBorda Valor="0,0,0,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <Autosize Valor="false"/>
-        <Gradiente Valor="true"/>
-        <GradienteStartColor Valor="214,230,245,255"/>
-        <GradienteEndColor Valor="238,245,252,255"/>
-        <GDirecao Valor="0"/>
-        <Alfa Valor="25"/>
-        <ShowDDL Valor="false"/>
-        <ShowInPlain Valor="false"/>
-        <MostrarConstraints Valor="true"/>
-        <PlainIR Valor="true"/>
-        <Campos>
-            <Campo>
-                <Texto>id</Texto>
-                <Tipo>INTEGER</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="true"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>demanda_id</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="true"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>latitude</Texto>
-                <Tipo>REAL</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>longitude</Texto>
-                <Tipo>REAL</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>accuracy</Texto>
-                <Tipo>REAL</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-            <Campo>
-                <Texto>captured_at</Texto>
-                <Tipo>TEXT</Tipo>
-                <Complemento/>
-                <Dicionario/>
-                <Observacao/>
-                <Key Valor="false"/>
-                <Fkey Valor="false"/>
-                <Unique Valor="false"/>
-            </Campo>
-        </Campos>
-        <Constraints/>
-    </Tabela>
-    <LogicoLinha ID="9">
+    </Relacionamento>
+    <Relacionamento ID="9">
+        <Bounds Height="70" Left="1240" Top="380" Width="235"/>
+        <DisablePainted Valor="false"/>
+        <Texto>GERA_OPERACAO</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="1" Nome="Arial" Tamanho="14"/>
+        <ForeColor Valor="0,101,72,255"/>
+        <Ancorado Valor="false"/>
+    </Relacionamento>
+    <Relacionamento ID="10">
+        <Bounds Height="70" Left="575" Top="820" Width="255"/>
+        <DisablePainted Valor="false"/>
+        <Texto>POSSUI_HISTORICO</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="1" Nome="Arial" Tamanho="14"/>
+        <ForeColor Valor="0,101,72,255"/>
+        <Ancorado Valor="false"/>
+    </Relacionamento>
+    <Relacionamento ID="11">
+        <Bounds Height="70" Left="1190" Top="815" Width="295"/>
+        <DisablePainted Valor="false"/>
+        <Texto>REGISTRA_LOCALIZACAO</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="1" Nome="Arial" Tamanho="14"/>
+        <ForeColor Valor="0,101,72,255"/>
+        <Ancorado Valor="false"/>
+    </Relacionamento>
+    <Ligacao ID="13">
         <DisablePainted Valor="false"/>
         <Tag LinhaMestre="-1"/>
         <Dashed Valor="false"/>
         <Ancorado Valor="false"/>
-        <TemSetaPontaA Valor="true"/>
-        <TemSetaPontaB Valor="true"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
         <SetaAberta Valor="true"/>
         <SetaLargura Valor="10"/>
-        <Inteligente Valor="false"/>
-        <SetaAutomatica Valor="true"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,101,72,255"/>
         <Largura Valor="1"/>
-        <Ligacoes PontaA="-1" PontaB="4"/>
+        <Ligacoes PontaA="3" PontaB="8"/>
         <Pontos>
-            <Ponto Left="752" Top="396"/>
-            <Ponto Left="737" Top="396"/>
+            <Ponto Left="866" Top="452"/>
+            <Ponto Left="842" Top="452"/>
+            <Ponto Left="842" Top="417"/>
+            <Ponto Left="817" Top="417"/>
         </Pontos>
-        <LogicoCardinalidade ID="10">
-            <Bounds Height="100" Left="604" Top="292" Width="150"/>
+        <Cardinalidade ID="14">
+            <Bounds Height="100" Left="712" Top="354" Width="150"/>
             <DisablePainted Valor="false"/>
             <Texto>Cardinalidade_1</Texto>
             <Observacao/>
             <Dicionario/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
+            <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
             <Ancorado Valor="false"/>
             <TamanhoAutmatico Valor="true"/>
-            <Card Valor="1"/>
+            <Card Valor="0"/>
             <MovimentacaoManual Valor="false"/>
             <Papel Valor=""/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
-        </LogicoCardinalidade>
-        <LogicoCardinalidade ID="11">
-            <Bounds Height="100" Left="589" Top="292" Width="150"/>
+        </Cardinalidade>
+    </Ligacao>
+    <Ligacao ID="16">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,101,72,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="4" PontaB="8"/>
+        <Pontos>
+            <Ponto Left="497" Top="278"/>
+            <Ponto Left="554" Top="278"/>
+            <Ponto Left="554" Top="417"/>
+            <Ponto Left="612" Top="417"/>
+        </Pontos>
+        <Cardinalidade ID="17">
+            <Bounds Height="100" Left="507" Top="180" Width="150"/>
             <DisablePainted Valor="false"/>
             <Texto>Cardinalidade_2</Texto>
             <Observacao/>
             <Dicionario/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
+            <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
             <Ancorado Valor="false"/>
             <TamanhoAutmatico Valor="true"/>
             <Card Valor="1"/>
             <MovimentacaoManual Valor="false"/>
             <Papel Valor=""/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
-        </LogicoCardinalidade>
-    </LogicoLinha>
-    <LogicoLinha ID="12">
+        </Cardinalidade>
+    </Ligacao>
+    <Ligacao ID="19">
         <DisablePainted Valor="false"/>
         <Tag LinhaMestre="-1"/>
         <Dashed Valor="false"/>
         <Ancorado Valor="false"/>
         <TemSetaPontaA Valor="false"/>
-        <TemSetaPontaB Valor="true"/>
+        <TemSetaPontaB Valor="false"/>
         <SetaAberta Valor="true"/>
         <SetaLargura Valor="10"/>
-        <Inteligente Valor="false"/>
-        <SetaAutomatica Valor="true"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,101,72,255"/>
         <Largura Valor="1"/>
-        <Ligacoes PontaA="-1" PontaB="7"/>
+        <Ligacoes PontaA="3" PontaB="9"/>
         <Pontos>
-            <Ponto Left="1277" Top="86"/>
-            <Ponto Left="1066" Top="206"/>
+            <Ponto Left="1237" Top="586"/>
+            <Ponto Left="1237" Top="412"/>
+            <Ponto Left="1237" Top="412"/>
         </Pontos>
-        <LogicoCardinalidade ID="13">
-            <Bounds Height="100" Left="1129" Top="-18" Width="150"/>
+        <Cardinalidade ID="20">
+            <Bounds Height="100" Left="1089" Top="482" Width="150"/>
             <DisablePainted Valor="false"/>
             <Texto>Cardinalidade_3</Texto>
             <Observacao/>
             <Dicionario/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
+            <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
             <Ancorado Valor="false"/>
             <TamanhoAutmatico Valor="true"/>
             <Card Valor="0"/>
             <MovimentacaoManual Valor="false"/>
             <Papel Valor=""/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
-        </LogicoCardinalidade>
-        <LogicoCardinalidade ID="14">
-            <Bounds Height="100" Left="912" Top="108" Width="150"/>
+        </Cardinalidade>
+    </Ligacao>
+    <Ligacao ID="22">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,101,72,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="5" PontaB="9"/>
+        <Pontos>
+            <Ponto Left="1526" Top="278"/>
+            <Ponto Left="1526" Top="412"/>
+            <Ponto Left="1472" Top="412"/>
+        </Pontos>
+        <Cardinalidade ID="23">
+            <Bounds Height="100" Left="1378" Top="288" Width="150"/>
             <DisablePainted Valor="false"/>
             <Texto>Cardinalidade_4</Texto>
             <Observacao/>
             <Dicionario/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
+            <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
             <Ancorado Valor="false"/>
             <TamanhoAutmatico Valor="true"/>
-            <Card Valor="1"/>
+            <Card Valor="3"/>
             <MovimentacaoManual Valor="false"/>
             <Papel Valor=""/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
-        </LogicoCardinalidade>
-    </LogicoLinha>
-    <LogicoLinha ID="15">
+        </Cardinalidade>
+    </Ligacao>
+    <Ligacao ID="25">
         <DisablePainted Valor="false"/>
         <Tag LinhaMestre="-1"/>
         <Dashed Valor="false"/>
         <Ancorado Valor="false"/>
         <TemSetaPontaA Valor="false"/>
-        <TemSetaPontaB Valor="true"/>
+        <TemSetaPontaB Valor="false"/>
         <SetaAberta Valor="true"/>
         <SetaLargura Valor="10"/>
-        <Inteligente Valor="false"/>
-        <SetaAutomatica Valor="true"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,101,72,255"/>
         <Largura Valor="1"/>
-        <Ligacoes PontaA="-1" PontaB="8"/>
+        <Ligacoes PontaA="3" PontaB="10"/>
         <Pontos>
-            <Ponto Left="1277" Top="686"/>
-            <Ponto Left="1066" Top="701"/>
+            <Ponto Left="866" Top="817"/>
+            <Ponto Left="847" Top="817"/>
+            <Ponto Left="847" Top="852"/>
+            <Ponto Left="827" Top="852"/>
         </Pontos>
-        <LogicoCardinalidade ID="16">
-            <Bounds Height="100" Left="1129" Top="582" Width="150"/>
+        <Cardinalidade ID="26">
+            <Bounds Height="100" Left="712" Top="719" Width="150"/>
             <DisablePainted Valor="false"/>
             <Texto>Cardinalidade_5</Texto>
             <Observacao/>
             <Dicionario/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
+            <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
             <Ancorado Valor="false"/>
             <TamanhoAutmatico Valor="true"/>
             <Card Valor="0"/>
             <MovimentacaoManual Valor="false"/>
             <Papel Valor=""/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
-        </LogicoCardinalidade>
-        <LogicoCardinalidade ID="17">
-            <Bounds Height="100" Left="912" Top="603" Width="150"/>
+        </Cardinalidade>
+    </Ligacao>
+    <Ligacao ID="28">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,101,72,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="6" PontaB="10"/>
+        <Pontos>
+            <Ponto Left="497" Top="1046"/>
+            <Ponto Left="534" Top="1046"/>
+            <Ponto Left="534" Top="852"/>
+            <Ponto Left="572" Top="852"/>
+        </Pontos>
+        <Cardinalidade ID="29">
+            <Bounds Height="100" Left="507" Top="948" Width="150"/>
             <DisablePainted Valor="false"/>
             <Texto>Cardinalidade_6</Texto>
             <Observacao/>
             <Dicionario/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
+            <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
             <Ancorado Valor="false"/>
             <TamanhoAutmatico Valor="true"/>
             <Card Valor="3"/>
             <MovimentacaoManual Valor="false"/>
             <Papel Valor=""/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
-        </LogicoCardinalidade>
-    </LogicoLinha>
-    <LogicoLinha ID="18">
+        </Cardinalidade>
+    </Ligacao>
+    <Ligacao ID="31">
         <DisablePainted Valor="false"/>
         <Tag LinhaMestre="-1"/>
         <Dashed Valor="false"/>
         <Ancorado Valor="false"/>
         <TemSetaPontaA Valor="false"/>
-        <TemSetaPontaB Valor="true"/>
+        <TemSetaPontaB Valor="false"/>
         <SetaAberta Valor="true"/>
         <SetaLargura Valor="10"/>
-        <Inteligente Valor="false"/>
-        <SetaAutomatica Valor="true"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,101,72,255"/>
         <Largura Valor="1"/>
-        <Ligacoes PontaA="-1" PontaB="6"/>
+        <Ligacoes PontaA="3" PontaB="11"/>
         <Pontos>
-            <Ponto Left="727" Top="696"/>
-            <Ponto Left="752" Top="696"/>
+            <Ponto Left="1187" Top="663"/>
+            <Ponto Left="1187" Top="836"/>
+            <Ponto Left="1236" Top="836"/>
         </Pontos>
-        <LogicoCardinalidade ID="19">
-            <Bounds Height="100" Left="579" Top="592" Width="150"/>
+        <Cardinalidade ID="32">
+            <Bounds Height="100" Left="1039" Top="673" Width="150"/>
             <DisablePainted Valor="false"/>
             <Texto>Cardinalidade_7</Texto>
             <Observacao/>
             <Dicionario/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
+            <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
             <Ancorado Valor="false"/>
             <TamanhoAutmatico Valor="true"/>
             <Card Valor="0"/>
             <MovimentacaoManual Valor="false"/>
             <Papel Valor=""/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
-        </LogicoCardinalidade>
-        <LogicoCardinalidade ID="20">
-            <Bounds Height="100" Left="604" Top="592" Width="150"/>
-            <DisablePainted Valor="false"/>
-            <Texto>Cardinalidade_8</Texto>
-            <Observacao/>
-            <Dicionario/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
-            <Ancorado Valor="false"/>
-            <TamanhoAutmatico Valor="true"/>
-            <Card Valor="3"/>
-            <MovimentacaoManual Valor="false"/>
-            <Papel Valor=""/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
-        </LogicoCardinalidade>
-    </LogicoLinha>
-    <LogicoLinha ID="21">
+        </Cardinalidade>
+    </Ligacao>
+    <Ligacao ID="34">
         <DisablePainted Valor="false"/>
         <Tag LinhaMestre="-1"/>
         <Dashed Valor="false"/>
         <Ancorado Valor="false"/>
         <TemSetaPontaA Valor="false"/>
-        <TemSetaPontaB Valor="true"/>
+        <TemSetaPontaB Valor="false"/>
         <SetaAberta Valor="true"/>
         <SetaLargura Valor="10"/>
-        <Inteligente Valor="false"/>
-        <SetaAutomatica Valor="true"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,101,72,255"/>
         <Largura Valor="1"/>
-        <Ligacoes PontaA="-1" PontaB="6"/>
+        <Ligacoes PontaA="7" PontaB="11"/>
         <Pontos>
-            <Ponto Left="727" Top="696"/>
-            <Ponto Left="526" Top="786"/>
+            <Ponto Left="1506" Top="1041"/>
+            <Ponto Left="1506" Top="847"/>
+            <Ponto Left="1482" Top="847"/>
         </Pontos>
-        <LogicoCardinalidade ID="22">
-            <Bounds Height="100" Left="579" Top="592" Width="150"/>
+        <Cardinalidade ID="35">
+            <Bounds Height="100" Left="1358" Top="937" Width="150"/>
             <DisablePainted Valor="false"/>
-            <Texto>Cardinalidade_9</Texto>
+            <Texto>Cardinalidade_8</Texto>
             <Observacao/>
             <Dicionario/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
-            <Ancorado Valor="false"/>
-            <TamanhoAutmatico Valor="true"/>
-            <Card Valor="0"/>
-            <MovimentacaoManual Valor="false"/>
-            <Papel Valor=""/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
-        </LogicoCardinalidade>
-        <LogicoCardinalidade ID="23">
-            <Bounds Height="100" Left="372" Top="688" Width="150"/>
-            <DisablePainted Valor="false"/>
-            <Texto>Cardinalidade_10</Texto>
-            <Observacao/>
-            <Dicionario/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
+            <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
             <Ancorado Valor="false"/>
             <TamanhoAutmatico Valor="true"/>
             <Card Valor="3"/>
             <MovimentacaoManual Valor="false"/>
             <Papel Valor=""/>
-            <Fonte Estilo="1" Nome="Arial" Tamanho="12"/>
-        </LogicoCardinalidade>
-    </LogicoLinha>
+        </Cardinalidade>
+    </Ligacao>
+    <Atributo ID="36">
+        <Bounds Height="42" Left="745" Top="490" Width="125"/>
+        <DisablePainted Valor="false"/>
+        <Texto>id</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="true"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="37">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="3" PontaB="36"/>
+        <Pontos>
+            <Ponto Left="866" Top="508"/>
+            <Ponto Left="732" Top="508"/>
+            <Ponto Left="732" Top="508"/>
+            <Ponto Left="742" Top="508"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="38">
+        <Bounds Height="42" Left="895" Top="440" Width="150"/>
+        <DisablePainted Valor="false"/>
+        <Texto>codigo</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="39">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="3" PontaB="38"/>
+        <Pontos>
+            <Ponto Left="892" Top="586"/>
+            <Ponto Left="892" Top="533"/>
+            <Ponto Left="882" Top="533"/>
+            <Ponto Left="882" Top="458"/>
+            <Ponto Left="892" Top="458"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="40">
+        <Bounds Height="42" Left="1080" Top="485" Width="125"/>
+        <DisablePainted Valor="false"/>
+        <Texto>tipo</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="41">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="3" PontaB="40"/>
+        <Pontos>
+            <Ponto Left="1139" Top="586"/>
+            <Ponto Left="1139" Top="555"/>
+            <Ponto Left="1067" Top="555"/>
+            <Ponto Left="1067" Top="503"/>
+            <Ponto Left="1077" Top="503"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="42">
+        <Bounds Height="42" Left="745" Top="695" Width="145"/>
+        <DisablePainted Valor="false"/>
+        <Texto>status</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="43">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="3" PontaB="42"/>
+        <Pontos>
+            <Ponto Left="866" Top="713"/>
+            <Ponto Left="732" Top="713"/>
+            <Ponto Left="732" Top="713"/>
+            <Ponto Left="742" Top="713"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="44">
+        <Bounds Height="42" Left="900" Top="750" Width="190"/>
+        <DisablePainted Valor="false"/>
+        <Texto>situacao_dados</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="45">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="3" PontaB="44"/>
+        <Pontos>
+            <Ponto Left="897" Top="663"/>
+            <Ponto Left="897" Top="705"/>
+            <Ponto Left="887" Top="705"/>
+            <Ponto Left="887" Top="705"/>
+            <Ponto Left="887" Top="768"/>
+            <Ponto Left="897" Top="768"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="46">
+        <Bounds Height="42" Left="1110" Top="700" Width="245"/>
+        <DisablePainted Valor="false"/>
+        <Texto>situacao_mapeamento</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="47">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="3" PontaB="46"/>
+        <Pontos>
+            <Ponto Left="1107" Top="663"/>
+            <Ponto Left="1107" Top="680"/>
+            <Ponto Left="1097" Top="680"/>
+            <Ponto Left="1097" Top="680"/>
+            <Ponto Left="1097" Top="718"/>
+            <Ponto Left="1107" Top="718"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="48">
+        <Bounds Height="42" Left="65" Top="95" Width="115"/>
+        <DisablePainted Valor="false"/>
+        <Texto>id</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="true"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="49">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="4" PontaB="48"/>
+        <Pontos>
+            <Ponto Left="176" Top="113"/>
+            <Ponto Left="52" Top="113"/>
+            <Ponto Left="52" Top="113"/>
+            <Ponto Left="62" Top="113"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="50">
+        <Bounds Height="42" Left="225" Top="55" Width="175"/>
+        <DisablePainted Valor="false"/>
+        <Texto>payload_api</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="51">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="4" PontaB="50"/>
+        <Pontos>
+            <Ponto Left="222" Top="201"/>
+            <Ponto Left="222" Top="148"/>
+            <Ponto Left="212" Top="148"/>
+            <Ponto Left="212" Top="73"/>
+            <Ponto Left="222" Top="73"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="52">
+        <Bounds Height="42" Left="440" Top="100" Width="190"/>
+        <DisablePainted Valor="false"/>
+        <Texto>atualizado_em</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="53">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="4" PontaB="52"/>
+        <Pontos>
+            <Ponto Left="437" Top="201"/>
+            <Ponto Left="437" Top="170"/>
+            <Ponto Left="427" Top="170"/>
+            <Ponto Left="427" Top="118"/>
+            <Ponto Left="437" Top="118"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="54">
+        <Bounds Height="42" Left="1460" Top="90" Width="110"/>
+        <DisablePainted Valor="false"/>
+        <Texto>id</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="true"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="55">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="5" PontaB="54"/>
+        <Pontos>
+            <Ponto Left="1457" Top="201"/>
+            <Ponto Left="1457" Top="165"/>
+            <Ponto Left="1447" Top="165"/>
+            <Ponto Left="1447" Top="108"/>
+            <Ponto Left="1457" Top="108"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="56">
+        <Bounds Height="42" Left="1600" Top="48" Width="195"/>
+        <DisablePainted Valor="false"/>
+        <Texto>tipo_operacao</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="57">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="5" PontaB="56"/>
+        <Pontos>
+            <Ponto Left="1597" Top="201"/>
+            <Ponto Left="1597" Top="144"/>
+            <Ponto Left="1587" Top="144"/>
+            <Ponto Left="1587" Top="66"/>
+            <Ponto Left="1597" Top="66"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="58">
+        <Bounds Height="42" Left="1830" Top="82" Width="145"/>
+        <DisablePainted Valor="false"/>
+        <Texto>payload</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="59">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="5" PontaB="58"/>
+        <Pontos>
+            <Ponto Left="1827" Top="201"/>
+            <Ponto Left="1827" Top="161"/>
+            <Ponto Left="1817" Top="161"/>
+            <Ponto Left="1817" Top="100"/>
+            <Ponto Left="1827" Top="100"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="60">
+        <Bounds Height="42" Left="1930" Top="220" Width="165"/>
+        <DisablePainted Valor="false"/>
+        <Texto>criado_em</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="61">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="5" PontaB="60"/>
+        <Pontos>
+            <Ponto Left="1917" Top="238"/>
+            <Ponto Left="1922" Top="238"/>
+            <Ponto Left="1922" Top="238"/>
+            <Ponto Left="1927" Top="238"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="62">
+        <Bounds Height="42" Left="1775" Top="315" Width="155"/>
+        <DisablePainted Valor="false"/>
+        <Texto>tentativas</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="63">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="5" PontaB="62"/>
+        <Pontos>
+            <Ponto Left="1772" Top="278"/>
+            <Ponto Left="1772" Top="295"/>
+            <Ponto Left="1762" Top="295"/>
+            <Ponto Left="1762" Top="295"/>
+            <Ponto Left="1762" Top="333"/>
+            <Ponto Left="1772" Top="333"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="64">
+        <Bounds Height="42" Left="1580" Top="320" Width="130"/>
+        <DisablePainted Valor="false"/>
+        <Texto>status</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="65">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="5" PontaB="64"/>
+        <Pontos>
+            <Ponto Left="1577" Top="278"/>
+            <Ponto Left="1577" Top="297"/>
+            <Ponto Left="1567" Top="297"/>
+            <Ponto Left="1567" Top="297"/>
+            <Ponto Left="1567" Top="338"/>
+            <Ponto Left="1577" Top="338"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="66">
+        <Bounds Height="42" Left="40" Top="1170" Width="185"/>
+        <DisablePainted Valor="false"/>
+        <Texto>alterado_em</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="true"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="67">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="6" PontaB="66"/>
+        <Pontos>
+            <Ponto Left="176" Top="1188"/>
+            <Ponto Left="27" Top="1188"/>
+            <Ponto Left="27" Top="1188"/>
+            <Ponto Left="37" Top="1188"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="68">
+        <Bounds Height="42" Left="240" Top="1240" Width="200"/>
+        <DisablePainted Valor="false"/>
+        <Texto>status_anterior</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="true"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="0"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="69">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="6" PontaB="68"/>
+        <Pontos>
+            <Ponto Left="237" Top="1123"/>
+            <Ponto Left="237" Top="1180"/>
+            <Ponto Left="227" Top="1180"/>
+            <Ponto Left="227" Top="1180"/>
+            <Ponto Left="227" Top="1258"/>
+            <Ponto Left="237" Top="1258"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="70">
+        <Bounds Height="42" Left="465" Top="1190" Width="175"/>
+        <DisablePainted Valor="false"/>
+        <Texto>status_novo</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="71">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="6" PontaB="70"/>
+        <Pontos>
+            <Ponto Left="462" Top="1123"/>
+            <Ponto Left="462" Top="1155"/>
+            <Ponto Left="452" Top="1155"/>
+            <Ponto Left="452" Top="1155"/>
+            <Ponto Left="452" Top="1208"/>
+            <Ponto Left="462" Top="1208"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="72">
+        <Bounds Height="42" Left="40" Top="940" Width="175"/>
+        <DisablePainted Valor="false"/>
+        <Texto>alterado_por</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="true"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="0"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="73">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="6" PontaB="72"/>
+        <Pontos>
+            <Ponto Left="176" Top="958"/>
+            <Ponto Left="27" Top="958"/>
+            <Ponto Left="27" Top="958"/>
+            <Ponto Left="37" Top="958"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="74">
+        <Bounds Height="42" Left="1450" Top="945" Width="110"/>
+        <DisablePainted Valor="false"/>
+        <Texto>id</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="true"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="75">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="7" PontaB="74"/>
+        <Pontos>
+            <Ponto Left="1502" Top="1041"/>
+            <Ponto Left="1502" Top="1013"/>
+            <Ponto Left="1437" Top="1013"/>
+            <Ponto Left="1437" Top="963"/>
+            <Ponto Left="1447" Top="963"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="76">
+        <Bounds Height="42" Left="1480" Top="1190" Width="145"/>
+        <DisablePainted Valor="false"/>
+        <Texto>latitude</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="77">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="7" PontaB="76"/>
+        <Pontos>
+            <Ponto Left="1477" Top="1118"/>
+            <Ponto Left="1477" Top="1152"/>
+            <Ponto Left="1467" Top="1152"/>
+            <Ponto Left="1467" Top="1152"/>
+            <Ponto Left="1467" Top="1208"/>
+            <Ponto Left="1477" Top="1208"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="78">
+        <Bounds Height="42" Left="1660" Top="1250" Width="155"/>
+        <DisablePainted Valor="false"/>
+        <Texto>longitude</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="79">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="7" PontaB="78"/>
+        <Pontos>
+            <Ponto Left="1657" Top="1118"/>
+            <Ponto Left="1657" Top="1182"/>
+            <Ponto Left="1647" Top="1182"/>
+            <Ponto Left="1647" Top="1182"/>
+            <Ponto Left="1647" Top="1268"/>
+            <Ponto Left="1657" Top="1268"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="80">
+        <Bounds Height="42" Left="1850" Top="1190" Width="145"/>
+        <DisablePainted Valor="false"/>
+        <Texto>precisao</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="true"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="0"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="81">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="7" PontaB="80"/>
+        <Pontos>
+            <Ponto Left="1847" Top="1118"/>
+            <Ponto Left="1847" Top="1152"/>
+            <Ponto Left="1837" Top="1152"/>
+            <Ponto Left="1837" Top="1152"/>
+            <Ponto Left="1837" Top="1208"/>
+            <Ponto Left="1847" Top="1208"/>
+        </Pontos>
+    </Ligacao>
+    <Atributo ID="82">
+        <Bounds Height="42" Left="1915" Top="955" Width="185"/>
+        <DisablePainted Valor="false"/>
+        <Texto>capturado_em</Texto>
+        <Observacao/>
+        <Dicionario/>
+        <Fonte Estilo="0" Nome="Arial" Tamanho="12"/>
+        <ForeColor Valor="0,54,111,255"/>
+        <Ancorado Valor="false"/>
+        <DirecaoFromInspector Valor="0"/>
+        <Autosize Valor="false"/>
+        <Identificador Valor="false"/>
+        <Opcional Valor="false"/>
+        <Multivalorado Valor="false"/>
+        <CardMinFromString Valor="1"/>
+        <CardMaxFromString Valor="n"/>
+        <TipoAtributo Valor=""/>
+    </Atributo>
+    <Ligacao ID="83">
+        <DisablePainted Valor="false"/>
+        <Tag LinhaMestre="-1"/>
+        <Dashed Valor="false"/>
+        <Ancorado Valor="false"/>
+        <TemSetaPontaA Valor="false"/>
+        <TemSetaPontaB Valor="false"/>
+        <SetaAberta Valor="true"/>
+        <SetaLargura Valor="10"/>
+        <Inteligente Valor="true"/>
+        <ForeColor Valor="0,97,189,255"/>
+        <Largura Valor="1"/>
+        <Ligacoes PontaA="7" PontaB="82"/>
+        <Pontos>
+            <Ponto Left="1912" Top="1041"/>
+            <Ponto Left="1912" Top="973"/>
+            <Ponto Left="1912" Top="973"/>
+        </Pontos>
+    </Ligacao>
 </DIAGRAMA>
