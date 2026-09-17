@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/app_theme.dart';
 import '../../../core/auth/roles.dart';
+import '../../../core/errors/user_facing_error.dart';
 import '../../../data/models/dashboard_models.dart';
 import '../../../data/models/demanda_status_rules.dart';
 import '../../authentication/presentation/auth_controller.dart';
@@ -66,7 +67,8 @@ class DashboardScreen extends ConsumerWidget {
                     ],
                   ),
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, _) => _EmptyState(text: error.toString()),
+            error: (error, _) =>
+                _EmptyState(text: userFacingErrorMessage(error)),
           ),
           const SizedBox(height: 24),
           Row(
@@ -91,7 +93,8 @@ class DashboardScreen extends ConsumerWidget {
               padding: EdgeInsets.all(24),
               child: Center(child: CircularProgressIndicator()),
             ),
-            error: (error, _) => _EmptyState(text: error.toString()),
+            error: (error, _) =>
+                _EmptyState(text: userFacingErrorMessage(error)),
           ),
         ],
       ),

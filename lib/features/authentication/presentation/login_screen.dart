@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/errors/user_facing_error.dart';
 import 'auth_controller.dart';
 import 'widgets/auth_shell.dart';
 
@@ -101,8 +102,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
               if (auth.hasError) ...[
                 const SizedBox(height: 16),
-                const AuthErrorMessage(
-                  'Não foi possível entrar. Verifique suas credenciais, o servidor e a conexão.',
+                AuthErrorMessage(
+                  userFacingErrorMessage(auth.error!),
                 ),
               ],
             ],

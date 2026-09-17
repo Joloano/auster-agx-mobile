@@ -14,5 +14,5 @@ class OfflineException extends AppException {
 
 class UnauthorizedException extends AppException {
   const UnauthorizedException()
-      : super('Sessao expirada. Faca login novamente.');
+      : super('Sessão expirada. Faça login novamente.');
 }

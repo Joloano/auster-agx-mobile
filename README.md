@@ -98,6 +98,8 @@ Credenciais, tokens e o último perfil autenticado não aparecem nos modelos por
 
 Endpoints reais documentados em `docs/investigacao-api.md`. O aplicativo não replica validações transacionais do ERP: autenticação, autorização, transições de status e pré-requisitos continuam sendo validados pelo backend existente. O mobile consome `/demandas/status-fluxo` para projetar as ações permitidas e sempre submete a alteração ao endpoint oficial antes de considerá-la confirmada.
 
+Erros HTTP são traduzidos em uma camada única antes de chegar às telas. O app diferencia sessão expirada, acesso negado, recurso ausente, indisponibilidade, timeout, limite de requisições e validações de negócio; detalhes técnicos e exceções internas não são exibidos ao usuário.
+
 ## Configuração da API
 
 Durante desenvolvimento:

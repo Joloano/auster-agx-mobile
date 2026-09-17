@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/app_theme.dart';
+import '../../../core/errors/user_facing_error.dart';
 import '../../../data/models/dashboard_models.dart';
 import '../../../data/models/demanda_status_rules.dart';
 import '../../../widgets/auster_page_header.dart';
@@ -80,7 +81,7 @@ class DemandasScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => _CenteredMessage(error.toString()),
+        error: (error, _) => _CenteredMessage(userFacingErrorMessage(error)),
       ),
     );
   }

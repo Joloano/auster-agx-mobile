@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/errors/user_facing_error.dart';
 import 'auth_controller.dart';
 import 'widgets/auth_shell.dart';
 
@@ -168,10 +169,10 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
             novaSenha: _novaSenhaController.text,
           );
       if (mounted) context.go('/dashboard');
-    } catch (_) {
+    } catch (error) {
       if (!mounted) return;
       setState(() {
-        _error = 'Não foi possível alterar a senha.';
+        _error = userFacingErrorMessage(error);
       });
     } finally {
       if (mounted) {

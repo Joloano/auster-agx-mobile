@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/app_theme.dart';
 import '../../../core/auth/roles.dart';
+import '../../../core/errors/user_facing_error.dart';
 import '../../../data/models/demanda_models.dart';
 import '../../../data/models/demanda_status_rules.dart';
 import '../../../data/models/location_capture.dart';
@@ -75,7 +76,7 @@ class DemandaDetailsScreen extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => _CenteredMessage(error.toString()),
+      error: (error, _) => _CenteredMessage(userFacingErrorMessage(error)),
     );
   }
 }
@@ -354,20 +355,26 @@ class _StatusActions extends ConsumerWidget {
     String? situacaoDados,
     String? situacaoMapeamento,
   }) async {
-    final repository = await ref.read(demandaRepositoryProvider.future);
-    await repository.updateFields(
-      current: detail,
-      status: status,
-      situacaoDados: situacaoDados,
-      situacaoMapeamento: situacaoMapeamento,
-    );
-    ref.invalidate(demandaDetailProvider(detail.demanda.id));
-    ref.invalidate(demandaHistoricoStatusProvider(detail.demanda.id));
-    ref.invalidate(dashboardDemandasProvider);
-    ref.invalidate(syncQueueSummaryProvider);
-    if (context.mounted) {
+    try {
+      final repository = await ref.read(demandaRepositoryProvider.future);
+      await repository.updateFields(
+        current: detail,
+        status: status,
+        situacaoDados: situacaoDados,
+        situacaoMapeamento: situacaoMapeamento,
+      );
+      ref.invalidate(demandaDetailProvider(detail.demanda.id));
+      ref.invalidate(demandaHistoricoStatusProvider(detail.demanda.id));
+      ref.invalidate(dashboardDemandasProvider);
+      ref.invalidate(syncQueueSummaryProvider);
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Demanda atualizada ou enfileirada.')),
+      );
+    } catch (error) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(userFacingErrorMessage(error))),
       );
     }
   }
@@ -611,7 +618,7 @@ class _HistoricoSection extends StatelessWidget {
               );
             },
             loading: () => const LinearProgressIndicator(),
-            error: (error, _) => Text(error.toString()),
+            error: (error, _) => Text(userFacingErrorMessage(error)),
           ),
         ],
       ),
@@ -660,7 +667,7 @@ class _LocationSection extends ConsumerWidget {
                     ],
                   ),
             loading: () => const LinearProgressIndicator(),
-            error: (error, _) => Text(error.toString()),
+            error: (error, _) => Text(userFacingErrorMessage(error)),
           ),
         ],
       ),
@@ -674,8 +681,9 @@ class _LocationSection extends ConsumerWidget {
       ref.invalidate(locationCapturesProvider(demandaId));
     } catch (error) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.toString())));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(userFacingErrorMessage(error))),
+      );
     }
   }
 }
