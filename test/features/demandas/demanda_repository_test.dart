@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:auster_agx_mobile/data/local/app_database.dart';
 import 'package:auster_agx_mobile/core/network/network_status.dart';
 import 'package:auster_agx_mobile/data/models/demanda_status_rules.dart';
@@ -37,6 +38,54 @@ void main() {
 
     expect(loaded?.demanda.codigoDemanda, 'SMN26001001');
     expect(api.detailCalls, 0);
+  });
+
+  test('loadDetail usa cache somente em falha transitoria online', () async {
+    network.online = true;
+    api.detailError = DioException.connectionError(
+      requestOptions: RequestOptions(path: '/demandas/demanda-1/detalhe'),
+      reason: 'offline',
+    );
+    final detail = _detail(status: 'LISTADA');
+    await database.saveDemandaDetail(detail);
+    final repository = DemandaRepository(
+      api: api,
+      database: database,
+      networkStatus: network,
+    );
+
+    final loaded = await repository.loadDetail(detail.demanda.id);
+
+    expect(loaded?.demanda.statusChave, 'LISTADA');
+  });
+
+  test('loadDetail propaga erro definitivo em vez de ocultar com cache',
+      () async {
+    network.online = true;
+    final options = RequestOptions(path: '/demandas/demanda-1/detalhe');
+    api.detailError = DioException.badResponse(
+      requestOptions: options,
+      response: Response<void>(requestOptions: options, statusCode: 403),
+      statusCode: 403,
+    );
+    final detail = _detail(status: 'LISTADA');
+    await database.saveDemandaDetail(detail);
+    final repository = DemandaRepository(
+      api: api,
+      database: database,
+      networkStatus: network,
+    );
+
+    await expectLater(
+      repository.loadDetail(detail.demanda.id),
+      throwsA(
+        isA<DioException>().having(
+          (error) => error.response?.statusCode,
+          'statusCode',
+          403,
+        ),
+      ),
+    );
   });
 
   test('updateStatus offline salva otimista e enfileira sync', () async {
@@ -107,6 +156,7 @@ void main() {
 }
 
 class _FakeDemandasApi implements DemandasRemoteDataSource {
+  Object? detailError;
   int detailCalls = 0;
   int historyCalls = 0;
   int statusFluxoCalls = 0;
@@ -114,6 +164,7 @@ class _FakeDemandasApi implements DemandasRemoteDataSource {
   @override
   Future<DemandaDetail> getDetail(String id) async {
     detailCalls++;
+    if (detailError != null) throw detailError!;
     return _detail(status: 'LISTADA');
   }
 

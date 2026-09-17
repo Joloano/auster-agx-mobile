@@ -1,18 +1,19 @@
-import '../../../core/network/network_status.dart';
+import '../../core/network/api_failure_policy.dart';
+import '../../core/network/network_status.dart';
 import '../local/app_database.dart';
 import '../models/dashboard_models.dart';
 import '../services/dashboard_api.dart';
 
 class DashboardRepository {
   DashboardRepository({
-    required DashboardApi api,
+    required DashboardRemoteDataSource api,
     required AppDatabase database,
     required ConnectivityStatus networkStatus,
   })  : _api = api,
         _database = database,
         _networkStatus = networkStatus;
 
-  final DashboardApi _api;
+  final DashboardRemoteDataSource _api;
   final AppDatabase _database;
   final ConnectivityStatus _networkStatus;
 
@@ -23,8 +24,11 @@ class DashboardRepository {
         final remote = await _api.getOverview();
         await _database.saveDashboardOverview(remote);
         return remote;
-      } catch (_) {
-        return cached;
+      } catch (error) {
+        if (cached != null && ApiFailurePolicy.isTransient(error)) {
+          return cached;
+        }
+        rethrow;
       }
     }
     return cached;
@@ -37,8 +41,9 @@ class DashboardRepository {
         final remote = await _api.listDemandasPainel(tamanho: 200);
         await _database.saveDashboardItems(remote.conteudo);
         return remote.conteudo;
-      } catch (_) {
-        return cached;
+      } catch (error) {
+        if (ApiFailurePolicy.isTransient(error)) return cached;
+        rethrow;
       }
     }
     return cached;

@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 
 import '../../core/errors/app_exception.dart';
+import '../../core/network/api_failure_policy.dart';
 import '../models/auth_session.dart';
 import '../models/auth_user.dart';
 import '../services/auth_api.dart';
@@ -38,7 +37,7 @@ class AuthRepository {
         await clearLocalSession();
         return null;
       }
-      if (_isTransientFailure(error)) {
+      if (ApiFailurePolicy.isTransient(error)) {
         final cachedUser = await _userStorage.read();
         if (cachedUser != null) return cachedUser;
       }
@@ -91,23 +90,5 @@ class AuthRepository {
     if (error is! DioException) return false;
     final statusCode = error.response?.statusCode;
     return statusCode == 401 || statusCode == 403;
-  }
-
-  bool _isTransientFailure(Object error) {
-    if (error is! DioException) return false;
-    if (error.type == DioExceptionType.connectionTimeout ||
-        error.type == DioExceptionType.sendTimeout ||
-        error.type == DioExceptionType.receiveTimeout ||
-        error.type == DioExceptionType.connectionError) {
-      return true;
-    }
-    if (error.type == DioExceptionType.unknown &&
-        error.error is SocketException) {
-      return true;
-    }
-    final statusCode = error.response?.statusCode;
-    return statusCode == 408 ||
-        statusCode == 429 ||
-        (statusCode != null && statusCode >= 500);
   }
 }

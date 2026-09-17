@@ -1,6 +1,5 @@
-import 'package:dio/dio.dart';
-
-import '../../../core/network/network_status.dart';
+import '../../core/network/api_failure_policy.dart';
+import '../../core/network/network_status.dart';
 import '../local/app_database.dart';
 import '../models/demanda_models.dart';
 import '../models/demanda_status_rules.dart';
@@ -26,8 +25,11 @@ class DemandaRepository {
         final remote = await _api.getDetail(id);
         await _database.saveDemandaDetail(remote);
         return remote;
-      } catch (_) {
-        return cached;
+      } catch (error) {
+        if (cached != null && ApiFailurePolicy.isTransient(error)) {
+          return cached;
+        }
+        rethrow;
       }
     }
     return cached;
@@ -80,9 +82,8 @@ class DemandaRepository {
       await _database.saveDemandaDetail(synced);
       await _database.updateCachedDashboardDemand(synced.demanda);
       return synced;
-    } on DioException catch (error) {
-      if (error.type == DioExceptionType.connectionError ||
-          error.type == DioExceptionType.connectionTimeout) {
+    } catch (error) {
+      if (ApiFailurePolicy.isTransient(error)) {
         await _enqueueUpdate(current.demanda.id, input);
         return optimistic;
       }
@@ -97,8 +98,11 @@ class DemandaRepository {
         final remote = await _api.getStatusFluxo();
         await _database.saveStatusFluxo(remote);
         return remote;
-      } catch (_) {
-        return cached;
+      } catch (error) {
+        if (cached != null && ApiFailurePolicy.isTransient(error)) {
+          return cached;
+        }
+        rethrow;
       }
     }
     return cached;
@@ -111,8 +115,9 @@ class DemandaRepository {
         final remote = await _api.getHistoricoStatus(id);
         await _database.saveDemandaStatusHistory(id, remote);
         return remote;
-      } catch (_) {
-        return cached;
+      } catch (error) {
+        if (ApiFailurePolicy.isTransient(error)) return cached;
+        rethrow;
       }
     }
     return cached;

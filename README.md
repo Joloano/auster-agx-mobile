@@ -131,7 +131,7 @@ O último perfil autenticado também é guardado no armazenamento seguro para pe
 
 ## Funcionamento offline
 
-Demandas sincronizadas são salvas no SQLite. A UI lê primeiro do banco local; quando existe internet, o repositório busca a API, atualiza o banco e reflete os dados.
+Demandas sincronizadas são salvas no SQLite. A UI lê primeiro do banco local; quando existe internet, o repositório busca a API, atualiza o banco e reflete os dados. O cache substitui a resposta remota apenas em falhas transitórias de rede, timeout, `408`, `429` ou `5xx`; erros definitivos como `401`, `403`, `404` e violações de contrato continuam visíveis para o fluxo de autenticação e para a UI.
 
 O cache inclui dashboard, detalhes agregados, histórico de status e metadados de transição. Assim, depois da primeira sincronização, o app continua mostrando o contexto operacional mesmo sem conexão. O cache é aberto somente depois da autenticação e é particionado por usuário para impedir exposição cruzada entre contas.
 
