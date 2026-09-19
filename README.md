@@ -36,9 +36,13 @@ lib/
   widgets/
 ```
 
-O shell usa `StatefulShellRoute.indexedStack`, como no app de referência, para manter pilhas independentes entre Dashboard e Demandas. A barra global de sincronização fica em `widgets/sync_status_bar.dart`.
+O shell usa `StatefulShellRoute.indexedStack` para manter pilhas independentes entre Dashboard e Demandas. A barra global de sincronização fica em `widgets/sync_status_bar.dart`.
 
 O comportamento de demandas foi alinhado ao AusterAgX oficial: o mobile usa os mesmos endpoints REST, o mesmo contrato de DTOs, os mesmos grupos operacionais do painel e as mesmas regras de transição vindas de `/demandas/status-fluxo`.
+
+## Diagrama de classes
+
+O [diagrama de classes completo](docs/diagrama-classes.md) documenta as entidades persistentes e os relacionamentos do domínio AusterAgX disponibilizado pela API. O aplicativo móvel usa esse domínio por meio dos contratos REST existentes e mantém no dispositivo somente os dados necessários para cache e operação offline.
 
 ## Identidade visual AUSTER
 
