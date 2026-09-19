@@ -48,18 +48,20 @@ O [diagrama de classes completo](docs/diagrama-classes.md) documenta as entidade
 
 A interface reutiliza o logo bicolor oficial do AUSTER em `assets/branding/auster-logo-bicolor.png`, além das cores institucionais azul (`#0261BD`) e verde (`#00B37B`). Títulos usam Bebas Neue e os demais textos usam Inter, acompanhando o frontend oficial. Login, troca de senha, cabeçalho, navegação, dashboard, demandas e detalhes compartilham os mesmos componentes de identidade visual. O launcher Android e o AppIcon iOS são gerados a partir do símbolo oficial em `assets/branding/auster-launcher-icon.png`, sem o ícone padrão do Flutter.
 
-## Modelo ER e esquema local
+## Modelo ER e persistência local
 
-Os dados foram documentados em dois níveis para não misturar o domínio do aplicativo com sua estratégia de cache. Ambos foram criados no [brModelo desktop](https://github.com/chcandido/brModelo) e os arquivos `.brM3` e XML foram reabertos e validados pelo motor do brModelo 3.2.0.
+Os dados estão documentados em dois escopos complementares para não misturar o modelo transacional da API com a estratégia de cache do aplicativo. Os artefatos editáveis foram criados no [brModelo desktop](https://github.com/chcandido/brModelo) e reabertos com o motor do brModelo 3.2.0 para validar sua integridade.
 
-### MER conceitual
+### ER do domínio AusterAgX
 
-O MER apresenta as entidades do domínio offline e suas cardinalidades. Uma `DEMANDA` pode ter zero ou um `DETALHE_DEMANDA` e zero ou muitas ocorrências de `HISTORICO_STATUS`, `CAPTURA_LOCALIZACAO` e `OPERACAO_SINCRONIZACAO`. Cada ocorrência dependente pertence a exatamente uma demanda.
+O modelo foi derivado diretamente do [diagrama de classes](docs/diagrama-classes.md) e representa as 28 entidades JPA persistentes e suas 36 associações. Os atributos herdados das classes abstratas foram incorporados às entidades concretas; classes auxiliares de changelog não foram tratadas como entidades de negócio.
 
-**Arquivos conceituais:** [editar no brModelo (`.brM3`)](docs/modelo-er/auster-agx-mobile.brM3) · [fonte XML](docs/modelo-er/auster-agx-mobile.xml) · [imagem em alta resolução](docs/modelo-er/auster-agx-mobile.png)
+O [ER completo em Mermaid](docs/modelo-er/auster-agx-dominio.md) preserva todos os atributos apresentados no diagrama de classes. A versão conceitual do brModelo prioriza identificadores, chaves públicas, relacionamentos e cardinalidades para manter o diagrama geral legível.
+
+**Arquivos do domínio:** [ER completo](docs/modelo-er/auster-agx-dominio.md) · [editar no brModelo (`.brM3`)](docs/modelo-er/auster-agx-mobile.brM3) · [fonte XML](docs/modelo-er/auster-agx-mobile.xml) · [imagem em alta resolução](docs/modelo-er/auster-agx-mobile.png)
 
 <p align="center">
-  <img src="docs/modelo-er/auster-agx-mobile.png" alt="MER conceitual do AusterAgX Mobile criado no brModelo" width="100%">
+  <img src="docs/modelo-er/auster-agx-mobile.png" alt="Modelo ER conceitual do domínio AusterAgX criado no brModelo" width="100%">
 </p>
 
 ### Esquema físico SQLite
@@ -82,7 +84,7 @@ O segundo modelo reproduz literalmente as sete tabelas criadas em `lib/data/loca
 | Resumo do dashboard | Snapshot JSON único em `dashboard_overview`, com `id = 1` |
 | Regras de transição | Snapshot JSON único em `status_fluxo`, com `id = 1` |
 
-O SQLite atual não declara nenhuma `FOREIGN KEY`. Por isso, `demanda_id` e `entity_id` não são marcados como FKs e o modelo físico não desenha relacionamentos inexistentes. As associações aparecem somente no MER conceitual. Os payloads da API permanecem em JSON para preservar o contrato do backend e evitar duplicar o esquema transacional do ERP.
+O SQLite atual não declara nenhuma `FOREIGN KEY`. Por isso, `demanda_id` e `entity_id` não são marcados como FKs e o modelo físico não desenha relacionamentos inexistentes. As associações transacionais pertencem ao ER do domínio; no cache local, os vínculos lógicos estão documentados na tabela acima. Os payloads da API permanecem em JSON para preservar o contrato do backend e evitar duplicar o esquema transacional do ERP.
 
 Cada usuário autenticado utiliza um arquivo SQLite próprio, com nome derivado de um hash SHA-256 do `userId`. O identificador não fica exposto no nome do arquivo e caches, fila offline e capturas GPS permanecem isolados entre contas no mesmo aparelho. A separação é física; o esquema de sete tabelas documentado abaixo continua idêntico em cada arquivo.
 
