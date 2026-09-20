@@ -162,32 +162,27 @@ O aplicativo consome `/demandas/status-fluxo` para obter transições e pré-req
 
 ## Modelagem do banco de dados
 
-Os dados são documentados em dois escopos para não confundir o domínio transacional da API com a estratégia de cache do aplicativo.
+Os dados são documentados em três camadas para separar o domínio da API, sua implementação relacional e a estratégia de cache offline do aplicativo. A auditoria foi feita sobre JPA e Flyway sem alterar o backend oficial.
 
 ### Modelo conceitual do domínio AusterAgX
 
-Derivado do [diagrama de classes](docs/diagrama-classes.md), o modelo representa **28 entidades JPA, 299 atributos e 36 relacionamentos**. A vista geral segue a notação do [brModelo Web](https://app.brmodeloweb.com/main), com entidades, relacionamentos, chaves e cardinalidades mínimas/máximas.
+Derivado do [diagrama de classes](docs/diagrama-classes.md), o modelo representa **28 entidades persistentes**, **36 associações JPA** e **5 relacionamentos físicos adicionais** encontrados nas migrations, totalizando **41 relacionamentos auditados**. A vista segue a notação de Chen usada pelo [brModelo Web](https://app.brmodeloweb.com/main), com entidades, relacionamentos, chaves e cardinalidades mínimas/máximas.
 
-[![Modelo ER conceitual do domínio AusterAgX](docs/modelo-er/auster-agx-mobile.png)](docs/modelo-er/auster-agx-mobile.png)
+[![Modelo conceitual do domínio AusterAgX](docs/modelo-er/auster-agx-conceitual.png)](docs/modelo-er/auster-agx-conceitual.png)
 
-**Artefatos:** [fonte semântica completa](docs/modelo-er/auster-agx-dominio.md) · [grafo JointJS](docs/modelo-er/auster-agx-brmodelo-web.json) · [SVG](docs/modelo-er/auster-agx-mobile.svg) · [PNG](docs/modelo-er/auster-agx-mobile.png)
+**Artefatos:** [catálogo semântico](docs/modelo-er/auster-agx-dominio.md) · [matriz de cardinalidades](docs/modelo-er/auster-agx-cardinalidades.md) · [grafo JointJS para o brModelo Web](docs/modelo-er/auster-agx-brmodelo-web.json) · [DOT](docs/modelo-er/auster-agx-conceitual.dot) · [SVG](docs/modelo-er/auster-agx-conceitual.svg) · [PNG](docs/modelo-er/auster-agx-conceitual.png)
 
-<details>
-<summary><strong>Vistas modulares em alta resolução</strong></summary>
+### Modelo lógico relacional do backend
 
-- Organização e clientes: [SVG](docs/modelo-er/modulos/organizacao-clientes.svg) · [PNG](docs/modelo-er/modulos/organizacao-clientes.png)
-- Agronomia e talhões: [SVG](docs/modelo-er/modulos/agronomia-talhoes.svg) · [PNG](docs/modelo-er/modulos/agronomia-talhoes.png)
-- Demandas e pedidos: [SVG](docs/modelo-er/modulos/demandas-pedidos.svg) · [PNG](docs/modelo-er/modulos/demandas-pedidos.png)
-- Sensoriamento remoto: [SVG](docs/modelo-er/modulos/sensoriamento.svg) · [PNG](docs/modelo-er/modulos/sensoriamento.png)
-- Manejo e adubação: [SVG](docs/modelo-er/modulos/manejo-adubacao.svg) · [PNG](docs/modelo-er/modulos/manejo-adubacao.png)
-- Prescrições inteligentes: [SVG](docs/modelo-er/modulos/prescricoes-inteligentes.svg) · [PNG](docs/modelo-er/modulos/prescricoes-inteligentes.png)
-- Infraestrutura e segurança: [SVG](docs/modelo-er/modulos/infraestrutura.svg) · [PNG](docs/modelo-er/modulos/infraestrutura.png)
+O modelo lógico explicita **35 tabelas**, **48 referências por FK** e **7 estruturas associativas ou de coleção**. Cada tabela destaca PK, FK, UK e `NOT NULL`; as linhas trazem a coluna de vínculo e as cardinalidades. Restrições ausentes nas migrations, como PK composta em `demanda_grupo`, não foram inventadas.
 
-</details>
+[![Modelo lógico relacional do AusterAgX](docs/modelo-er/auster-agx-logico.png)](docs/modelo-er/auster-agx-logico.png)
+
+**Artefatos:** [DOT](docs/modelo-er/auster-agx-logico.dot) · [SVG](docs/modelo-er/auster-agx-logico.svg) · [PNG](docs/modelo-er/auster-agx-logico.png) · [índice da modelagem](docs/modelo-er/README.md)
 
 ### Modelo físico do cache SQLite
 
-O segundo modelo reproduz as sete tabelas de `lib/data/local/app_database.dart`, incluindo tipos, chaves primárias, nulabilidade, valores padrão, `CHECK` e `AUTOINCREMENT`.
+O terceiro modelo reproduz as sete tabelas de `lib/data/local/app_database.dart`, incluindo tipos, chaves primárias, nulabilidade, valores padrão, `CHECK` e `AUTOINCREMENT`.
 
 [![Modelo físico do SQLite mobile](docs/modelo-er/auster-agx-mobile-fisico.png)](docs/modelo-er/auster-agx-mobile-fisico.png)
 
@@ -262,7 +257,7 @@ Builds release exigem HTTPS e assinatura privada configurada. Consulte [a seçã
 - **Instalação, emulador, celular e assinatura:** [INSTALACAO.md](INSTALACAO.md)
 - **Endpoints, DTOs, autorização e regras do backend:** [docs/investigacao-api.md](docs/investigacao-api.md)
 - **Diagrama de classes do domínio:** [docs/diagrama-classes.md](docs/diagrama-classes.md)
-- **Modelo ER completo:** [docs/modelo-er/auster-agx-dominio.md](docs/modelo-er/auster-agx-dominio.md)
+- **Modelagem conceitual, lógica e física:** [docs/modelo-er/README.md](docs/modelo-er/README.md)
 - **Decisões de segurança da primeira fase:** [docs/fase-1-seguranca.md](docs/fase-1-seguranca.md)
 - **Configuração e permissões Android:** [docs/android-config.md](docs/android-config.md)
 - **Issues acadêmicas versionadas:** [docs/issues/README.md](docs/issues/README.md)
