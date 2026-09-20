@@ -1,12 +1,16 @@
-# Issue 004 - Registrar localizacao via GPS
+# Issue 004 — Registrar localização via GPS
 
 ## Objetivo
 
-Permitir capturar GPS no detalhe de uma demanda e armazenar latitude, longitude, precisao e horario no banco local.
+Permitir capturar o GPS no detalhe de uma demanda e armazenar latitude, longitude, precisão e horário no banco local.
 
-## Criterios de aceite
+## Critérios de aceite
 
-- App solicita permissao de localizacao.
-- Trata permissao negada, permissao permanentemente negada e GPS desligado.
-- Mostra coordenadas capturadas na tela de detalhe.
-- Nao envia GPS ao backend enquanto nao existir endpoint real.
+- O aplicativo solicita permissão de localização em tempo de execução.
+- Trata permissão negada, permissão permanentemente negada e GPS desligado.
+- Mostra as coordenadas capturadas na tela de detalhe.
+- Não envia o GPS ao backend enquanto não existir endpoint real.
+
+## Status
+
+Concluída.
