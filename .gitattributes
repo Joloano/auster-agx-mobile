@@ -1,0 +1,50 @@
+# Normalização de quebras de linha
+# O repositório é editado no Windows e versionado com LF, para que arquivos
+# gerados pelo tooling do Flutter não apareçam como modificados a cada commit.
+
+* text=auto eol=lf
+
+# Scripts que dependem do interpretador do Windows
+*.ps1   text eol=crlf
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+
+# Scripts que precisam de LF mesmo no Windows
+gradlew text eol=lf
+*.sh    text eol=lf
+
+# Arquivos textuais do projeto
+*.dart      text
+*.kt        text
+*.kts       text
+*.gradle    text
+*.java      text
+*.md        text
+*.json      text
+*.yaml      text
+*.yml       text
+*.xml       text
+*.dot       text
+*.svg       text
+*.sql       text
+*.properties text
+
+# Binários: nunca normalizar nem tentar diferenciar
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.webp      binary
+*.ttf       binary
+*.otf       binary
+*.jar       binary
+*.keystore  binary
+*.jks       binary
+*.apk       binary
+*.aab       binary
+*.brM3      binary
+
+# Arquivos gerados: mantêm o diff enxuto nas revisões
+pubspec.lock       -diff linguist-generated
+docs/modelo-er/auster-agx-brmodelo-web.json -diff linguist-generated
