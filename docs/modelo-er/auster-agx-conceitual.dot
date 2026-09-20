@@ -1,0 +1,221 @@
+digraph AusterConceitual {
+  graph [bgcolor="#FFFFFF", pad="0.35", margin="0", rankdir="LR", newrank=true, splines=polyline, overlap=false, nodesep="0.42", ranksep="1.15", fontname="Arial", fontsize=24, fontcolor="#173D35", label="MODELO CONCEITUAL DO DOMÍNIO AUSTERAGX\n28 entidades · 41 relacionamentos auditados · cardinalidade mínima e máxima", labelloc="t", labeljust="c"];
+  node [fontname="Arial", fontsize=10, color="#273632", fontcolor="#17211E", penwidth=1.15];
+  edge [fontname="Arial", fontsize=9, color="#4B5955", fontcolor="#17211E", penwidth=1.0, arrowsize=0.55];
+  subgraph cluster_organizacao {
+    label="ORGANIZAÇÃO, CLIENTES E ACESSO"; color="#5C7C73"; fillcolor="#EAF4F1"; style="rounded,filled"; penwidth=1.1; fontname="Arial"; fontsize=12; fontcolor="#273632"; margin=18;
+    USUARIO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#5C7C73", width=2.1, height=0.52, label="USUÁRIO"];
+    CLIENTE [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#5C7C73", width=2.1, height=0.52, label="CLIENTE"];
+    CLIENTE_FAZENDA [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#5C7C73", width=2.1, height=0.52, label="CLIENTE-FAZENDA"];
+    FAZENDA [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#5C7C73", width=2.1, height=0.52, label="FAZENDA"];
+    COLABORADOR [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#5C7C73", width=2.1, height=0.52, label="COLABORADOR"];
+    FEEDBACK [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#5C7C73", width=2.1, height=0.52, label="FEEDBACK"];
+  }
+  subgraph cluster_agronomia {
+    label="AGRONOMIA E ESTRUTURA PRODUTIVA"; color="#6D8060"; fillcolor="#EEF5E7"; style="rounded,filled"; penwidth=1.1; fontname="Arial"; fontsize=12; fontcolor="#273632"; margin=18;
+    TALHAO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#6D8060", width=2.1, height=0.52, label="TALHÃO"];
+    GRUPO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#6D8060", width=2.1, height=0.52, label="GRUPO"];
+    CULTURA [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#6D8060", width=2.1, height=0.52, label="CULTURA"];
+    CULTIVO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#6D8060", width=2.1, height=0.52, label="CULTIVO"];
+    CULTURA_ANTECESSORA [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#6D8060", width=2.1, height=0.52, label="CULTURA ANTECESSORA"];
+    DADOS_SOLO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#6D8060", width=2.1, height=0.52, label="DADOS DE SOLO"];
+    ESTADIO_FENOLOGICO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#6D8060", width=2.1, height=0.52, label="ESTÁDIO FENOLÓGICO"];
+    EQUIPAMENTO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#6D8060", width=2.1, height=0.52, label="EQUIPAMENTO"];
+  }
+  subgraph cluster_demandas {
+    label="PEDIDOS, DEMANDAS E SENSORIAMENTO"; color="#5D748A"; fillcolor="#EAF1F8"; style="rounded,filled"; penwidth=1.1; fontname="Arial"; fontsize=12; fontcolor="#273632"; margin=18;
+    PEDIDO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#5D748A", width=2.1, height=0.52, label="PEDIDO"];
+    DEMANDA [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#5D748A", width=2.1, height=0.52, label="DEMANDA"];
+    DEMANDA_STATUS_HISTORICO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#5D748A", width=2.1, height=0.52, label="HISTÓRICO DE STATUS"];
+    SENSORIAMENTO_REMOTO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#5D748A", width=2.1, height=0.52, label="SENSORIAMENTO REMOTO"];
+  }
+  subgraph cluster_prescricoes {
+    label="MANEJO E PRESCRIÇÕES"; color="#8A744D"; fillcolor="#FFF4DF"; style="rounded,filled"; penwidth=1.1; fontname="Arial"; fontsize=12; fontcolor="#273632"; margin=18;
+    ADUBACAO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#8A744D", width=2.1, height=0.52, label="ADUBAÇÃO"];
+    MANEJO_NITROGENIO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#8A744D", width=2.1, height=0.52, label="MANEJO DE NITROGÊNIO"];
+    PRESCRICAO_SMART_BRAKE [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#8A744D", width=2.1, height=0.52, label="PRESCRIÇÃO SMART BRAKE"];
+    PRESCRICAO_SMART_SEEDING [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#8A744D", width=2.1, height=0.52, label="PRESCRIÇÃO SMART SEEDING"];
+  }
+  subgraph cluster_infraestrutura {
+    label="INFRAESTRUTURA E SEGURANÇA"; color="#766D82"; fillcolor="#F2F0F6"; style="rounded,filled"; penwidth=1.1; fontname="Arial"; fontsize=12; fontcolor="#273632"; margin=18;
+    ARQUIVO_UPLOAD [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#766D82", width=2.1, height=0.52, label="ARQUIVO DE UPLOAD"];
+    AUDIT_LOG [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#766D82", width=2.1, height=0.52, label="LOG DE AUDITORIA"];
+    GOOGLE_DRIVE_CREDENTIAL [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#766D82", width=2.1, height=0.52, label="CREDENCIAL GOOGLE DRIVE"];
+    PASSWORD_RESET_TOKEN [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#766D82", width=2.1, height=0.52, label="TOKEN DE REDEFINIÇÃO"];
+    REFRESH_TOKEN [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#766D82", width=2.1, height=0.52, label="REFRESH TOKEN"];
+    SEQUENCIA_CODIGO [shape=box, style="rounded,filled", fillcolor="#FFFFFF", color="#766D82", width=2.1, height=0.52, label="SEQUÊNCIA DE CÓDIGO"];
+  }
+  R01 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="ADMINISTRADO
+POR"];
+  CLIENTE -> R01 [dir=none, label="(0,N)"];
+  R01 -> USUARIO [dir=none, label="(1,1)"];
+  R02 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="VINCULA
+CLIENTE"];
+  CLIENTE_FAZENDA -> R02 [dir=none, label="(0,N)"];
+  R02 -> CLIENTE [dir=none, label="(1,1)"];
+  R03 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="VINCULA
+FAZENDA"];
+  CLIENTE_FAZENDA -> R03 [dir=none, label="(0,N)"];
+  R03 -> FAZENDA [dir=none, label="(1,1)"];
+  R04 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="ATUA
+PARA"];
+  COLABORADOR -> R04 [dir=none, label="(0,N)"];
+  R04 -> CLIENTE [dir=none, label="(0,1)"];
+  R05 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="ATUA
+EM"];
+  COLABORADOR -> R05 [dir=none, label="(0,N)"];
+  R05 -> FAZENDA [dir=none, label="(0,N)"];
+  R06 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="VINCULA
+CONTA"];
+  COLABORADOR -> R06 [dir=none, label="(0,N)"];
+  R06 -> USUARIO [dir=none, label="(0,1)"];
+  R07 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="PERTENCE
+A
+CLIENTE"];
+  FAZENDA -> R07 [dir=none, label="(0,N)"];
+  R07 -> CLIENTE [dir=none, label="(0,1)"];
+  R08 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="CRIADO
+POR"];
+  FEEDBACK -> R08 [dir=none, label="(0,N)"];
+  R08 -> USUARIO [dir=none, label="(1,1)"];
+  R09 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="PERTENCE
+A
+FAZENDA"];
+  TALHAO -> R09 [dir=none, label="(0,N)"];
+  R09 -> FAZENDA [dir=none, label="(1,1)"];
+  R10 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="AGRUPA
+TALHAO"];
+  GRUPO -> R10 [dir=none, label="(0,N)"];
+  R10 -> TALHAO [dir=none, label="(0,N)"];
+  R11 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="OCORRE
+NO
+TALHAO"];
+  CULTIVO -> R11 [dir=none, label="(0,N)"];
+  R11 -> TALHAO [dir=none, label="(1,1)"];
+  R12 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="UTILIZA
+CULTURA"];
+  CULTIVO -> R12 [dir=none, label="(0,1)"];
+  R12 -> CULTURA [dir=none, label="(1,1)"];
+  R13 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="OCORREU
+NO
+TALHAO"];
+  CULTURA_ANTECESSORA -> R13 [dir=none, label="(0,N)"];
+  R13 -> TALHAO [dir=none, label="(1,1)"];
+  R14 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="REFERENCIA
+CULTURA"];
+  CULTURA_ANTECESSORA -> R14 [dir=none, label="(0,N)"];
+  R14 -> CULTURA [dir=none, label="(1,1)"];
+  R15 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="DESCREVE
+SOLO"];
+  DADOS_SOLO -> R15 [dir=none, label="(0,N)"];
+  R15 -> TALHAO [dir=none, label="(1,1)"];
+  R16 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="PERTENCE
+A
+CULTURA"];
+  ESTADIO_FENOLOGICO -> R16 [dir=none, label="(0,N)"];
+  R16 -> CULTURA [dir=none, label="(0,1)"];
+  R17 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="PRODUZ
+CULTURA"];
+  FAZENDA -> R17 [dir=none, label="(0,N)"];
+  R17 -> CULTURA [dir=none, label="(0,N)"];
+  R18 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="UTILIZA
+EQUIPAMENTO"];
+  FAZENDA -> R18 [dir=none, label="(0,N)"];
+  R18 -> EQUIPAMENTO [dir=none, label="(0,N)"];
+  R19 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="SOLICITADO
+POR"];
+  PEDIDO -> R19 [dir=none, label="(0,N)"];
+  R19 -> CLIENTE [dir=none, label="(1,1)"];
+  R20 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="PERTENCE
+A
+PEDIDO"];
+  DEMANDA -> R20 [dir=none, label="(0,N)"];
+  R20 -> PEDIDO [dir=none, label="(1,1)"];
+  R21 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="ORIGINA
+RETRABALHO"];
+  DEMANDA -> R21 [dir=none, label="(0,N)", constraint=false];
+  R21 -> DEMANDA [dir=none, label="(0,1)", constraint=false];
+  R22 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="REPRESENTADA
+POR"];
+  DEMANDA -> R22 [dir=none, label="(0,N)"];
+  R22 -> COLABORADOR [dir=none, label="(0,1)"];
+  R23 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="ABRANGE
+GRUPO"];
+  DEMANDA -> R23 [dir=none, label="(0,N)"];
+  R23 -> GRUPO [dir=none, label="(0,N)"];
+  R24 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="UTILIZA
+MAPEAMENTO"];
+  DEMANDA -> R24 [dir=none, label="(0,N)"];
+  R24 -> SENSORIAMENTO_REMOTO [dir=none, label="(0,N)"];
+  R25 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="REGISTRA
+STATUS"];
+  DEMANDA_STATUS_HISTORICO -> R25 [dir=none, label="(0,N)"];
+  R25 -> DEMANDA [dir=none, label="(1,1)"];
+  R26 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="RESPONSAVEL
+POR"];
+  SENSORIAMENTO_REMOTO -> R26 [dir=none, label="(0,N)"];
+  R26 -> COLABORADOR [dir=none, label="(0,1)"];
+  R27 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="DERIVA
+DE"];
+  SENSORIAMENTO_REMOTO -> R27 [dir=none, label="(0,N)", constraint=false];
+  R27 -> SENSORIAMENTO_REMOTO [dir=none, label="(0,1)", constraint=false];
+  R28 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="DETALHA
+DEMANDA"];
+  ADUBACAO -> R28 [dir=none, label="(0,N)"];
+  R28 -> DEMANDA [dir=none, label="(1,1)"];
+  R29 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="APLICA
+NO
+ESTADIO"];
+  ADUBACAO -> R29 [dir=none, label="(0,N)"];
+  R29 -> ESTADIO_FENOLOGICO [dir=none, label="(0,1)"];
+  R30 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="CONFIGURA
+MANEJO"];
+  MANEJO_NITROGENIO -> R30 [dir=none, label="(0,1)"];
+  R30 -> DEMANDA [dir=none, label="(1,1)"];
+  R31 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="USA
+EQUIPAMENTO"];
+  MANEJO_NITROGENIO -> R31 [dir=none, label="(0,N)"];
+  R31 -> EQUIPAMENTO [dir=none, label="(0,1)"];
+  R32 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="CONFIGURA
+PRESCRICAO"];
+  PRESCRICAO_SMART_BRAKE -> R32 [dir=none, label="(0,1)"];
+  R32 -> DEMANDA [dir=none, label="(1,1)"];
+  R33 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="APLICA
+NO
+ESTADIO"];
+  PRESCRICAO_SMART_BRAKE -> R33 [dir=none, label="(0,N)"];
+  R33 -> ESTADIO_FENOLOGICO [dir=none, label="(0,1)"];
+  R34 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="USA
+EQUIPAMENTO"];
+  PRESCRICAO_SMART_BRAKE -> R34 [dir=none, label="(0,N)"];
+  R34 -> EQUIPAMENTO [dir=none, label="(0,1)"];
+  R35 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="CONFIGURA
+SEMEADURA"];
+  PRESCRICAO_SMART_SEEDING -> R35 [dir=none, label="(0,1)"];
+  R35 -> DEMANDA [dir=none, label="(1,1)"];
+  R36 [shape=diamond, style="filled", fillcolor="#FFFFFF", color="#4B5955", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="USA
+SEMEADORA"];
+  PRESCRICAO_SMART_SEEDING -> R36 [dir=none, label="(0,N)"];
+  R36 -> EQUIPAMENTO [dir=none, label="(0,1)"];
+  R37 [shape=diamond, style="filled,dashed", fillcolor="#F7F4FA", color="#766D82", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="ENVIA
+ARQUIVO"];
+  ARQUIVO_UPLOAD -> R37 [dir=none, label="(0,N)", style=dashed, color="#766D82"];
+  R37 -> USUARIO [dir=none, label="(1,1)", style=dashed, color="#766D82"];
+  R38 [shape=diamond, style="filled,dashed", fillcolor="#F7F4FA", color="#766D82", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="REGISTRA
+AUDITORIA"];
+  AUDIT_LOG -> R38 [dir=none, label="(0,N)", style=dashed, color="#766D82"];
+  R38 -> USUARIO [dir=none, label="(0,1)", style=dashed, color="#766D82"];
+  R39 [shape=diamond, style="filled,dashed", fillcolor="#F7F4FA", color="#766D82", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="POSSUI
+CREDENCIAL"];
+  GOOGLE_DRIVE_CREDENTIAL -> R39 [dir=none, label="(0,1)", style=dashed, color="#766D82"];
+  R39 -> USUARIO [dir=none, label="(1,1)", style=dashed, color="#766D82"];
+  R40 [shape=diamond, style="filled,dashed", fillcolor="#F7F4FA", color="#766D82", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="SOLICITA
+REDEFINICAO"];
+  PASSWORD_RESET_TOKEN -> R40 [dir=none, label="(0,N)", style=dashed, color="#766D82"];
+  R40 -> USUARIO [dir=none, label="(1,1)", style=dashed, color="#766D82"];
+  R41 [shape=diamond, style="filled,dashed", fillcolor="#F7F4FA", color="#766D82", width=1.48, height=0.68, fontsize=8.5, margin=0.03, label="MANTEM
+SESSAO"];
+  REFRESH_TOKEN -> R41 [dir=none, label="(0,N)", style=dashed, color="#766D82"];
+  R41 -> USUARIO [dir=none, label="(1,1)", style=dashed, color="#766D82"];
+  legenda [shape=plain, label=<<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="4" CELLPADDING="3"><TR><TD ALIGN="LEFT"><B>Leitura:</B> a cardinalidade junto à entidade indica quantas ocorrências dela participam para uma ocorrência do lado oposto.</TD></TR><TR><TD ALIGN="LEFT">Linha contínua: associação JPA · linha tracejada: FK física declarada em migration.</TD></TR></TABLE>>];
+}

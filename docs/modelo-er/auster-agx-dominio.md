@@ -1,8 +1,10 @@
 # Modelo ER do domínio AusterAgX
 
-Este modelo foi derivado do [diagrama de classes](../diagrama-classes.md). Ele representa as 28 entidades JPA persistentes, seus atributos e as 36 associações explícitas do domínio disponibilizado pela API.
+Este catálogo foi derivado do [diagrama de classes](../diagrama-classes.md) e reconciliado com o mapeamento JPA e as migrations Flyway do backend oficial. Ele representa **28 entidades persistentes**, seus **299 atributos documentados**, **36 associações JPA** e **5 relacionamentos físicos adicionais** declarados apenas por chave estrangeira, totalizando **41 relacionamentos conceituais auditados**.
 
 As classes abstratas de infraestrutura (`AbstractAuditable`, `AbstractPersistable` e `EntidadeComPublicId`) foram incorporadas aos atributos das entidades concretas. Classes internas de changelog não são entidades de negócio e, por isso, não aparecem no ER.
+
+Nulabilidade, unicidade e tabelas associativas foram conferidas nas migrations. A [matriz de cardinalidades](auster-agx-cardinalidades.md) registra a origem e a justificativa de cada vínculo.
 
 ```mermaid
 erDiagram
@@ -362,40 +364,47 @@ erDiagram
         LocalDateTime updatedAt
     }
 
-    ADUBACAO o{--o| DEMANDA : "detalha_demanda"
+    ADUBACAO o{--|| DEMANDA : "detalha_demanda"
     ADUBACAO o{--o| ESTADIO_FENOLOGICO : "aplica_no_estadio"
-    CLIENTE_FAZENDA o{--o| CLIENTE : "vincula_cliente"
-    CLIENTE_FAZENDA o{--o| FAZENDA : "vincula_fazenda"
-    CLIENTE o{--o| USUARIO : "administrado_por"
+    ARQUIVO_UPLOAD o{--|| USUARIO : "envia_arquivo"
+    AUDIT_LOG o{--o| USUARIO : "registra_auditoria"
+    CLIENTE_FAZENDA o{--|| CLIENTE : "vincula_cliente"
+    CLIENTE_FAZENDA o{--|| FAZENDA : "vincula_fazenda"
+    CLIENTE o{--|| USUARIO : "administrado_por"
     COLABORADOR o{--o| CLIENTE : "atua_para"
     COLABORADOR o{--o{ FAZENDA : "atua_em"
     COLABORADOR o{--o| USUARIO : "vincula_conta"
-    CULTIVO o|--o| CULTURA : "utiliza_cultura"
-    CULTIVO o{--o| TALHAO : "ocorre_no_talhao"
-    CULTURA_ANTECESSORA o{--o| CULTURA : "referencia_cultura"
-    CULTURA_ANTECESSORA o{--o| TALHAO : "ocorreu_no_talhao"
-    DADOS_SOLO o{--o| TALHAO : "descreve_solo"
+    CULTIVO o|--|| CULTURA : "utiliza_cultura"
+    CULTIVO o{--|| TALHAO : "ocorre_no_talhao"
+    CULTURA_ANTECESSORA o{--|| CULTURA : "referencia_cultura"
+    CULTURA_ANTECESSORA o{--|| TALHAO : "ocorreu_no_talhao"
+    DADOS_SOLO o{--|| TALHAO : "descreve_solo"
     DEMANDA o{--o| COLABORADOR : "representada_por"
     DEMANDA o{--o| DEMANDA : "origina_retrabalho"
     DEMANDA o{--o{ GRUPO : "abrange_grupo"
-    DEMANDA o{--o| PEDIDO : "pertence_ao_pedido"
+    DEMANDA o{--|| PEDIDO : "pertence_ao_pedido"
     DEMANDA o{--o{ SENSORIAMENTO_REMOTO : "utiliza_mapeamento"
-    DEMANDA_STATUS_HISTORICO o{--o| DEMANDA : "registra_status"
+    DEMANDA_STATUS_HISTORICO o{--|| DEMANDA : "registra_status"
     ESTADIO_FENOLOGICO o{--o| CULTURA : "pertence_a_cultura"
     FAZENDA o{--o| CLIENTE : "pertence_a_cliente"
     FAZENDA o{--o{ CULTURA : "produz_cultura"
     FAZENDA o{--o{ EQUIPAMENTO : "utiliza_equipamento"
-    FEEDBACK o{--o| USUARIO : "criado_por"
+    FEEDBACK o{--|| USUARIO : "criado_por"
+    GOOGLE_DRIVE_CREDENTIAL o|--|| USUARIO : "possui_credencial"
     GRUPO o{--o{ TALHAO : "agrupa_talhao"
-    MANEJO_NITROGENIO o|--o| DEMANDA : "configura_manejo"
-    MANEJO_NITROGENIO o{--o| EQUIPAMENTO : "usa_modelo"
-    PEDIDO o{--o| CLIENTE : "solicitado_por"
-    PRESCRICAO_SMART_BRAKE o|--o| DEMANDA : "configura_prescricao"
+    MANEJO_NITROGENIO o|--|| DEMANDA : "configura_manejo"
+    MANEJO_NITROGENIO o{--o| EQUIPAMENTO : "usa_equipamento"
+    PASSWORD_RESET_TOKEN o{--|| USUARIO : "solicita_redefinicao"
+    PEDIDO o{--|| CLIENTE : "solicitado_por"
+    PRESCRICAO_SMART_BRAKE o|--|| DEMANDA : "configura_prescricao"
     PRESCRICAO_SMART_BRAKE o{--o| EQUIPAMENTO : "usa_equipamento"
     PRESCRICAO_SMART_BRAKE o{--o| ESTADIO_FENOLOGICO : "aplica_no_estadio"
-    PRESCRICAO_SMART_SEEDING o|--o| DEMANDA : "configura_semeadura"
+    PRESCRICAO_SMART_SEEDING o|--|| DEMANDA : "configura_semeadura"
     PRESCRICAO_SMART_SEEDING o{--o| EQUIPAMENTO : "usa_semeadora"
+    REFRESH_TOKEN o{--|| USUARIO : "mantem_sessao"
     SENSORIAMENTO_REMOTO o{--o| COLABORADOR : "responsavel_por"
     SENSORIAMENTO_REMOTO o{--o| SENSORIAMENTO_REMOTO : "deriva_de"
-    TALHAO o{--o| FAZENDA : "pertence_a_fazenda"
+    TALHAO o{--|| FAZENDA : "pertence_a_fazenda"
 ```
+
+Os cinco vínculos de infraestrutura declarados somente nas migrations aparecem com linha tracejada no [modelo conceitual em SVG](auster-agx-conceitual.svg). O diagrama Mermaid acima não diferencia estilos de origem; a matriz auditada é a referência para essa distinção.
