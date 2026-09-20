@@ -11,10 +11,31 @@
 ![API REST](https://img.shields.io/badge/integra%C3%A7%C3%A3o-API%20REST-0261BD)
 ![Offline first](https://img.shields.io/badge/opera%C3%A7%C3%A3o-offline--first-00A36C)
 ![Tests](https://img.shields.io/badge/testes-43%20aprovados-brightgreen)
+![Versão](https://img.shields.io/badge/vers%C3%A3o-0.1.0%2B1-lightgrey)
+![Licença](https://img.shields.io/badge/uso-acad%C3%AAmico-lightgrey)
 
 Aplicativo **Android em Flutter/Dart** para acompanhamento operacional de demandas agrícolas do AusterAgX. Oferece autenticação JWT, dashboard, consulta e atualização autorizada de demandas, cache SQLite isolado por usuário, fila de sincronização e captura local de GPS.
 
 O cliente mobile reutiliza a **API AusterAgX existente**. Autorização, transições de status e validações de negócio continuam no backend oficial; o aplicativo não duplica a base transacional nem cria regras paralelas.
+
+---
+
+## Sumário
+
+- [Preview](#preview)
+- [Tecnologias](#tecnologias)
+- [Principais funcionalidades](#principais-funcionalidades)
+- [Perfis de acesso](#perfis-de-acesso)
+- [Arquitetura](#arquitetura)
+- [Modelagem do banco de dados](#modelagem-do-banco-de-dados)
+- [Pré-requisitos](#pré-requisitos)
+- [Como rodar](#como-rodar)
+- [Documentação técnica](#documentação-técnica)
+- [Testes automatizados](#testes-automatizados)
+- [Demonstração acadêmica](#demonstração-acadêmica)
+- [Estrutura do repositório](#estrutura-do-repositório)
+- [Segurança e integridade](#segurança-e-integridade)
+- [Licença e autoria](#licença-e-autoria)
 
 ---
 
@@ -186,7 +207,9 @@ O terceiro modelo reproduz as sete tabelas de `lib/data/local/app_database.dart`
 
 [![Modelo físico do SQLite mobile](docs/modelo-er/auster-agx-mobile-fisico.png)](docs/modelo-er/auster-agx-mobile-fisico.png)
 
-**Artefatos:** [brModelo `.brM3`](docs/modelo-er/auster-agx-mobile-fisico.brM3) · [XML](docs/modelo-er/auster-agx-mobile-fisico.xml) · [PNG](docs/modelo-er/auster-agx-mobile-fisico.png)
+**Artefatos:** [DDL](docs/modelo-er/auster-agx-mobile-fisico.sql) · [ER textual](docs/modelo-er/auster-agx-mobile-fisico.md) · [brModelo `.brM3`](docs/modelo-er/auster-agx-mobile-fisico.brM3) · [XML](docs/modelo-er/auster-agx-mobile-fisico.xml) · [PNG](docs/modelo-er/auster-agx-mobile-fisico.png)
+
+O DDL e o ER textual são extraídos de `lib/data/local/app_database.dart` pelo gerador, não escritos à mão.
 
 | Conceito | Persistência física offline |
 |---|---|
@@ -199,6 +222,27 @@ O terceiro modelo reproduz as sete tabelas de `lib/data/local/app_database.dart`
 | Regras de transição | Snapshot único em `status_fluxo` |
 
 O cache não declara `FOREIGN KEY`: os vínculos locais são lógicos e os payloads preservam o contrato da API. Tokens e o último perfil autenticado ficam no `flutter_secure_storage`, fora do SQLite.
+
+### Regeneração dos modelos
+
+```powershell
+node scripts/gerar-modelos-er.mjs
+```
+
+O gerador valida contagens, identificadores, cardinalidades, nulabilidade e unicidade do backend, confere o cache SQLite contra o código Dart e só então reescreve DOT, SVG, JSON, matriz de auditoria, DDL e ER textual. Divergência entre código e modelo interrompe a execução. A opção `--render` também atualiza os PNGs quando `sharp` está disponível.
+
+---
+
+## Pré-requisitos
+
+| Requisito | Versão | Observação |
+|---|---|---|
+| Flutter SDK | 3.x no canal stable | `flutter doctor` sem erros para Android |
+| Dart SDK | `>=3.3.0 <4.0.0` | Acompanha o Flutter |
+| Android SDK | API 21 ou superior | Android Studio ou command-line tools |
+| JDK | 17 | Exigido pelo Android Gradle Plugin |
+| Node.js | 18 ou superior | Somente para regenerar os modelos ER |
+| API AusterAgX | Instância acessível | O aplicativo não embarca dados de demonstração |
 
 ---
 
@@ -299,16 +343,20 @@ A suíte cobre configuração segura da API, SQLite, isolamento de usuário, fil
 ## Estrutura do repositório
 
 ```text
-android/          projeto, permissões, ícones e assinatura Android
-assets/           logo oficial e fontes AUSTER
-docs/             contratos, segurança, issues, diagramas e screenshots
-lib/              código Dart do aplicativo
-scripts/          automação de publicação e criação de issues
-test/             testes unitários e de widgets
-.env.example      referência das opções locais de API
-INSTALACAO.md     guia completo de ambiente e execução
-README.md         apresentação e documentação principal
-pubspec.yaml      dependências, assets e metadados Flutter
+android/            projeto, permissões, ícones e assinatura Android
+assets/             logo oficial e fontes AUSTER
+docs/               contratos, segurança, issues, diagramas e screenshots
+docs/modelo-er/     modelos conceitual, lógico e físico e seus artefatos
+docs/issues/        issues do MVP versionadas junto do código
+lib/                código Dart do aplicativo
+scripts/            gerador dos modelos ER e publicação do repositório
+test/               testes unitários e de widgets
+.env.example        referência das opções locais de API
+.gitattributes      normalização de quebras de linha e arquivos binários
+analysis_options.yaml regras de lint aplicadas ao código Dart
+INSTALACAO.md       guia completo de ambiente e execução
+README.md           apresentação e documentação principal
+pubspec.yaml        dependências, assets e metadados Flutter
 ```
 
 Como este repositório é exclusivamente mobile, o projeto Flutter permanece na raiz. Backend e banco transacional não são copiados para pastas locais: o aplicativo consome a API AusterAgX já mantida pelo sistema oficial.
@@ -324,3 +372,11 @@ Como este repositório é exclusivamente mobile, o projeto Flutter permanece na 
 - Bancos, filas e capturas GPS são isolados por usuário no dispositivo.
 - Segredos de assinatura, bancos locais e arquivos `.env` não entram no Git.
 - Builds release falham quando a assinatura privada não está configurada.
+
+---
+
+## Licença e autoria
+
+Projeto acadêmico desenvolvido por **Joloano** ([@Joloano](https://github.com/Joloano)) no Colégio Politécnico da UFSM.
+
+O código deste repositório é disponibilizado para fins de estudo e avaliação acadêmica. A marca AUSTER, a identidade visual, a API AusterAgX e os dados operacionais pertencem à AUSTER Tecnologia e não são licenciados por este repositório. Nenhum dado real de cliente é versionado aqui.
