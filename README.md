@@ -1,68 +1,176 @@
-# AusterAgX Mobile
+<p align="center">
+  <img src="assets/branding/auster-logo-bicolor.png" alt="AUSTER Tecnologia" width="420">
+</p>
 
-## Objetivo
+# AusterAgX Mobile — App Flutter offline-first
 
-Aplicativo Flutter acadêmico para acompanhamento mobile de demandas do AusterAgX, com login REST, JWT, troca obrigatória de senha temporária, armazenamento offline, fila de sincronização e captura de GPS.
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white)](https://flutter.dev/)
+![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart&logoColor=white)
+![Android](https://img.shields.io/badge/Android-validado-3DDC84?logo=android&logoColor=white)
+![Riverpod](https://img.shields.io/badge/estado-Riverpod-00ADEF)
+![API REST](https://img.shields.io/badge/integra%C3%A7%C3%A3o-API%20REST-0261BD)
+![Offline first](https://img.shields.io/badge/opera%C3%A7%C3%A3o-offline--first-00A36C)
+![Tests](https://img.shields.io/badge/testes-43%20aprovados-brightgreen)
 
-## Motivação para versão mobile
+Aplicativo **Android em Flutter/Dart** para acompanhamento operacional de demandas agrícolas do AusterAgX. Oferece autenticação JWT, dashboard, consulta e atualização autorizada de demandas, cache SQLite isolado por usuário, fila de sincronização e captura local de GPS.
 
-Colaboradores podem consultar e atualizar demandas fora do computador, inclusive em áreas com conectividade limitada. O app prioriza o fluxo de demandas, não a conversão completa do ERP.
+O cliente mobile reutiliza a **API AusterAgX existente**. Autorização, transições de status e validações de negócio continuam no backend oficial; o aplicativo não duplica a base transacional nem cria regras paralelas.
+
+---
+
+## Preview
+
+Capturas reais dos widgets Flutter em viewport mobile de 390 × 844 pontos, usando dados controlados de demonstração.
+
+| Dashboard operacional | Demandas por etapa e status |
+|:---:|:---:|
+| <img src="docs/screenshots/mobile-dashboard.png" alt="Dashboard operacional do AusterAgX Mobile" width="280"> | <img src="docs/screenshots/mobile-demandas.png" alt="Lista de demandas do AusterAgX Mobile" width="280"> |
+
+<details>
+<summary><strong>Ver o fluxo completo de telas</strong></summary>
+
+<p align="center">
+  <img src="docs/screenshots/mobile-login.png" alt="Login do AusterAgX Mobile" width="190">
+  <img src="docs/screenshots/mobile-troca-senha.png" alt="Troca obrigatória de senha" width="190">
+  <img src="docs/screenshots/mobile-detalhe-demanda.png" alt="Detalhe de demanda com status e GPS" width="190">
+</p>
+
+</details>
+
+---
+
+## Tecnologias
+
+| Camada | Tecnologias |
+|---|---|
+| **Mobile** | Flutter / Dart, Material 3, internacionalização nativa do Flutter |
+| **Estado e DI** | Riverpod para estado assíncrono, sessão e injeção de dependências |
+| **Navegação** | GoRouter com `StatefulShellRoute.indexedStack` |
+| **API** | Dio, REST, JWT com access token e refresh token rotativo |
+| **Persistência** | SQLite via `sqlite3` e `sqlite3_flutter_libs`, cache por usuário e fila offline |
+| **Segurança** | `flutter_secure_storage`, validação de origem da API e assinatura release obrigatória |
+| **Conectividade** | `connectivity_plus`, política de falhas transitórias e sincronização automática |
+| **Recursos nativos** | `geolocator` e `permission_handler` para captura GPS e permissões Android |
+| **Interface** | Identidade AUSTER, logo oficial, Inter e Bebas Neue |
+| **Qualidade** | `flutter_test`, Mocktail, Flutter Lints e 43 testes automatizados |
+| **Modelagem** | brModelo Web, brModelo desktop e Mermaid |
+
+---
+
+## Principais funcionalidades
+
+1. **Autenticação e sessão**
+   - Login por e-mail e senha em `POST /auth/login`.
+   - JWT armazenado no cofre seguro do sistema, nunca em preferências simples ou no SQLite.
+   - Renovação coordenada de token para impedir múltiplos refreshes concorrentes.
+   - Logout com revogação do refresh token no backend.
+   - Restauração offline somente depois de uma sessão validada anteriormente.
+
+2. **Troca obrigatória de senha**
+   - Bloqueio da navegação operacional quando `deveAlterarSenha = true`.
+   - Envio do contrato oficial para `POST /auth/change-password`.
+   - Atualização imediata da sessão após a confirmação da nova senha.
+
+3. **Dashboard operacional**
+   - Resumo de clientes, fazendas, talhões e vínculos.
+   - Métricas de área e cobertura por talhões.
+   - Maiores fazendas e demandas recentes.
+   - Mesmos agrupamentos operacionais usados pelo painel AusterAgX.
+
+4. **Demandas**
+   - Listagem agrupada em `Listada`, `A seguir`, `Coleta de dados`, `Andamento`, `Entregue` e `Cancelada`.
+   - Detalhe agregado com pedido, cliente, fazendas, grupos, talhões, culturas e sensoriamentos.
+   - Histórico de status, demanda de origem e demandas derivadas.
+   - Atualização de status, situação dos dados e situação do mapeamento para perfis autorizados.
+
+5. **Operação offline**
+   - Cache local de dashboard, lista, detalhe, histórico e regras de transição.
+   - Leitura local quando não há conectividade ou ocorre falha HTTP transitória.
+   - Um arquivo SQLite por usuário, identificado por hash, para impedir exposição entre contas.
+   - Erros definitivos de autorização ou contrato permanecem visíveis e não são mascarados pelo cache.
+
+6. **Fila de sincronização**
+   - Escritas offline otimistas com indicador global de estado.
+   - Consolidação da última alteração pendente por demanda.
+   - Reconciliação dos caches com a resposta oficial após um `PATCH` aceito.
+   - Repetição de falhas transitórias e bloqueio de rejeições permanentes para evitar loops.
+
+7. **Recurso nativo de GPS**
+   - Captura de latitude, longitude, precisão e horário no detalhe da demanda.
+   - Permissão solicitada em tempo de execução.
+   - Registro mantido localmente, pois a API atual não oferece endpoint de demanda para esse payload.
+
+8. **Segurança e mensagens de erro**
+   - Diferencia sessão expirada, acesso negado, validação, indisponibilidade, timeout e limite de requisições.
+   - Não expõe stack traces ou detalhes internos do servidor ao usuário.
+   - HTTP local liberado apenas em debug; release exige HTTPS por padrão.
+
+9. **Identidade visual AUSTER**
+   - Logo bicolor oficial, azul `#0261BD` e verde `#00B37B`.
+   - Bebas Neue nos títulos e Inter no restante da interface.
+   - Launcher Android e AppIcon iOS gerados a partir do símbolo oficial.
+
+---
+
+## Perfis de acesso
+
+| Perfil | Comportamento no aplicativo |
+|---|---|
+| `SUPER_ADMIN` | Consulta e alteração operacional de demandas |
+| `USUARIO_TECNICO_PRESCRICAO` | Consulta e alteração operacional de demandas |
+| `USUARIO_CONSULTOR_CTV` | Consulta conforme a carteira autorizada pelo backend |
+| `USUARIO_ASSISTENTE_ATV` | Consulta conforme a autorização recebida da API |
+| `USUARIO_GESTOR_ADMINISTRATIVO` | Consulta conforme a autorização recebida da API |
+
+Somente `SUPER_ADMIN` e `USUARIO_TECNICO_PRESCRICAO` recebem ações de alteração de status, dados e mapeamento. A API continua sendo a autoridade final: ausência de autenticação resulta em `401` e falta de permissão em `403`.
+
+---
 
 ## Arquitetura
 
-A arquitetura é modular e separa base técnica, acesso a dados, serviços, sincronização, telas por funcionalidade, rotas e componentes compartilhados:
+A organização separa infraestrutura técnica, contratos de dados, regras de acesso, estado de interface e funcionalidades. O fluxo principal é **tela → provider/controller → repositório → API e SQLite**.
 
 ```text
 lib/
-  app/
-  routes/
+  app/                         configuração do aplicativo
+  routes/                      navegação e proteção de rotas
   core/
-    auth/
-    config/
-    errors/
-    network/
+    auth/                      eventos e perfis da sessão
+    config/                    configuração por dart-define
+    errors/                    erros de domínio e mensagens seguras
+    network/                   conectividade e política de falhas
   data/
-    local/
-    models/
-    repositorios/
-    services/
-    sync/
+    local/                     SQLite e isolamento por usuário
+    models/                    DTOs e modelos imutáveis
+    repositorios/              coordenação API/cache
+    services/                  clientes REST, tokens, GPS e usuário
+    sync/                      fila e serviço de sincronização
   features/
-    authentication/
-    dashboard/
-    demandas/
-    location/
-    shell/
-  widgets/
+    authentication/            login e troca de senha
+    dashboard/                 visão geral operacional
+    demandas/                  lista e detalhe
+    location/                  captura de localização
+    shell/                     navegação principal
+  widgets/                     componentes AUSTER compartilhados
 ```
 
-O shell usa `StatefulShellRoute.indexedStack` para manter pilhas independentes entre Dashboard e Demandas. A barra global de sincronização fica em `widgets/sync_status_bar.dart`.
+O shell usa `StatefulShellRoute.indexedStack` para manter pilhas independentes entre Dashboard e Demandas. A barra global de sincronização fica em `lib/widgets/sync_status_bar.dart`.
 
-O comportamento de demandas foi alinhado ao AusterAgX oficial: o mobile usa os mesmos endpoints REST, o mesmo contrato de DTOs, os mesmos grupos operacionais do painel e as mesmas regras de transição vindas de `/demandas/status-fluxo`.
+O aplicativo consome `/demandas/status-fluxo` para obter transições e pré-requisitos. Dessa forma, a ordem do processo não é codificada novamente no cliente.
 
-## Diagrama de classes
+---
 
-O [diagrama de classes completo](docs/diagrama-classes.md) documenta as entidades persistentes e os relacionamentos do domínio AusterAgX disponibilizado pela API. O aplicativo móvel usa esse domínio por meio dos contratos REST existentes e mantém no dispositivo somente os dados necessários para cache e operação offline.
+## Modelagem do banco de dados
 
-## Identidade visual AUSTER
+Os dados são documentados em dois escopos para não confundir o domínio transacional da API com a estratégia de cache do aplicativo.
 
-A interface reutiliza o logo bicolor oficial do AUSTER em `assets/branding/auster-logo-bicolor.png`, além das cores institucionais azul (`#0261BD`) e verde (`#00B37B`). Títulos usam Bebas Neue e os demais textos usam Inter, acompanhando o frontend oficial. Login, troca de senha, cabeçalho, navegação, dashboard, demandas e detalhes compartilham os mesmos componentes de identidade visual. O launcher Android e o AppIcon iOS são gerados a partir do símbolo oficial em `assets/branding/auster-launcher-icon.png`, sem o ícone padrão do Flutter.
+### Modelo conceitual do domínio AusterAgX
 
-## Modelo ER e persistência local
+Derivado do [diagrama de classes](docs/diagrama-classes.md), o modelo representa **28 entidades JPA, 299 atributos e 36 relacionamentos**. A vista geral segue a notação do [brModelo Web](https://app.brmodeloweb.com/main), com entidades, relacionamentos, chaves e cardinalidades mínimas/máximas.
 
-Os dados estão documentados em dois escopos complementares para não misturar o modelo transacional da API com a estratégia de cache do aplicativo. O domínio da API segue o padrão conceitual do [brModelo Web](https://app.brmodeloweb.com/main), enquanto o esquema físico do cache permanece no formato do [brModelo desktop](https://github.com/chcandido/brModelo).
+[![Modelo ER conceitual do domínio AusterAgX](docs/modelo-er/auster-agx-mobile.png)](docs/modelo-er/auster-agx-mobile.png)
 
-### ER do domínio AusterAgX
-
-O modelo foi derivado diretamente do [diagrama de classes](docs/diagrama-classes.md) e representa 28 entidades JPA persistentes, 299 atributos e 36 associações. Os atributos herdados das classes abstratas foram incorporados às entidades concretas; classes auxiliares de changelog não foram tratadas como entidades de negócio.
-
-O [ER completo em Mermaid](docs/modelo-er/auster-agx-dominio.md) preserva todos os atributos apresentados no diagrama de classes. A vista conceitual usa as mesmas formas do [projeto oficial do brModelo Web](https://github.com/brmodeloweb/brmodelo-app): entidades retangulares, relacionamentos em losangos, atributos em elipses, chaves preenchidas e cardinalidades mínimas/máximas. Para manter a leitura em tela, ela destaca identificadores e chaves públicas e organiza o domínio em sete módulos; uma entidade repetida entre módulos representa apenas a fronteira entre contextos, não uma duplicação no banco.
-
-**Artefatos do domínio:** [fonte semântica completa](docs/modelo-er/auster-agx-dominio.md) · [grafo JointJS versionável](docs/modelo-er/auster-agx-brmodelo-web.json) · [vetor SVG](docs/modelo-er/auster-agx-mobile.svg) · [PNG em alta resolução](docs/modelo-er/auster-agx-mobile.png)
-
-<p align="center">
-  <img src="docs/modelo-er/auster-agx-mobile.png" alt="Modelo ER conceitual do domínio AusterAgX no padrão visual do brModelo Web" width="100%">
-</p>
+**Artefatos:** [fonte semântica completa](docs/modelo-er/auster-agx-dominio.md) · [grafo JointJS](docs/modelo-er/auster-agx-brmodelo-web.json) · [SVG](docs/modelo-er/auster-agx-mobile.svg) · [PNG](docs/modelo-er/auster-agx-mobile.png)
 
 <details>
 <summary><strong>Vistas modulares em alta resolução</strong></summary>
@@ -77,237 +185,165 @@ O [ER completo em Mermaid](docs/modelo-er/auster-agx-dominio.md) preserva todos 
 
 </details>
 
-### Esquema físico SQLite
+### Modelo físico do cache SQLite
 
-O segundo modelo reproduz literalmente as sete tabelas criadas em `lib/data/local/app_database.dart`, incluindo tipos, chaves primárias, nulabilidade, valores padrão, `CHECK` e `AUTOINCREMENT`.
+O segundo modelo reproduz as sete tabelas de `lib/data/local/app_database.dart`, incluindo tipos, chaves primárias, nulabilidade, valores padrão, `CHECK` e `AUTOINCREMENT`.
 
-**Arquivos físicos:** [editar no brModelo (`.brM3`)](docs/modelo-er/auster-agx-mobile-fisico.brM3) · [fonte XML](docs/modelo-er/auster-agx-mobile-fisico.xml) · [imagem em alta resolução](docs/modelo-er/auster-agx-mobile-fisico.png)
+[![Modelo físico do SQLite mobile](docs/modelo-er/auster-agx-mobile-fisico.png)](docs/modelo-er/auster-agx-mobile-fisico.png)
 
-<p align="center">
-  <img src="docs/modelo-er/auster-agx-mobile-fisico.png" alt="Esquema físico do SQLite offline do AusterAgX Mobile no brModelo" width="100%">
-</p>
+**Artefatos:** [brModelo `.brM3`](docs/modelo-er/auster-agx-mobile-fisico.brM3) · [XML](docs/modelo-er/auster-agx-mobile-fisico.xml) · [PNG](docs/modelo-er/auster-agx-mobile-fisico.png)
 
 | Conceito | Persistência física offline |
-| --- | --- |
-| Resumo de demanda | `dashboard_items.payload`, um JSON por `id` de demanda |
-| Detalhe de demanda | `demanda_details.payload`, um JSON por `id` de demanda |
-| Histórico de status | `demanda_status_history.payload`, uma lista JSON por `demanda_id` |
-| Operação de sincronização | Uma linha em `sync_queue`; `entity` e `entity_id` identificam o agregado |
-| Captura de localização | Uma linha em `location_captures` associada logicamente por `demanda_id` |
-| Resumo do dashboard | Snapshot JSON único em `dashboard_overview`, com `id = 1` |
-| Regras de transição | Snapshot JSON único em `status_fluxo`, com `id = 1` |
+|---|---|
+| Resumo de demanda | `dashboard_items.payload`, um JSON por demanda |
+| Detalhe de demanda | `demanda_details.payload`, um JSON por demanda |
+| Histórico de status | `demanda_status_history.payload`, lista JSON por `demanda_id` |
+| Operação de sincronização | Uma linha em `sync_queue`, identificada por entidade e ID |
+| Captura de localização | Uma linha em `location_captures`, associada por `demanda_id` |
+| Resumo do dashboard | Snapshot único em `dashboard_overview` |
+| Regras de transição | Snapshot único em `status_fluxo` |
 
-O SQLite atual não declara nenhuma `FOREIGN KEY`. Por isso, `demanda_id` e `entity_id` não são marcados como FKs e o modelo físico não desenha relacionamentos inexistentes. As associações transacionais pertencem ao ER do domínio; no cache local, os vínculos lógicos estão documentados na tabela acima. Os payloads da API permanecem em JSON para preservar o contrato do backend e evitar duplicar o esquema transacional do ERP.
+O cache não declara `FOREIGN KEY`: os vínculos locais são lógicos e os payloads preservam o contrato da API. Tokens e o último perfil autenticado ficam no `flutter_secure_storage`, fora do SQLite.
 
-Cada usuário autenticado utiliza um arquivo SQLite próprio, com nome derivado de um hash SHA-256 do `userId`. O identificador não fica exposto no nome do arquivo e caches, fila offline e capturas GPS permanecem isolados entre contas no mesmo aparelho. A separação é física; o esquema de sete tabelas documentado abaixo continua idêntico em cada arquivo.
+---
 
-Credenciais, tokens e o último perfil autenticado não aparecem nos modelos porque ficam no `flutter_secure_storage`, fora do SQLite. Os objetos de demanda são reconstruídos a partir dos payloads da API e mantidos apenas como cache operacional.
+## Como rodar
 
-## Tecnologias
+> O passo a passo completo para Windows, emulador, celular físico, APK e assinatura está em [INSTALACAO.md](INSTALACAO.md).
 
-- Dio: cliente HTTP e interceptors.
-- Riverpod: estado assíncrono e injeção de dependências.
-- GoRouter: navegação declarativa.
-- flutter_secure_storage: armazenamento seguro de JWT, refresh token e perfil mínimo da sessão.
-- SQLite via sqlite3: cache local e fila de sincronização.
-- connectivity_plus: monitoramento de conectividade.
-- geolocator e permission_handler: GPS e permissões nativas.
+### Preparação
 
-## Integração com API
+```powershell
+git clone https://github.com/Joloano/auster-agx-mobile.git
+cd auster-agx-mobile
+flutter pub get
+```
 
-Endpoints reais documentados em `docs/investigacao-api.md`. O aplicativo não replica validações transacionais do ERP: autenticação, autorização, transições de status e pré-requisitos continuam sendo validados pelo backend existente. O mobile consome `/demandas/status-fluxo` para projetar as ações permitidas e sempre submete a alteração ao endpoint oficial antes de considerá-la confirmada.
-
-Erros HTTP são traduzidos em uma camada única antes de chegar às telas. O app diferencia sessão expirada, acesso negado, recurso ausente, indisponibilidade, timeout, limite de requisições e validações de negócio; detalhes técnicos e exceções internas não são exibidos ao usuário.
-
-## Configuração da API
-
-Durante desenvolvimento:
-
-- Android Emulator: `http://10.0.2.2:8080`
-- Celular físico: usar o IP da máquina na rede local.
-
-As opções são definidas em tempo de compilação por `--dart-define`:
-
-- `API_BASE_URL`: endereço base do backend; o padrão local é `http://10.0.2.2:8080`.
-- `API_TIMEOUT_MS`: timeout das chamadas HTTP em milissegundos; o padrão é `10000`.
-- `ALLOW_INSECURE_HTTP`: libera HTTP explicitamente. Em debug o padrão é `true`; em release, `false`.
-
-Configurar URL com:
+### App mobile no emulador Android
 
 ```powershell
 flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8080
 ```
 
-O manifesto Android permite tráfego HTTP somente no build `debug`, para testes com a API na rede local. Builds de produção devem usar uma origem HTTPS sem caminho, query ou credenciais; a configuração é validada antes de o cliente HTTP ser criado.
-
-## Autenticação
-
-O login usa `POST /auth/login` com `email` e `senha`. A resposta contém `accessToken`, `refreshToken` e dados do usuário. Tokens ficam no armazenamento seguro, nunca em SharedPreferences.
-
-Quando o backend retorna `deveAlterarSenha = true`, o app segue o comportamento do AUSTER oficial e bloqueia a navegação operacional até concluir `POST /auth/change-password`. O payload usa o contrato oficial (`novaSenha` e, quando aplicável, `senhaAtual`) e a resposta atualiza o usuário autenticado no estado da aplicação.
-
-Durante a restauração da sessão, o roteador mantém uma tela neutra de carregamento. Dashboard, demandas e recursos operacionais só são montados depois da validação do usuário; links internos válidos são retomados após a autenticação.
-
-O último perfil autenticado também é guardado no armazenamento seguro para permitir a abertura offline depois de um login validado. Falhas transitórias de conexão, timeout, `408`, `429` ou respostas `5xx` preservam tokens e usam esse perfil local. Somente ausência de refresh token ou rejeições definitivas `401/403` removem toda a sessão e notificam o estado global do aplicativo. Requisições concorrentes compartilham uma única renovação de token para evitar refresh duplicado.
-
-## Funcionamento offline
-
-Demandas sincronizadas são salvas no SQLite. A UI lê primeiro do banco local; quando existe internet, o repositório busca a API, atualiza o banco e reflete os dados. O cache substitui a resposta remota apenas em falhas transitórias de rede, timeout, `408`, `429` ou `5xx`; erros definitivos como `401`, `403`, `404` e violações de contrato continuam visíveis para o fluxo de autenticação e para a UI.
-
-O cache inclui dashboard, detalhes agregados, histórico de status e metadados de transição. Assim, depois da primeira sincronização, o app continua mostrando o contexto operacional mesmo sem conexão. O cache é aberto somente depois da autenticação e é particionado por usuário para impedir exposição cruzada entre contas.
-
-## Sincronização
-
-Alterações feitas sem internet entram em `sync_queue`. Ao detectar conectividade, `SyncService` tenta enviar as operações pendentes. Depois de um PATCH aceito, detalhe e dashboard são reconciliados com a `Demanda` devolvida pelo backend antes de a operação ser concluída; assim, normalizações e decisões do servidor substituem corretamente o estado otimista local.
-
-Para evitar envio redundante, a fila consolida a última operação pendente de uma mesma demanda antes da sincronização. O PATCH enviado para `/demandas/{id}` segue o contrato oficial: `tipo`, `representanteId`, `prazo`, `areaDeInteresse`, `status`, `situacaoDados`, `situacaoMapeamento` e `retrabalho`. A tela só oferece alteração de status, dados ou mapeamento para perfis administrativos (`SUPER_ADMIN` e `USUARIO_TECNICO_PRESCRICAO`), como no frontend oficial.
-
-Falhas transitórias e `401` incrementam a tentativa e mantêm a operação pendente. Rejeições permanentes (`403`, `404`, `409`, `422` e demais `4xx`) mudam a operação para `failed`, aparecem na barra global e não entram em repetição infinita. Uma nova edição da mesma demanda substitui o payload rejeitado e reativa a operação para sincronização.
-
-## Recurso nativo utilizado
-
-GPS no detalhe da demanda. A captura funciona como evidência local de campo e fica separada do payload REST oficial para preservar o contrato atual do AUSTER.
-
-## Como executar
-
-Este workspace usa Flutter e Android SDK portáteis em `C:\auster-mobile-tools`, para não depender de instalação global nem tocar no sistema oficial:
+### App mobile em celular físico
 
 ```powershell
-cd "C:\Users\Joloano\OneDrive\Área de Trabalho\AusterMobileFaculdade\auster_agx_mobile"
-
-C:\auster-mobile-tools\flutter\bin\flutter.bat pub get
-C:\auster-mobile-tools\flutter\bin\flutter.bat run --dart-define=API_BASE_URL=http://10.0.2.2:8080
+flutter devices
+flutter run -d ID_DO_DISPOSITIVO --dart-define=API_BASE_URL=http://IP_DO_COMPUTADOR:8080
 ```
 
-Para evitar falhas do analysis server com o caminho acentuado `Área de Trabalho`, também existe um junction ASCII:
+Computador, celular e API devem estar na mesma rede. `10.0.2.2` funciona apenas no emulador Android.
+
+### Configuração da API
+
+| Opção | Descrição |
+|---|---|
+| `API_BASE_URL` | Origem HTTP(S) do backend; padrão `http://10.0.2.2:8080` |
+| `API_TIMEOUT_MS` | Timeout HTTP em milissegundos; padrão `10000` |
+| `ALLOW_INSECURE_HTTP` | `true` em debug e `false` em release por padrão |
+
+O valor de `API_BASE_URL` deve ser uma origem sem caminho, query, fragmento ou credenciais. O app não inclui usuários de demonstração: use uma conta válida do ambiente AusterAgX. Se a senha for provisória, a troca será exigida automaticamente.
+
+### APK de desenvolvimento
 
 ```powershell
-cd C:\auster-mobile-work\auster_agx_mobile
-```
-
-## Testar em um celular Android
-
-1. Ative as opções do desenvolvedor e a depuração USB no aparelho.
-2. Conecte computador e celular à mesma rede Wi-Fi e confirme o dispositivo com `adb devices`.
-3. Descubra o IPv4 do computador com `ipconfig` e garanta que o backend aceite conexões da rede local.
-4. Execute substituindo `IP_DO_COMPUTADOR` e `ID_DO_DISPOSITIVO` pelos valores reais:
-
-```powershell
-C:\auster-mobile-tools\flutter\bin\flutter.bat run -d ID_DO_DISPOSITIVO --dart-define=API_BASE_URL=http://IP_DO_COMPUTADOR:8080
-```
-
-Para gerar e instalar um APK de desenvolvimento no celular sem manter o cabo conectado:
-
-```powershell
-C:\auster-mobile-tools\flutter\bin\flutter.bat build apk --debug --dart-define=API_BASE_URL=http://IP_DO_COMPUTADOR:8080
+flutter build apk --debug --dart-define=API_BASE_URL=http://IP_DO_COMPUTADOR:8080
 adb install -r build\app\outputs\flutter-apk\app-debug.apk
 ```
 
-O APK precisa ter sido gerado com o `API_BASE_URL` acessível pelo celular; `10.0.2.2` funciona apenas no emulador Android. HTTP local é aceito somente em debug; builds release exigem HTTPS por padrão.
+### Distribuição
 
-## Assinatura Android de produção
+Builds release exigem HTTPS e assinatura privada configurada. Consulte [a seção de assinatura do guia](INSTALACAO.md#configurar-assinatura-de-produção) antes de gerar APK ou Android App Bundle.
 
-O build release nunca usa a chave de debug. Antes da primeira distribuição, gere e mantenha uma chave privada fora do Git:
+---
+
+## Documentação técnica
+
+- **Instalação, emulador, celular e assinatura:** [INSTALACAO.md](INSTALACAO.md)
+- **Endpoints, DTOs, autorização e regras do backend:** [docs/investigacao-api.md](docs/investigacao-api.md)
+- **Diagrama de classes do domínio:** [docs/diagrama-classes.md](docs/diagrama-classes.md)
+- **Modelo ER completo:** [docs/modelo-er/auster-agx-dominio.md](docs/modelo-er/auster-agx-dominio.md)
+- **Decisões de segurança da primeira fase:** [docs/fase-1-seguranca.md](docs/fase-1-seguranca.md)
+- **Configuração e permissões Android:** [docs/android-config.md](docs/android-config.md)
+- **Issues acadêmicas versionadas:** [docs/issues/README.md](docs/issues/README.md)
+- **Issues do repositório:** [GitHub Issues](https://github.com/Joloano/auster-agx-mobile/issues)
+
+---
+
+## Testes automatizados
+
+Baseline validada em **20 de setembro de 2026**:
+
+- `flutter analyze --no-pub`: **nenhuma ocorrência**.
+- `flutter test --no-pub`: **43 testes aprovados**.
 
 ```powershell
-New-Item -ItemType Directory -Force android\keystore
-keytool -genkeypair -v -keystore android\keystore\auster-upload-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
-Copy-Item android\key.properties.example android\key.properties
+flutter analyze
+flutter test
 ```
 
-Edite `android/key.properties` com as senhas escolhidas. O arquivo de propriedades e os arquivos `*.jks` já estão ignorados pelo Git; mantenha um backup seguro da chave, porque atualizações futuras do aplicativo dependem dela.
+A suíte cobre configuração segura da API, SQLite, isolamento de usuário, fila offline, tradução de erros, refresh JWT, sincronização, repositórios, mapeamento dos DTOs reais e proteção das rotas/widgets de autenticação.
 
-Com a assinatura configurada, gere o APK ou o Android App Bundle usando uma API HTTPS:
+---
 
-```powershell
-C:\auster-mobile-tools\flutter\bin\flutter.bat build apk --release --dart-define=API_BASE_URL=https://api.exemplo.com
-C:\auster-mobile-tools\flutter\bin\flutter.bat build appbundle --release --dart-define=API_BASE_URL=https://api.exemplo.com
-```
+## Demonstração acadêmica
 
-Sem `android/key.properties`, com propriedade ausente ou com caminho de chave inválido, o build release falha explicitamente em vez de produzir um pacote assinado como desenvolvimento.
+1. Abrir o aplicativo.
+2. Autenticar pela API REST e receber JWT.
+3. Trocar a senha quando o backend marcar a credencial como provisória.
+4. Consultar dashboard e demandas.
+5. Abrir o detalhe agregado de uma demanda.
+6. Desligar a internet e continuar consultando os dados locais.
+7. Alterar status, dados ou mapeamento com um perfil autorizado.
+8. Conferir a operação pendente e o estado otimista no app.
+9. Restabelecer a conexão e sincronizar com o servidor.
+10. Capturar a localização GPS no detalhe da demanda.
 
-## Testes
+---
 
-```powershell
-C:\auster-mobile-tools\flutter\bin\flutter.bat analyze
-C:\auster-mobile-tools\flutter\bin\flutter.bat test
-```
-
-## Publicação no GitHub
-
-O repositório acadêmico foi publicado em:
+## Estrutura do repositório
 
 ```text
-https://github.com/Joloano/auster-agx-mobile
+android/          projeto, permissões, ícones e assinatura Android
+assets/           logo oficial e fontes AUSTER
+docs/             contratos, segurança, issues, diagramas e screenshots
+ios/              estrutura Flutter gerada para iOS
+lib/              código Dart do aplicativo
+scripts/          automação de publicação e criação de issues
+test/             testes unitários e de widgets
+.env.example      referência das opções locais de API
+INSTALACAO.md     guia completo de ambiente e execução
+README.md         apresentação e documentação principal
+pubspec.yaml      dependências, assets e metadados Flutter
 ```
 
-Para repetir a publicação em outro remoto ou recriar as issues versionadas:
+Como este repositório é exclusivamente mobile, o projeto Flutter permanece na raiz. Backend e banco transacional não são copiados para pastas locais: o aplicativo consome a API AusterAgX já mantida pelo sistema oficial.
 
-```powershell
-cd C:\auster-mobile-work\auster_agx_mobile
-.\scripts\publish-github.ps1 -RepositoryFullName SEU_USUARIO/auster-agx-mobile -CreateRepo -CreateIssues
-```
+---
 
-Para publicar em um repositório já existente:
+## Segurança e integridade
 
-```powershell
-.\scripts\publish-github.ps1 -RepositoryFullName SEU_USUARIO/auster-agx-mobile -CreateIssues
-```
+- O mobile não altera tabelas, migrations ou regras do AusterAgX oficial.
+- DTOs enviados respeitam os contratos aceitos por `/auth`, `/dashboard` e `/demandas`.
+- Transições são obtidas de `/demandas/status-fluxo` e novamente validadas pelo servidor.
+- Tokens e perfil mínimo ficam no armazenamento seguro do sistema.
+- Bancos, filas e capturas GPS são isolados por usuário no dispositivo.
+- Segredos de assinatura, bancos locais e arquivos `.env` não entram no Git.
+- Builds release falham quando a assinatura privada não está configurada.
 
-## Demonstracao
-
-1. Abrir app.
-2. Login via API REST.
-3. Receber JWT.
-4. Trocar senha provisória quando `deveAlterarSenha` estiver ativo.
-5. Ver dashboard/demandas.
-6. Desligar internet.
-7. Continuar vendo dados locais.
-8. Alterar status, situação dos dados ou situação do mapeamento quando o perfil permitir.
-9. Ver alteração pendente consolidada e card local atualizado.
-10. Religar internet.
-11. Sincronizar com o servidor.
-12. Abrir detalhe com resumo, contexto, sensoriamento, cadeia e histórico.
-13. Capturar GPS.
-
-## Prints das telas
-
-Capturas reais dos widgets Flutter, renderizadas em viewport mobile de 390 x 844 pontos com dados controlados de demonstração:
-
-<p>
-  <img src="docs/screenshots/mobile-login.png" alt="Tela de login do AusterAgX Mobile" width="180">
-  <img src="docs/screenshots/mobile-troca-senha.png" alt="Tela de troca obrigatória de senha do AusterAgX Mobile" width="180">
-  <img src="docs/screenshots/mobile-dashboard.png" alt="Dashboard mobile com resumo e demandas recentes" width="180">
-  <img src="docs/screenshots/mobile-demandas.png" alt="Lista mobile de demandas agrupadas por status" width="180">
-  <img src="docs/screenshots/mobile-detalhe-demanda.png" alt="Detalhe mobile da demanda com status e GPS" width="180">
-</p>
-
-## Entrega consolidada
-
-- Login, refresh token, logout e troca obrigatória de senha temporária conforme o AUSTER oficial.
-- Dashboard mobile com resumo operacional, cards de demandas, grupos de status e métricas de área.
-- Lista e detalhe de demandas com cache offline, histórico de status, sensoriamentos, culturas e cadeia origem/derivadas.
-- Atualização de status, situação dos dados e situação do mapeamento com as mesmas regras de transição do backend.
-- Fila offline persistente, consolidada por demanda, com sincronização automática quando a conexão volta.
-- Captura GPS local no detalhe da demanda usando permissões nativas Android.
-- README, modelo ER no padrão do brModelo Web, esquema físico do cache, investigação de API, issues versionadas e prints mobile mantidos no próprio repositório.
+---
 
 ## Limitações conhecidas
 
-- A localização GPS permanece no banco local porque o AUSTER oficial não possui um endpoint específico para associá-la à demanda. O backend não foi alterado nem recebeu campos inventados.
-- A estratégia de conflito offline consolida a última alteração pendente por demanda. Mesclagem distribuída e versionamento de registros exigiriam suporte contratual do servidor.
-- A entrega foi validada no Android. Uma publicação iOS ainda exige configuração, assinatura e validação em ambiente Apple.
+- A captura GPS permanece no banco local porque não existe endpoint oficial para vinculá-la à demanda.
+- A fila consolida a última alteração pendente por demanda; mesclagem distribuída exige suporte contratual do backend.
+- A entrega foi validada no Android. Publicação iOS ainda requer assinatura e validação em ambiente Apple.
+- O modo offline depende de ao menos uma sincronização anterior do usuário e dos dados consultados.
 
 ## Possíveis melhorias
 
-- Sincronizar capturas GPS quando existir um endpoint oficial aprovado para esse contrato.
-- Adicionar testes de integração contra um ambiente controlado do backend e uma suíte automatizada em dispositivo físico.
-- Criar pipelines de assinatura, distribuição interna e validação também para iOS.
-- Avaliar sincronização periódica em segundo plano após definir requisitos de bateria, rede e política operacional.
-
-## Premissas de integridade do AUSTER oficial
-
-- O app mobile consome endpoints REST existentes e não altera tabelas, migrations ou regras do sistema oficial.
-- O payload enviado ao backend respeita os DTOs já aceitos por `/auth`, `/dashboard` e `/demandas`.
-- Dados locais existem para operação mobile/offline e não substituem a base transacional do AUSTER.
-- O build validado é Android, usando Flutter e Android SDK portáteis em `C:\auster-mobile-tools`.
+- Sincronizar GPS quando existir um endpoint oficial aprovado.
+- Adicionar testes de integração contra um ambiente controlado da API.
+- Automatizar build assinado e distribuição interna em CI.
+- Validar e publicar também a versão iOS.
+- Avaliar sincronização periódica em segundo plano após definir requisitos de bateria e rede.
