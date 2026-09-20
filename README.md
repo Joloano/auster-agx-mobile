@@ -2,7 +2,7 @@
   <img src="assets/branding/auster-logo-bicolor.png" alt="AUSTER Tecnologia" width="420">
 </p>
 
-# AusterAgX Mobile — App Flutter offline-first
+# AusterAgX Mobile — App Android Flutter offline-first
 
 [![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white)](https://flutter.dev/)
 ![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart&logoColor=white)
@@ -108,7 +108,7 @@ Capturas reais dos widgets Flutter em viewport mobile de 390 × 844 pontos, usan
 9. **Identidade visual AUSTER**
    - Logo bicolor oficial, azul `#0261BD` e verde `#00B37B`.
    - Bebas Neue nos títulos e Inter no restante da interface.
-   - Launcher Android e AppIcon iOS gerados a partir do símbolo oficial.
+   - Launcher Android gerado a partir do símbolo oficial.
 
 ---
 
@@ -307,7 +307,6 @@ A suíte cobre configuração segura da API, SQLite, isolamento de usuário, fil
 android/          projeto, permissões, ícones e assinatura Android
 assets/           logo oficial e fontes AUSTER
 docs/             contratos, segurança, issues, diagramas e screenshots
-ios/              estrutura Flutter gerada para iOS
 lib/              código Dart do aplicativo
 scripts/          automação de publicação e criação de issues
 test/             testes unitários e de widgets
@@ -330,20 +329,3 @@ Como este repositório é exclusivamente mobile, o projeto Flutter permanece na 
 - Bancos, filas e capturas GPS são isolados por usuário no dispositivo.
 - Segredos de assinatura, bancos locais e arquivos `.env` não entram no Git.
 - Builds release falham quando a assinatura privada não está configurada.
-
----
-
-## Limitações conhecidas
-
-- A captura GPS permanece no banco local porque não existe endpoint oficial para vinculá-la à demanda.
-- A fila consolida a última alteração pendente por demanda; mesclagem distribuída exige suporte contratual do backend.
-- A entrega foi validada no Android. Publicação iOS ainda requer assinatura e validação em ambiente Apple.
-- O modo offline depende de ao menos uma sincronização anterior do usuário e dos dados consultados.
-
-## Possíveis melhorias
-
-- Sincronizar GPS quando existir um endpoint oficial aprovado.
-- Adicionar testes de integração contra um ambiente controlado da API.
-- Automatizar build assinado e distribuição interna em CI.
-- Validar e publicar também a versão iOS.
-- Avaliar sincronização periódica em segundo plano após definir requisitos de bateria e rede.

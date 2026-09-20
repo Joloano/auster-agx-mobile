@@ -1,6 +1,6 @@
 # Configuração Android
 
-As pastas Android e iOS foram geradas com o template oficial do Flutter. O guia completo de ambiente, emulador, celular físico e assinatura está em [`INSTALACAO.md`](../INSTALACAO.md).
+O projeto Android foi gerado com o template oficial do Flutter. O guia completo de ambiente, emulador, celular físico e assinatura está em [`INSTALACAO.md`](../INSTALACAO.md).
 
 Para preparar o projeto:
 
