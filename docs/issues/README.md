@@ -8,7 +8,7 @@ As issues deste projeto são versionadas como arquivos Markdown neste diretório
 | [002](002-dashboard-demandas.md) | Dashboard e demandas mobile | Concluída |
 | [003](003-offline-sync.md) | Offline-first e fila de sincronização | Concluída |
 | [004](004-gps-demanda.md) | Registrar localização via GPS | Concluída |
-| [005](005-revisao-documentacao-modelagem.md) | Revisão da documentação e dos modelos de dados | Em andamento |
+| [005](005-revisao-documentacao-modelagem.md) | Revisão da documentação e dos modelos de dados | Concluída |
 
 ## Publicar no GitHub Issues
 
