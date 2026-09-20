@@ -1185,6 +1185,158 @@ As tabelas \`demanda_grupo\`, \`grupo_talhao\`, \`fazenda_cultura\` e \`fazenda_
 `;
 }
 
+const mobileSchemaSource = path.join(repositoryRoot, 'lib', 'data', 'local', 'app_database.dart');
+const mobileModelSource = path.join(outputDir, 'auster-agx-mobile-fisico.xml');
+
+const mobileTableNotes = {
+  dashboard_items: 'Um JSON por demanda listada no dashboard',
+  dashboard_overview: 'Snapshot único, garantido por CHECK (id = 1)',
+  demanda_details: 'Um JSON por demanda aberta em detalhe',
+  demanda_status_history: 'Lista JSON de histórico por demanda',
+  status_fluxo: 'Snapshot único das regras de transição',
+  sync_queue: 'Fila de escritas offline, com tentativas e status',
+  location_captures: 'Capturas de GPS mantidas apenas no dispositivo',
+};
+
+function readMobileSchemaDdl() {
+  const dart = fs.readFileSync(mobileSchemaSource, 'utf8');
+  const marker = dart.indexOf('void _createSchema()');
+  if (marker < 0) {
+    throw new Error('Não foi possível localizar _createSchema em app_database.dart.');
+  }
+  const opening = dart.indexOf("'''", marker);
+  const closing = dart.indexOf("'''", opening + 3);
+  if (opening < 0 || closing < 0) {
+    throw new Error('Não foi possível extrair o DDL de _createSchema.');
+  }
+  return dart
+    .slice(opening + 3, closing)
+    .split('\n')
+    .map((line) => line.replace(/^ {6}/, '').trimEnd())
+    .join('\n')
+    .trim();
+}
+
+function parseMobileSchema(ddl) {
+  const statements = [...ddl.matchAll(/CREATE TABLE IF NOT EXISTS (\w+) \(([\s\S]*?)\n\);/g)];
+  if (statements.length === 0) {
+    throw new Error('Nenhuma tabela encontrada no DDL do cache SQLite.');
+  }
+  return statements.map(([, name, body]) => ({
+    name,
+    columns: body
+      .split('\n')
+      .map((line) => line.trim().replace(/,$/, ''))
+      .filter(Boolean)
+      .map((line) => {
+        const [columnName, type, ...rest] = line.split(/\s+/);
+        return { name: columnName, type, constraint: rest.join(' ') };
+      }),
+  }));
+}
+
+function parseBrModeloTables() {
+  const xml = fs.readFileSync(mobileModelSource, 'utf8');
+  return [...xml.matchAll(/<Tabela ID[^>]*>([\s\S]*?)<\/Tabela>/g)].map(([, body]) => ({
+    name: body.match(/<Texto>([^<]*)<\/Texto>/)[1],
+    columns: [...body.matchAll(/<Campo>([\s\S]*?)<\/Campo>/g)].map(([, field]) => ({
+      name: field.match(/<Texto>([^<]*)<\/Texto>/)[1],
+      type: field.match(/<Tipo>([^<]*)<\/Tipo>/)[1],
+    })),
+  }));
+}
+
+function assertMobileSchema(schema) {
+  const diagram = parseBrModeloTables();
+  if (schema.length !== diagram.length) {
+    throw new Error(
+      `O cache SQLite declara ${schema.length} tabelas e o modelo físico do brModelo tem ${diagram.length}.`,
+    );
+  }
+  const modelled = new Map(diagram.map((table) => [table.name, table]));
+  for (const table of schema) {
+    const reference = modelled.get(table.name);
+    if (!reference) {
+      throw new Error(`A tabela ${table.name} não existe no modelo físico do brModelo.`);
+    }
+    const codeColumns = table.columns.map((item) => item.name).join(', ');
+    const modelColumns = reference.columns.map((item) => item.name).join(', ');
+    if (codeColumns !== modelColumns) {
+      throw new Error(
+        `Colunas divergentes em ${table.name}: código [${codeColumns}] e modelo [${modelColumns}].`,
+      );
+    }
+    for (const column of table.columns) {
+      const referenceColumn = reference.columns.find((item) => item.name === column.name);
+      if (referenceColumn.type !== column.type) {
+        throw new Error(
+          `Tipo divergente em ${table.name}.${column.name}: código ${column.type} e modelo ${referenceColumn.type}.`,
+        );
+      }
+    }
+  }
+}
+
+function mobilePhysicalSql(ddl) {
+  return [
+    '-- Modelo físico do cache offline do AusterAgX Mobile.',
+    '-- Arquivo gerado por scripts/gerar-modelos-er.mjs a partir de',
+    '-- lib/data/local/app_database.dart. Não edite manualmente.',
+    '--',
+    '-- Cada usuário autenticado possui um arquivo SQLite próprio, nomeado com o',
+    '-- hash SHA-256 do identificador. O cache não declara FOREIGN KEY: os vínculos',
+    '-- são lógicos e os payloads preservam o contrato da API. Tokens e perfil',
+    '-- autenticado ficam no flutter_secure_storage, fora do SQLite.',
+    '',
+    ddl,
+    '',
+  ].join('\n');
+}
+
+function mobilePhysicalDocument(schema) {
+  const lines = [
+    '# Modelo físico do cache SQLite',
+    '',
+    'Documento gerado por `scripts/gerar-modelos-er.mjs`. A fonte de verdade é',
+    '`lib/data/local/app_database.dart`, e o gerador falha quando o código diverge do',
+    'modelo do brModelo em tabelas, colunas ou tipos.',
+    '',
+    'DDL versionado: [auster-agx-mobile-fisico.sql](auster-agx-mobile-fisico.sql).',
+    '',
+    '```mermaid',
+    'erDiagram',
+  ];
+  for (const table of schema) {
+    lines.push(`    ${table.name.toUpperCase()} {`);
+    for (const column of table.columns) {
+      const isPrimaryKey = /PRIMARY KEY/.test(column.constraint);
+      const note = column.constraint
+        .replace('PRIMARY KEY', '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .replace(/"/g, "'");
+      const key = isPrimaryKey ? ' PK' : '';
+      const comment = note ? ` "${note}"` : '';
+      lines.push(`        ${column.type} ${column.name}${key}${comment}`);
+    }
+    lines.push('    }');
+  }
+  lines.push('```', '', '## Tabelas', '');
+  lines.push('| Tabela | Colunas | Chave primária | Papel no cache |');
+  lines.push('|---|---|---|---|');
+  for (const table of schema) {
+    const primaryKey = table.columns
+      .filter((column) => /PRIMARY KEY/.test(column.constraint))
+      .map((column) => column.name)
+      .join(', ');
+    lines.push(
+      `| \`${table.name}\` | ${table.columns.length} | \`${primaryKey}\` | ${mobileTableNotes[table.name] ?? ''} |`,
+    );
+  }
+  lines.push('');
+  return lines.join('\n');
+}
+
 async function renderSvg(svgFileName, pngFileName) {
   const require = createRequire(import.meta.url);
   const configuredPaths = (process.env.ER_TOOL_NODE_MODULES ?? '')
@@ -1215,12 +1367,22 @@ async function main() {
   fs.writeFileSync(path.join(outputDir, 'auster-agx-brmodelo-web.json'), `${JSON.stringify(brModeloGraph(), null, 2)}\n`, 'utf8');
   fs.writeFileSync(path.join(outputDir, 'auster-agx-cardinalidades.md'), cardinalityDocument(), 'utf8');
 
+  const mobileDdl = readMobileSchemaDdl();
+  const mobileSchema = parseMobileSchema(mobileDdl);
+  assertMobileSchema(mobileSchema);
+  fs.writeFileSync(path.join(outputDir, 'auster-agx-mobile-fisico.sql'), mobilePhysicalSql(mobileDdl), 'utf8');
+  fs.writeFileSync(path.join(outputDir, 'auster-agx-mobile-fisico.md'), mobilePhysicalDocument(mobileSchema), 'utf8');
+
   if (process.argv.includes('--render')) {
     await renderSvg('auster-agx-conceitual.svg', 'auster-agx-conceitual.png');
     await renderSvg('auster-agx-logico.svg', 'auster-agx-logico.png');
   }
 
-  console.log(`Modelo validado: ${entities.length} entidades, ${relationships.length} relacionamentos, ${tables.length} tabelas e ${logicalForeignKeys.length} FKs.`);
+  console.log(
+    `Modelo validado: ${entities.length} entidades, ${relationships.length} relacionamentos, ` +
+      `${tables.length} tabelas lógicas, ${logicalForeignKeys.length} FKs e ` +
+      `${mobileSchema.length} tabelas no cache SQLite.`,
+  );
 }
 
 await main();
