@@ -50,19 +50,32 @@ A interface reutiliza o logo bicolor oficial do AUSTER em `assets/branding/auste
 
 ## Modelo ER e persistência local
 
-Os dados estão documentados em dois escopos complementares para não misturar o modelo transacional da API com a estratégia de cache do aplicativo. Os artefatos editáveis foram criados no [brModelo desktop](https://github.com/chcandido/brModelo) e reabertos com o motor do brModelo 3.2.0 para validar sua integridade.
+Os dados estão documentados em dois escopos complementares para não misturar o modelo transacional da API com a estratégia de cache do aplicativo. O domínio da API segue o padrão conceitual do [brModelo Web](https://app.brmodeloweb.com/main), enquanto o esquema físico do cache permanece no formato do [brModelo desktop](https://github.com/chcandido/brModelo).
 
 ### ER do domínio AusterAgX
 
-O modelo foi derivado diretamente do [diagrama de classes](docs/diagrama-classes.md) e representa as 28 entidades JPA persistentes e suas 36 associações. Os atributos herdados das classes abstratas foram incorporados às entidades concretas; classes auxiliares de changelog não foram tratadas como entidades de negócio.
+O modelo foi derivado diretamente do [diagrama de classes](docs/diagrama-classes.md) e representa 28 entidades JPA persistentes, 299 atributos e 36 associações. Os atributos herdados das classes abstratas foram incorporados às entidades concretas; classes auxiliares de changelog não foram tratadas como entidades de negócio.
 
-O [ER completo em Mermaid](docs/modelo-er/auster-agx-dominio.md) preserva todos os atributos apresentados no diagrama de classes. A versão conceitual do brModelo prioriza identificadores, chaves públicas, relacionamentos e cardinalidades para manter o diagrama geral legível.
+O [ER completo em Mermaid](docs/modelo-er/auster-agx-dominio.md) preserva todos os atributos apresentados no diagrama de classes. A vista conceitual usa as mesmas formas do [projeto oficial do brModelo Web](https://github.com/brmodeloweb/brmodelo-app): entidades retangulares, relacionamentos em losangos, atributos em elipses, chaves preenchidas e cardinalidades mínimas/máximas. Para manter a leitura em tela, ela destaca identificadores e chaves públicas e organiza o domínio em sete módulos; uma entidade repetida entre módulos representa apenas a fronteira entre contextos, não uma duplicação no banco.
 
-**Arquivos do domínio:** [ER completo](docs/modelo-er/auster-agx-dominio.md) · [editar no brModelo (`.brM3`)](docs/modelo-er/auster-agx-mobile.brM3) · [fonte XML](docs/modelo-er/auster-agx-mobile.xml) · [imagem em alta resolução](docs/modelo-er/auster-agx-mobile.png)
+**Artefatos do domínio:** [fonte semântica completa](docs/modelo-er/auster-agx-dominio.md) · [grafo JointJS versionável](docs/modelo-er/auster-agx-brmodelo-web.json) · [vetor SVG](docs/modelo-er/auster-agx-mobile.svg) · [PNG em alta resolução](docs/modelo-er/auster-agx-mobile.png)
 
 <p align="center">
-  <img src="docs/modelo-er/auster-agx-mobile.png" alt="Modelo ER conceitual do domínio AusterAgX criado no brModelo" width="100%">
+  <img src="docs/modelo-er/auster-agx-mobile.png" alt="Modelo ER conceitual do domínio AusterAgX no padrão visual do brModelo Web" width="100%">
 </p>
+
+<details>
+<summary><strong>Vistas modulares em alta resolução</strong></summary>
+
+- Organização e clientes: [SVG](docs/modelo-er/modulos/organizacao-clientes.svg) · [PNG](docs/modelo-er/modulos/organizacao-clientes.png)
+- Agronomia e talhões: [SVG](docs/modelo-er/modulos/agronomia-talhoes.svg) · [PNG](docs/modelo-er/modulos/agronomia-talhoes.png)
+- Demandas e pedidos: [SVG](docs/modelo-er/modulos/demandas-pedidos.svg) · [PNG](docs/modelo-er/modulos/demandas-pedidos.png)
+- Sensoriamento remoto: [SVG](docs/modelo-er/modulos/sensoriamento.svg) · [PNG](docs/modelo-er/modulos/sensoriamento.png)
+- Manejo e adubação: [SVG](docs/modelo-er/modulos/manejo-adubacao.svg) · [PNG](docs/modelo-er/modulos/manejo-adubacao.png)
+- Prescrições inteligentes: [SVG](docs/modelo-er/modulos/prescricoes-inteligentes.svg) · [PNG](docs/modelo-er/modulos/prescricoes-inteligentes.png)
+- Infraestrutura e segurança: [SVG](docs/modelo-er/modulos/infraestrutura.svg) · [PNG](docs/modelo-er/modulos/infraestrutura.png)
+
+</details>
 
 ### Esquema físico SQLite
 
@@ -277,7 +290,7 @@ Capturas reais dos widgets Flutter, renderizadas em viewport mobile de 390 x 844
 - Atualização de status, situação dos dados e situação do mapeamento com as mesmas regras de transição do backend.
 - Fila offline persistente, consolidada por demanda, com sincronização automática quando a conexão volta.
 - Captura GPS local no detalhe da demanda usando permissões nativas Android.
-- README, modelo ER do brModelo, investigação de API, issues versionadas e prints mobile mantidos no próprio repositório.
+- README, modelo ER no padrão do brModelo Web, esquema físico do cache, investigação de API, issues versionadas e prints mobile mantidos no próprio repositório.
 
 ## Limitações conhecidas
 
