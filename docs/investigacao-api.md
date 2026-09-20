@@ -1,10 +1,6 @@
 # Investigacao da API AusterAgX
 
-Referencia analisada:
-
-```text
-C:\Users\Joloano\OneDrive\Área de Trabalho\AusterMobileFaculdade\AusterAgX-Mobile-Reference
-```
+Referência analisada: backend e frontend oficiais do AusterAgX, consultados somente para levantar contratos REST, autorização e regras de fluxo consumidas pelo aplicativo móvel.
 
 ## Autenticacao e seguranca
 
