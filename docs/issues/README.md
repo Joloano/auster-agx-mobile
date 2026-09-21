@@ -10,6 +10,7 @@ As issues deste projeto são versionadas como arquivos Markdown neste diretório
 | [004](004-gps-demanda.md) | Registrar localização via GPS | Concluída |
 | [005](005-revisao-documentacao-modelagem.md) | Revisão da documentação e dos modelos de dados | Concluída |
 | [006](006-diagramas-readme-brmodelo.md) | Diagramas conceitual e lógico do README no padrão brModelo | Concluída |
+| [007](007-infraestrutura-desenvolvimento.md) | Licença, ambiente com um comando, scripts versionados e CI | Em andamento |
 
 ## Publicar no GitHub Issues
 
@@ -24,6 +25,7 @@ gh issue create --repo Joloano/auster-agx-mobile --title "Offline-first e fila d
 gh issue create --repo Joloano/auster-agx-mobile --title "Registrar localização via GPS" --body-file "docs/issues/004-gps-demanda.md"
 gh issue create --repo Joloano/auster-agx-mobile --title "Revisão da documentação e dos modelos de dados" --body-file "docs/issues/005-revisao-documentacao-modelagem.md"
 gh issue create --repo Joloano/auster-agx-mobile --title "Diagramas conceitual e lógico do README no padrão brModelo" --body-file "docs/issues/006-diagramas-readme-brmodelo.md"
+gh issue create --repo Joloano/auster-agx-mobile --title "Licença, ambiente com um comando, scripts versionados e CI" --body-file "docs/issues/007-infraestrutura-desenvolvimento.md"
 ```
 
 O destino é sempre `Joloano/auster-agx-mobile`. O repositório oficial do AusterAgX nunca é usado como destino dessas issues.
