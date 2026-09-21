@@ -11,6 +11,7 @@ As issues deste projeto são versionadas como arquivos Markdown neste diretório
 | [005](005-revisao-documentacao-modelagem.md) | Revisão da documentação e dos modelos de dados | Concluída |
 | [006](006-diagramas-readme-brmodelo.md) | Diagramas conceitual e lógico do README no padrão brModelo | Concluída |
 | [007](007-infraestrutura-desenvolvimento.md) | Licença, ambiente com um comando, scripts versionados e CI | Concluída |
+| [008](008-ci-node24-ubuntu-fixo.md) | CI em Node.js 24 e com imagem do Ubuntu fixa | Em andamento |
 
 ## Publicar no GitHub Issues
 
@@ -26,6 +27,7 @@ gh issue create --repo Joloano/auster-agx-mobile --title "Registrar localizaçã
 gh issue create --repo Joloano/auster-agx-mobile --title "Revisão da documentação e dos modelos de dados" --body-file "docs/issues/005-revisao-documentacao-modelagem.md"
 gh issue create --repo Joloano/auster-agx-mobile --title "Diagramas conceitual e lógico do README no padrão brModelo" --body-file "docs/issues/006-diagramas-readme-brmodelo.md"
 gh issue create --repo Joloano/auster-agx-mobile --title "Licença, ambiente com um comando, scripts versionados e CI" --body-file "docs/issues/007-infraestrutura-desenvolvimento.md"
+gh issue create --repo Joloano/auster-agx-mobile --title "CI em Node.js 24 e com imagem do Ubuntu fixa" --body-file "docs/issues/008-ci-node24-ubuntu-fixo.md"
 ```
 
 O destino é sempre `Joloano/auster-agx-mobile`. O repositório oficial do AusterAgX nunca é usado como destino dessas issues.
