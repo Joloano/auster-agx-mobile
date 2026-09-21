@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  flutter:
+    name: Análise e testes do app
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          # Mesma versão usada no desenvolvimento (.dart_tool/version).
+          flutter-version: 3.47.4
+          channel: stable
+          cache: true
+
+      - name: SQLite nativo para os testes do cache offline
+        run: sudo apt-get update -q && sudo apt-get install -y -q libsqlite3-dev
+
+      - run: flutter pub get
+
+      - name: Análise estática
+        run: flutter analyze
+
+      - name: Testes
+        run: flutter test
+
+  modelos:
+    name: Modelos de dados em dia
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # O gerador valida o modelo do domínio e confere o cache SQLite contra
+      # lib/data/local/app_database.dart antes de reescrever os artefatos.
+      - name: Regenerar artefatos
+        run: node scripts/gerar-modelos-er.mjs
+
+      - name: Conferir que nada mudou
+        run: |
+          if [ -n "$(git status --porcelain -- docs/modelo-er)" ]; then
+            echo "::error::Os artefatos de docs/modelo-er estão desatualizados. Rode 'node scripts/gerar-modelos-er.mjs' e faça commit do resultado."
+            git status --short -- docs/modelo-er
+            git diff --stat -- docs/modelo-er
+            exit 1
+          fi
