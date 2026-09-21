@@ -28,4 +28,4 @@ Fechar as lacunas de infraestrutura do repositório mantendo o aplicativo Flutte
 
 ## Status
 
-Em andamento.
+Concluída em 21 de setembro de 2026.
