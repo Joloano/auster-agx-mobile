@@ -279,8 +279,8 @@ function relacionamentosMer(caixas, relationships) {
     const grupo = c('GRUPO');
     const x = demanda.x + 14;
     const forma = losango(x, 468, 'abrange');
-    svg.push(perna([[x, demanda.y + demanda.altura], forma.vertices.top], cardinalidade(r.rightCardinality), 'esquerda'));
-    svg.push(perna([[x, grupo.y], forma.vertices.bottom], cardinalidade(r.leftCardinality), 'esquerda'));
+    svg.push(perna([[x, demanda.y + demanda.altura], forma.vertices.top], cardinalidade(r.leftCardinality), 'esquerda'));
+    svg.push(perna([[x, grupo.y], forma.vertices.bottom], cardinalidade(r.rightCardinality), 'esquerda'));
     svg.push(forma.svg);
   }
 
@@ -293,8 +293,8 @@ function relacionamentosMer(caixas, relationships) {
     const y = 520;
     const forma = losango(1420, y, 'utiliza');
     const xEntrada = sensoriamento.x + 40;
-    svg.push(perna([[xSaida, demanda.y + demanda.altura], [xSaida, y], forma.vertices.left], cardinalidade(r.rightCardinality)));
-    svg.push(perna([[xEntrada, sensoriamento.y], [xEntrada, y], forma.vertices.right], cardinalidade(r.leftCardinality)));
+    svg.push(perna([[xSaida, demanda.y + demanda.altura], [xSaida, y], forma.vertices.left], cardinalidade(r.leftCardinality)));
+    svg.push(perna([[xEntrada, sensoriamento.y], [xEntrada, y], forma.vertices.right], cardinalidade(r.rightCardinality)));
     svg.push(forma.svg);
   }
 
