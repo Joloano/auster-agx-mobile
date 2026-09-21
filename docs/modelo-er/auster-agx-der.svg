@@ -1,0 +1,392 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1869" height="1164" viewBox="0 0 1869 1164" role="img" aria-labelledby="titulo descricao">
+<title id="titulo">Modelo lógico (DER) do AusterAgX Mobile</title>
+<desc id="descricao">Estilo do modelo lógico do brModelo: 15 tabelas e 18 chaves estrangeiras do subdomínio consumido pelo aplicativo.</desc>
+<defs>
+  <filter id="sombra" x="-5%" y="-5%" width="110%" height="110%"><feDropShadow dx="0" dy="1" stdDeviation="1.2" flood-color="#000" flood-opacity="0.18"/></filter>
+</defs>
+<style>
+  .corpo { fill: #f7f7f7; stroke: #a8a8a8; stroke-width: 1; }
+  .divisoria { stroke: #c8c8c8; stroke-width: 1; }
+  .linha-der { fill: none; stroke: #111; stroke-width: 1.1; }
+  text { font-family: 'DejaVu Sans', Verdana, Arial, sans-serif; font-weight: bold; fill: #1c1c1c; }
+  .titulo { font-size: 13px; text-anchor: middle; }
+  .coluna { font-size: 11.5px; }
+  .resumo { font-size: 11px; font-weight: normal; font-style: italic; fill: #6b6b6b; }
+  .cardinalidade { font-size: 12px; fill: #000; }
+</style>
+<rect width="100%" height="100%" fill="#fff"/>
+<polyline points="404,110 272,110" class="linha-der"/>
+<polyline points="397,106 404,110 397,114" class="linha-der"/>
+<text x="394" y="103" class="cardinalidade" text-anchor="end">(0,n)</text>
+<text x="282" y="127" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="210,470 210,420 444,420 444,324" class="linha-der"/>
+<polyline points="206,463 210,470 214,463" class="linha-der"/>
+<text x="218" y="461" class="cardinalidade" text-anchor="start">(0,n)</text>
+<text x="452" y="342" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="272,560 404,560" class="linha-der"/>
+<polyline points="279,556 272,560 279,564" class="linha-der"/>
+<text x="282" y="553" class="cardinalidade" text-anchor="start">(0,n)</text>
+<text x="394" y="577" class="cardinalidade" text-anchor="end">(1,1)</text>
+<polyline points="554,470 554,324" class="linha-der"/>
+<polyline points="550,463 554,470 558,463" class="linha-der"/>
+<text x="562" y="461" class="cardinalidade" text-anchor="start">(0,n)</text>
+<text x="562" y="342" class="cardinalidade" text-anchor="start">(0,1)</text>
+<polyline points="768,560 636,560" class="linha-der"/>
+<polyline points="761,556 768,560 761,564" class="linha-der"/>
+<text x="758" y="553" class="cardinalidade" text-anchor="end">(0,n)</text>
+<text x="646" y="577" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="1000,900 1132,900" class="linha-der"/>
+<polyline points="1007,896 1000,900 1007,904" class="linha-der"/>
+<text x="1010" y="893" class="cardinalidade" text-anchor="start">(0,n)</text>
+<text x="1122" y="917" class="cardinalidade" text-anchor="end">(1,1)</text>
+<polyline points="884,840 884,754" class="linha-der"/>
+<polyline points="880,833 884,840 888,833" class="linha-der"/>
+<text x="892" y="831" class="cardinalidade" text-anchor="start">(0,n)</text>
+<text x="892" y="772" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="520,840 520,754" class="linha-der"/>
+<polyline points="516,833 520,840 524,833" class="linha-der"/>
+<text x="528" y="831" class="cardinalidade" text-anchor="start">(0,n)</text>
+<text x="528" y="772" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="404,900 272,900" class="linha-der"/>
+<polyline points="397,896 404,900 397,904" class="linha-der"/>
+<text x="394" y="893" class="cardinalidade" text-anchor="end">(0,n)</text>
+<text x="282" y="917" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="768,110 636,110" class="linha-der"/>
+<polyline points="761,106 768,110 761,114" class="linha-der"/>
+<text x="758" y="103" class="cardinalidade" text-anchor="end">(0,n)</text>
+<text x="646" y="127" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="1132,110 1000,110" class="linha-der"/>
+<polyline points="1125,106 1132,110 1125,114" class="linha-der"/>
+<text x="1122" y="103" class="cardinalidade" text-anchor="end">(0,n)</text>
+<text x="1010" y="127" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="1364,196 1394,196 1394,150 1364,150" class="linha-der"/>
+<polyline points="1371,192 1364,196 1371,200" class="linha-der"/>
+<text x="1401" y="200.5" class="cardinalidade" text-anchor="start">(0,n)</text>
+<text x="1401" y="154.5" class="cardinalidade" text-anchor="start">(0,1)</text>
+<polyline points="1248,470 1248,368" class="linha-der"/>
+<polyline points="1244,463 1248,470 1252,463" class="linha-der"/>
+<text x="1256" y="461" class="cardinalidade" text-anchor="start">(0,n)</text>
+<text x="1256" y="386" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="1248,578 1248,840" class="linha-der"/>
+<polyline points="1244,585 1248,578 1252,585" class="linha-der"/>
+<text x="1256" y="596" class="cardinalidade" text-anchor="start">(0,n)</text>
+<text x="1256" y="831" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="1536,470 1536,440 1322,440 1322,368" class="linha-der"/>
+<polyline points="1532,463 1536,470 1540,463" class="linha-der"/>
+<text x="1544" y="461" class="cardinalidade" text-anchor="start">(0,n)</text>
+<text x="1330" y="386" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="1612,578 1612,840" class="linha-der"/>
+<polyline points="1608,585 1612,578 1616,585" class="linha-der"/>
+<text x="1620" y="596" class="cardinalidade" text-anchor="start">(0,n)</text>
+<text x="1620" y="831" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="1496,110 1364,110" class="linha-der"/>
+<polyline points="1489,106 1496,110 1489,114" class="linha-der"/>
+<text x="1486" y="103" class="cardinalidade" text-anchor="end">(0,n)</text>
+<text x="1374" y="127" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="1735,990 1765,990 1765,940 1735,940" class="linha-der"/>
+<polyline points="1742,986 1735,990 1742,994" class="linha-der"/>
+<text x="1772" y="994.5" class="cardinalidade" text-anchor="start">(0,n)</text>
+<text x="1772" y="944.5" class="cardinalidade" text-anchor="start">(0,1)</text>
+<g filter="url(#sombra)">
+<rect x="40" y="40" width="232" height="284" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-usuario" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M40,49 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-usuario)"/>
+<line x1="40" y1="68" x2="272" y2="68" class="divisoria"/>
+<text x="156" y="59" class="titulo">usuario</text>
+<g transform="translate(56,85)" fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="70" y="91" class="coluna">id</text>
+<text x="70" y="113" class="coluna">public_id</text>
+<text x="70" y="135" class="coluna">email</text>
+<text x="70" y="157" class="coluna">nome</text>
+<text x="70" y="179" class="coluna">perfil</text>
+<text x="70" y="201" class="coluna">senha_hash</text>
+<text x="70" y="223" class="coluna">deve_alterar_senha</text>
+<text x="70" y="245" class="coluna">ativo</text>
+<text x="70" y="267" class="coluna">created_at</text>
+<text x="70" y="289" class="coluna">updated_at</text>
+<line x1="40" y1="300" x2="272" y2="300" class="divisoria"/>
+<g transform="translate(52,312) rotate(-90)"><g fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<rect x="59" y="310" width="6" height="3" fill="#e0a100"/>
+<g filter="url(#sombra)">
+<rect x="404" y="40" width="232" height="284" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-cliente" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M404,49 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-cliente)"/>
+<line x1="404" y1="68" x2="636" y2="68" class="divisoria"/>
+<text x="520" y="59" class="titulo">cliente</text>
+<g transform="translate(420,85)" fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="434" y="91" class="coluna">id</text>
+<text x="434" y="113" class="coluna">public_id</text>
+<g transform="translate(420,129)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="434" y="135" class="coluna">usuario_id</text>
+<text x="434" y="157" class="coluna">nome_fantasia</text>
+<text x="434" y="179" class="coluna">razao_social</text>
+<text x="434" y="201" class="coluna">numero_documento</text>
+<text x="434" y="223" class="coluna">tipo_documento</text>
+<text x="434" y="245" class="coluna">email_faturamento</text>
+<text x="434" y="267" class="coluna">ativo</text>
+<text x="434" y="289" class="resumo">… dados cadastrais e endereço</text>
+<line x1="404" y1="300" x2="636" y2="300" class="divisoria"/>
+<g transform="translate(416,312) rotate(-90)"><g fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<rect x="423" y="310" width="6" height="3" fill="#e0a100"/>
+<line x1="436" y1="300" x2="436" y2="324" class="divisoria"/>
+<g transform="translate(444,312) rotate(-90)"><g fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<g filter="url(#sombra)">
+<rect x="40" y="470" width="232" height="196" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-cliente_fazenda" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M40,479 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-cliente_fazenda)"/>
+<line x1="40" y1="498" x2="272" y2="498" class="divisoria"/>
+<text x="156" y="489" class="titulo">cliente_fazenda</text>
+<g transform="translate(56,515)" fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="70" y="521" class="coluna">id</text>
+<text x="70" y="543" class="coluna">public_id</text>
+<g transform="translate(56,559)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="70" y="565" class="coluna">cliente_id</text>
+<g transform="translate(56,581)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="70" y="587" class="coluna">fazenda_id</text>
+<text x="70" y="609" class="coluna">data_inicio</text>
+<text x="70" y="631" class="coluna">data_fim</text>
+<line x1="40" y1="642" x2="272" y2="642" class="divisoria"/>
+<g transform="translate(52,654) rotate(-90)"><g fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<rect x="59" y="652" width="6" height="3" fill="#e0a100"/>
+<line x1="72" y1="642" x2="72" y2="666" class="divisoria"/>
+<g transform="translate(80,654) rotate(-90)"><g fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<g filter="url(#sombra)">
+<rect x="404" y="470" width="232" height="284" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-fazenda" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M404,479 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-fazenda)"/>
+<line x1="404" y1="498" x2="636" y2="498" class="divisoria"/>
+<text x="520" y="489" class="titulo">fazenda</text>
+<g transform="translate(420,515)" fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="434" y="521" class="coluna">id</text>
+<text x="434" y="543" class="coluna">public_id</text>
+<g transform="translate(420,559)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="434" y="565" class="coluna">cliente_proprietario_id</text>
+<text x="434" y="587" class="coluna">nome</text>
+<text x="434" y="609" class="coluna">area_ha</text>
+<text x="434" y="631" class="coluna">area_cultivavel</text>
+<text x="434" y="653" class="coluna">latitude</text>
+<text x="434" y="675" class="coluna">longitude</text>
+<text x="434" y="697" class="coluna">ativo</text>
+<text x="434" y="719" class="resumo">… endereço e geometria</text>
+<line x1="404" y1="730" x2="636" y2="730" class="divisoria"/>
+<g transform="translate(416,742) rotate(-90)"><g fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<rect x="423" y="740" width="6" height="3" fill="#e0a100"/>
+<line x1="436" y1="730" x2="436" y2="754" class="divisoria"/>
+<g transform="translate(444,742) rotate(-90)"><g fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<g filter="url(#sombra)">
+<rect x="768" y="470" width="232" height="284" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-talhao" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M768,479 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-talhao)"/>
+<line x1="768" y1="498" x2="1000" y2="498" class="divisoria"/>
+<text x="884" y="489" class="titulo">talhao</text>
+<g transform="translate(784,515)" fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="798" y="521" class="coluna">id</text>
+<text x="798" y="543" class="coluna">public_id</text>
+<g transform="translate(784,559)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="798" y="565" class="coluna">fazenda_id</text>
+<text x="798" y="587" class="coluna">codigo_lpt</text>
+<text x="798" y="609" class="coluna">nome</text>
+<text x="798" y="631" class="coluna">numero_talhao</text>
+<text x="798" y="653" class="coluna">area_ha</text>
+<text x="798" y="675" class="coluna">area_cultivavel</text>
+<text x="798" y="697" class="coluna">irrigacao</text>
+<text x="798" y="719" class="resumo">… coordenadas e geometria</text>
+<line x1="768" y1="730" x2="1000" y2="730" class="divisoria"/>
+<g transform="translate(780,742) rotate(-90)"><g fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<rect x="787" y="740" width="6" height="3" fill="#e0a100"/>
+<line x1="800" y1="730" x2="800" y2="754" class="divisoria"/>
+<g transform="translate(808,742) rotate(-90)"><g fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<g filter="url(#sombra)">
+<rect x="1132" y="840" width="232" height="196" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-grupo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M1132,849 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-grupo)"/>
+<line x1="1132" y1="868" x2="1364" y2="868" class="divisoria"/>
+<text x="1248" y="859" class="titulo">grupo</text>
+<g transform="translate(1148,885)" fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1162" y="891" class="coluna">id</text>
+<text x="1162" y="913" class="coluna">public_id</text>
+<text x="1162" y="935" class="coluna">nome</text>
+<text x="1162" y="957" class="coluna">ativo</text>
+<text x="1162" y="979" class="coluna">created_at</text>
+<text x="1162" y="1001" class="coluna">updated_at</text>
+<line x1="1132" y1="1012" x2="1364" y2="1012" class="divisoria"/>
+<g transform="translate(1144,1024) rotate(-90)"><g fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<rect x="1151" y="1022" width="6" height="3" fill="#e0a100"/>
+<g filter="url(#sombra)">
+<rect x="40" y="840" width="232" height="218" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-cultura" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M40,849 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-cultura)"/>
+<line x1="40" y1="868" x2="272" y2="868" class="divisoria"/>
+<text x="156" y="859" class="titulo">cultura</text>
+<g transform="translate(56,885)" fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="70" y="891" class="coluna">id</text>
+<text x="70" y="913" class="coluna">nome</text>
+<text x="70" y="935" class="coluna">grupo_cultura</text>
+<text x="70" y="957" class="coluna">precocidade</text>
+<text x="70" y="979" class="coluna">ativo</text>
+<text x="70" y="1001" class="coluna">created_at</text>
+<text x="70" y="1023" class="coluna">updated_at</text>
+<line x1="40" y1="1034" x2="272" y2="1034" class="divisoria"/>
+<g transform="translate(52,1046) rotate(-90)"><g fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<rect x="59" y="1044" width="6" height="3" fill="#e0a100"/>
+<g filter="url(#sombra)">
+<rect x="768" y="40" width="232" height="218" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-pedido" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M768,49 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-pedido)"/>
+<line x1="768" y1="68" x2="1000" y2="68" class="divisoria"/>
+<text x="884" y="59" class="titulo">pedido</text>
+<g transform="translate(784,85)" fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="798" y="91" class="coluna">id</text>
+<text x="798" y="113" class="coluna">public_id</text>
+<g transform="translate(784,129)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="798" y="135" class="coluna">cliente_id</text>
+<text x="798" y="157" class="coluna">codigo</text>
+<text x="798" y="179" class="coluna">apelido</text>
+<text x="798" y="201" class="coluna">observacoes</text>
+<text x="798" y="223" class="coluna">ativo</text>
+<line x1="768" y1="234" x2="1000" y2="234" class="divisoria"/>
+<g transform="translate(780,246) rotate(-90)"><g fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<rect x="787" y="244" width="6" height="3" fill="#e0a100"/>
+<line x1="800" y1="234" x2="800" y2="258" class="divisoria"/>
+<g transform="translate(808,246) rotate(-90)"><g fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<g filter="url(#sombra)">
+<rect x="1132" y="40" width="232" height="328" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-demanda" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M1132,49 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-demanda)"/>
+<line x1="1132" y1="68" x2="1364" y2="68" class="divisoria"/>
+<text x="1248" y="59" class="titulo">demanda</text>
+<g transform="translate(1148,85)" fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1162" y="91" class="coluna">id</text>
+<text x="1162" y="113" class="coluna">public_id</text>
+<g transform="translate(1148,129)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1162" y="135" class="coluna">pedido_id</text>
+<g transform="translate(1148,151)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1162" y="157" class="coluna">demanda_origem_id</text>
+<g transform="translate(1148,173)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1162" y="179" class="coluna">representante_id</text>
+<text x="1162" y="201" class="coluna">codigo_demanda</text>
+<text x="1162" y="223" class="coluna">tipo</text>
+<text x="1162" y="245" class="coluna">status</text>
+<text x="1162" y="267" class="coluna">situacao_dados</text>
+<text x="1162" y="289" class="coluna">situacao_mapeamento</text>
+<text x="1162" y="311" class="coluna">retrabalho</text>
+<text x="1162" y="333" class="resumo">… prazo, área e aplicação</text>
+<line x1="1132" y1="344" x2="1364" y2="344" class="divisoria"/>
+<g transform="translate(1144,356) rotate(-90)"><g fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<rect x="1151" y="354" width="6" height="3" fill="#e0a100"/>
+<line x1="1164" y1="344" x2="1164" y2="368" class="divisoria"/>
+<g transform="translate(1172,356) rotate(-90)"><g fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<g filter="url(#sombra)">
+<rect x="1496" y="40" width="232" height="218" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-demanda_status_historico" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M1496,49 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-demanda_status_historico)"/>
+<line x1="1496" y1="68" x2="1728" y2="68" class="divisoria"/>
+<text x="1612" y="59" class="titulo">demanda_status_historico</text>
+<g transform="translate(1512,85)" fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1526" y="91" class="coluna">id</text>
+<g transform="translate(1512,107)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1526" y="113" class="coluna">demanda_id</text>
+<text x="1526" y="135" class="coluna">status_anterior</text>
+<text x="1526" y="157" class="coluna">status_novo</text>
+<text x="1526" y="179" class="coluna">alterado_em</text>
+<text x="1526" y="201" class="coluna">alterado_por_id</text>
+<text x="1526" y="223" class="coluna">alterado_por_nome</text>
+<line x1="1496" y1="234" x2="1728" y2="234" class="divisoria"/>
+<g transform="translate(1508,246) rotate(-90)"><g fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<rect x="1515" y="244" width="6" height="3" fill="#e0a100"/>
+<line x1="1528" y1="234" x2="1528" y2="258" class="divisoria"/>
+<g transform="translate(1536,246) rotate(-90)"><g fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<g filter="url(#sombra)">
+<rect x="1496" y="840" width="239" height="284" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-sensoriamento_remoto" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M1496,849 a9,9 0 0 1 9,-9 h221 a9,9 0 0 1 9,9 v19 h-239 z" fill="url(#g-sensoriamento_remoto)"/>
+<line x1="1496" y1="868" x2="1735" y2="868" class="divisoria"/>
+<text x="1615.5" y="859" class="titulo">sensoriamento_remoto</text>
+<g transform="translate(1512,885)" fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1526" y="891" class="coluna">id</text>
+<text x="1526" y="913" class="coluna">public_id</text>
+<g transform="translate(1512,929)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1526" y="935" class="coluna">piloto_id</text>
+<g transform="translate(1512,951)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1526" y="957" class="coluna">mapeamento_origem_id</text>
+<text x="1526" y="979" class="coluna">codigo_mapeamento</text>
+<text x="1526" y="1001" class="coluna">fonte</text>
+<text x="1526" y="1023" class="coluna">qualidade</text>
+<text x="1526" y="1045" class="coluna">data_imagem</text>
+<text x="1526" y="1067" class="coluna">status</text>
+<text x="1526" y="1089" class="resumo">… satélite, imagem e observações</text>
+<line x1="1496" y1="1100" x2="1735" y2="1100" class="divisoria"/>
+<g transform="translate(1508,1112) rotate(-90)"><g fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<rect x="1515" y="1110" width="6" height="3" fill="#e0a100"/>
+<line x1="1528" y1="1100" x2="1528" y2="1124" class="divisoria"/>
+<g transform="translate(1536,1112) rotate(-90)"><g fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<g filter="url(#sombra)">
+<rect x="768" y="840" width="232" height="108" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-grupo_talhao" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M768,849 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-grupo_talhao)"/>
+<line x1="768" y1="868" x2="1000" y2="868" class="divisoria"/>
+<text x="884" y="859" class="titulo">grupo_talhao</text>
+<g transform="translate(784,885)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="798" y="891" class="coluna">grupo_id</text>
+<g transform="translate(784,907)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="798" y="913" class="coluna">talhao_id</text>
+<line x1="768" y1="924" x2="1000" y2="924" class="divisoria"/>
+<line x1="774" y1="924" x2="774" y2="948" class="divisoria"/>
+<g transform="translate(782,936) rotate(-90)"><g fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<g filter="url(#sombra)">
+<rect x="404" y="840" width="232" height="108" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-fazenda_cultura" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M404,849 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-fazenda_cultura)"/>
+<line x1="404" y1="868" x2="636" y2="868" class="divisoria"/>
+<text x="520" y="859" class="titulo">fazenda_cultura</text>
+<g transform="translate(420,885)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="434" y="891" class="coluna">fazenda_id</text>
+<g transform="translate(420,907)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="434" y="913" class="coluna">cultura_id</text>
+<line x1="404" y1="924" x2="636" y2="924" class="divisoria"/>
+<line x1="410" y1="924" x2="410" y2="948" class="divisoria"/>
+<g transform="translate(418,936) rotate(-90)"><g fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<g filter="url(#sombra)">
+<rect x="1132" y="470" width="232" height="108" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-demanda_grupo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M1132,479 a9,9 0 0 1 9,-9 h214 a9,9 0 0 1 9,9 v19 h-232 z" fill="url(#g-demanda_grupo)"/>
+<line x1="1132" y1="498" x2="1364" y2="498" class="divisoria"/>
+<text x="1248" y="489" class="titulo">demanda_grupo</text>
+<g transform="translate(1148,515)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1162" y="521" class="coluna">demanda_id</text>
+<g transform="translate(1148,537)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1162" y="543" class="coluna">grupo_id</text>
+<line x1="1132" y1="554" x2="1364" y2="554" class="divisoria"/>
+<line x1="1138" y1="554" x2="1138" y2="578" class="divisoria"/>
+<g transform="translate(1146,566) rotate(-90)"><g fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<g filter="url(#sombra)">
+<rect x="1496" y="470" width="283" height="108" rx="9" class="corpo"/>
+</g>
+<defs><linearGradient id="g-demanda_sensoriamento_remoto" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c2c2c2"/><stop offset="1" stop-color="#d9d9d9"/></linearGradient></defs>
+<path d="M1496,479 a9,9 0 0 1 9,-9 h265 a9,9 0 0 1 9,9 v19 h-283 z" fill="url(#g-demanda_sensoriamento_remoto)"/>
+<line x1="1496" y1="498" x2="1779" y2="498" class="divisoria"/>
+<text x="1637.5" y="489" class="titulo">demanda_sensoriamento_remoto</text>
+<g transform="translate(1512,515)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1526" y="521" class="coluna">demanda_id</text>
+<g transform="translate(1512,537)" fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g>
+<text x="1526" y="543" class="coluna">sensoriamento_remoto_id</text>
+<line x1="1496" y1="554" x2="1779" y2="554" class="divisoria"/>
+<g transform="translate(1508,566) rotate(-90)"><g fill="#111" stroke="#111"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+<rect x="1515" y="564" width="6" height="3" fill="#e0a100"/>
+<line x1="1528" y1="554" x2="1528" y2="578" class="divisoria"/>
+<g transform="translate(1536,566) rotate(-90)"><g fill="#2e8b2e" stroke="#2e8b2e"><circle cx="0" cy="-3" r="3.2" stroke-width="1.2" fill="none"/><rect x="-0.9" y="0" width="1.8" height="8" stroke="none"/><rect x="0.9" y="4.2" width="2.6" height="1.6" stroke="none"/><rect x="0.9" y="6.6" width="2" height="1.4" stroke="none"/></g></g>
+</svg>

@@ -3,6 +3,8 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 
+import { conceptualReadmeSvg, logicalReadmeSvg } from './diagramas-readme.mjs';
+
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(scriptDir, '..');
 const outputDir = path.join(repositoryRoot, 'docs', 'modelo-er');
@@ -1337,7 +1339,7 @@ function mobilePhysicalDocument(schema) {
   return lines.join('\n');
 }
 
-async function renderSvg(svgFileName, pngFileName) {
+async function renderSvg(svgFileName, pngFileName, escala = 1) {
   const require = createRequire(import.meta.url);
   const configuredPaths = (process.env.ER_TOOL_NODE_MODULES ?? '')
     .split(path.delimiter)
@@ -1351,7 +1353,7 @@ async function renderSvg(svgFileName, pngFileName) {
   }
   const sharp = require(sharpEntry);
   const svg = fs.readFileSync(path.join(outputDir, svgFileName));
-  await sharp(svg, { density: 96, limitInputPixels: false })
+  await sharp(svg, { density: 96 * escala, limitInputPixels: false })
     .resize({ width: 6400, withoutEnlargement: true })
     .png({ compressionLevel: 9, adaptiveFiltering: true })
     .toFile(path.join(outputDir, pngFileName));
@@ -1373,9 +1375,15 @@ async function main() {
   fs.writeFileSync(path.join(outputDir, 'auster-agx-mobile-fisico.sql'), mobilePhysicalSql(mobileDdl), 'utf8');
   fs.writeFileSync(path.join(outputDir, 'auster-agx-mobile-fisico.md'), mobilePhysicalDocument(mobileSchema), 'utf8');
 
+  const modeloReadme = { entities, associationTables, relationships, logicalForeignKeys };
+  fs.writeFileSync(path.join(outputDir, 'auster-agx-mer.svg'), conceptualReadmeSvg(modeloReadme), 'utf8');
+  fs.writeFileSync(path.join(outputDir, 'auster-agx-der.svg'), logicalReadmeSvg(modeloReadme), 'utf8');
+
   if (process.argv.includes('--render')) {
     await renderSvg('auster-agx-conceitual.svg', 'auster-agx-conceitual.png');
     await renderSvg('auster-agx-logico.svg', 'auster-agx-logico.png');
+    await renderSvg('auster-agx-mer.svg', 'auster-agx-mer.png', 2);
+    await renderSvg('auster-agx-der.svg', 'auster-agx-der.png', 2);
   }
 
   console.log(

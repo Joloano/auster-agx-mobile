@@ -1,0 +1,315 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1880" height="880" viewBox="0 0 1880 880" role="img" aria-labelledby="titulo descricao">
+<title id="titulo">Modelo conceitual (MER) do AusterAgX Mobile</title>
+<desc id="descricao">Notação de Chen no padrão do brModelo: 11 entidades e 14 relacionamentos do subdomínio consumido pelo aplicativo.</desc>
+<style>
+  .linha { fill: none; stroke: #000; stroke-width: 1.1; }
+  .entidade { fill: #fff; stroke: #000; stroke-width: 1.1; }
+  .losango { fill: #fff; stroke: #000; stroke-width: 1.1; }
+  .atributo { fill: #fff; stroke: #000; stroke-width: 1.1; }
+  .identificador { fill: #000; stroke: #000; stroke-width: 1.1; }
+  text { font-family: 'DejaVu Sans', Verdana, Arial, sans-serif; font-weight: bold; fill: #000; }
+  .nome-entidade { font-size: 13px; text-anchor: middle; }
+  .nome-atributo { font-size: 12px; }
+  .relacionamento { font-size: 12px; text-anchor: middle; }
+  .cardinalidade { font-size: 12px; }
+</style>
+<rect width="100%" height="100%" fill="#fff"/>
+<polyline points="192,268 241.5,268" class="linha"/><text x="199" y="261" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="420,268 370.5,268" class="linha"/><text x="413" y="261" class="cardinalidade" text-anchor="end">(0,n)</text>
+<polygon points="306,246 370.5,268 306,290 241.5,268" class="losango"/><text x="306" y="272.5" class="relacionamento">administra</text>
+<polyline points="552,268 613.5,268" class="linha"/><text x="559" y="261" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="780,268 718.5,268" class="linha"/><text x="773" y="261" class="cardinalidade" text-anchor="end">(0,n)</text>
+<polygon points="666,246 718.5,268 666,290 613.5,268" class="losango"/><text x="666" y="272.5" class="relacionamento">solicita</text>
+<polyline points="912,268 971.5,268" class="linha"/><text x="919" y="261" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="1140,268 1080.5,268" class="linha"/><text x="1133" y="261" class="cardinalidade" text-anchor="end">(0,n)</text>
+<polygon points="1026,246 1080.5,268 1026,290 971.5,268" class="losango"/><text x="1026" y="272.5" class="relacionamento">compõe</text>
+<polyline points="192,668 255,668" class="linha"/><text x="199" y="661" class="cardinalidade" text-anchor="start">(0,n)</text>
+<polyline points="420,668 357,668" class="linha"/><text x="413" y="661" class="cardinalidade" text-anchor="end">(0,n)</text>
+<polygon points="306,646 357,668 306,690 255,668" class="losango"/><text x="306" y="672.5" class="relacionamento">cultiva</text>
+<polyline points="552,668 612.5,668" class="linha"/><text x="559" y="661" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="780,668 719.5,668" class="linha"/><text x="773" y="661" class="cardinalidade" text-anchor="end">(0,n)</text>
+<polygon points="666,646 719.5,668 666,690 612.5,668" class="losango"/><text x="666" y="672.5" class="relacionamento">contém</text>
+<polyline points="912,668 974,668" class="linha"/><text x="919" y="661" class="cardinalidade" text-anchor="start">(0,n)</text>
+<polyline points="1140,668 1078,668" class="linha"/><text x="1133" y="661" class="cardinalidade" text-anchor="end">(0,n)</text>
+<polygon points="1026,646 1078,668 1026,690 974,668" class="losango"/><text x="1026" y="672.5" class="relacionamento">agrupa</text>
+<polyline points="1290,256 1340,256" class="linha"/><text x="1297" y="249" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polyline points="1500,256 1450,256" class="linha"/><text x="1493" y="249" class="cardinalidade" text-anchor="end">(0,n)</text>
+<polygon points="1395,234 1450,256 1395,278 1340,256" class="losango"/><text x="1395" y="260.5" class="relacionamento">registra</text>
+<polyline points="520,296 520,446" class="linha"/><text x="527" y="313" class="cardinalidade" text-anchor="start">(0,1)</text>
+<polyline points="520,640 520,490" class="linha"/><text x="527" y="632" class="cardinalidade" text-anchor="start">(0,n)</text>
+<polygon points="520,446 570,468 520,490 470,468" class="losango"/><text x="520" y="472.5" class="relacionamento">possui</text>
+<polyline points="319,454 378,454 378,384" class="linha"/><text x="326" y="447" class="cardinalidade" text-anchor="start">(0,n)</text>
+<polyline points="450,296 450,362 430.5,362" class="linha"/><text x="457" y="313" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polygon points="378,340 430.5,362 378,384 325.5,362" class="losango"/><text x="378" y="366.5" class="relacionamento">vincula</text>
+<polyline points="319,482 378,482 378,550" class="linha"/><text x="326" y="475" class="cardinalidade" text-anchor="start">(0,n)</text>
+<polyline points="450,640 450,572 430.5,572" class="linha"/><text x="457" y="632" class="cardinalidade" text-anchor="start">(1,1)</text>
+<polygon points="378,550 430.5,572 378,594 325.5,572" class="losango"/><text x="378" y="576.5" class="relacionamento">vincula</text>
+<polyline points="1154,296 1154,446" class="linha"/><text x="1147" y="313" class="cardinalidade" text-anchor="end">(0,n)</text>
+<polyline points="1154,640 1154,490" class="linha"/><text x="1147" y="632" class="cardinalidade" text-anchor="end">(0,n)</text>
+<polygon points="1154,446 1210,468 1154,490 1098,468" class="losango"/><text x="1154" y="472.5" class="relacionamento">abrange</text>
+<polyline points="1214,296 1214,520 1371,520" class="linha"/><text x="1221" y="313" class="cardinalidade" text-anchor="start">(0,n)</text>
+<polyline points="1540,640 1540,520 1469,520" class="linha"/><text x="1547" y="632" class="cardinalidade" text-anchor="start">(0,n)</text>
+<polygon points="1420,498 1469,520 1420,542 1371,520" class="losango"/><text x="1420" y="524.5" class="relacionamento">utiliza</text>
+<polyline points="1274,296 1274,396 1296,396" class="linha"/><text x="1281" y="313" class="cardinalidade" text-anchor="start">(0,n)</text>
+<polyline points="1290,284 1360,284 1360,374" class="linha"/><text x="1297" y="277" class="cardinalidade" text-anchor="start">(0,1)</text>
+<polygon points="1360,374 1424,396 1360,418 1296,396" class="losango"/><text x="1360" y="400.5" class="relacionamento">retrabalho</text>
+<polyline points="1713,654 1787,654 1787,738" class="linha"/><text x="1720" y="647" class="cardinalidade" text-anchor="start">(0,n)</text>
+<polyline points="1713,682 1727,682 1727,760 1737.5,760" class="linha"/><text x="1720" y="675" class="cardinalidade" text-anchor="start">(0,1)</text>
+<polygon points="1787,738 1836.5,760 1787,782 1737.5,760" class="losango"/><text x="1787" y="764.5" class="relacionamento">deriva</text>
+<line x1="72" y1="240" x2="72" y2="53.5" class="linha"/>
+<circle cx="72" cy="47" r="6.5" class="identificador"/>
+<text x="83.5" y="51.5" class="nome-atributo">id</text>
+<line x1="80" y1="240" x2="80" y2="72.5" class="linha"/>
+<circle cx="80" cy="66" r="6.5" class="atributo"/>
+<text x="91.5" y="70.5" class="nome-atributo">public id</text>
+<line x1="88" y1="240" x2="88" y2="91.5" class="linha"/>
+<circle cx="88" cy="85" r="6.5" class="atributo"/>
+<text x="99.5" y="89.5" class="nome-atributo">email</text>
+<line x1="96" y1="240" x2="96" y2="110.5" class="linha"/>
+<circle cx="96" cy="104" r="6.5" class="atributo"/>
+<text x="107.5" y="108.5" class="nome-atributo">nome</text>
+<line x1="104" y1="240" x2="104" y2="129.5" class="linha"/>
+<circle cx="104" cy="123" r="6.5" class="atributo"/>
+<text x="115.5" y="127.5" class="nome-atributo">perfil</text>
+<line x1="112" y1="240" x2="112" y2="148.5" class="linha"/>
+<circle cx="112" cy="142" r="6.5" class="atributo"/>
+<text x="123.5" y="146.5" class="nome-atributo">senha hash</text>
+<line x1="120" y1="240" x2="120" y2="167.5" class="linha"/>
+<circle cx="120" cy="161" r="6.5" class="atributo"/>
+<text x="131.5" y="165.5" class="nome-atributo">deve alterar senha</text>
+<line x1="128" y1="240" x2="128" y2="186.5" class="linha"/>
+<circle cx="128" cy="180" r="6.5" class="atributo"/>
+<text x="139.5" y="184.5" class="nome-atributo">ativo</text>
+<line x1="136" y1="240" x2="136" y2="205.5" class="linha"/>
+<circle cx="136" cy="199" r="6.5" class="atributo"/>
+<text x="147.5" y="203.5" class="nome-atributo">created at</text>
+<line x1="144" y1="240" x2="144" y2="224.5" class="linha"/>
+<circle cx="144" cy="218" r="6.5" class="atributo"/>
+<text x="155.5" y="222.5" class="nome-atributo">updated at</text>
+<rect x="60" y="240" width="132" height="56" class="entidade"/>
+<text x="126" y="273" class="nome-entidade">usuario</text>
+<line x1="432" y1="240" x2="432" y2="91.5" class="linha"/>
+<circle cx="432" cy="85" r="6.5" class="identificador"/>
+<text x="443.5" y="89.5" class="nome-atributo">id</text>
+<line x1="440" y1="240" x2="440" y2="110.5" class="linha"/>
+<circle cx="440" cy="104" r="6.5" class="atributo"/>
+<text x="451.5" y="108.5" class="nome-atributo">public id</text>
+<line x1="448" y1="240" x2="448" y2="129.5" class="linha"/>
+<circle cx="448" cy="123" r="6.5" class="atributo"/>
+<text x="459.5" y="127.5" class="nome-atributo">nome fantasia</text>
+<line x1="456" y1="240" x2="456" y2="148.5" class="linha"/>
+<circle cx="456" cy="142" r="6.5" class="atributo"/>
+<text x="467.5" y="146.5" class="nome-atributo">razao social</text>
+<line x1="464" y1="240" x2="464" y2="167.5" class="linha"/>
+<circle cx="464" cy="161" r="6.5" class="atributo"/>
+<text x="475.5" y="165.5" class="nome-atributo">numero documento</text>
+<line x1="472" y1="240" x2="472" y2="186.5" class="linha"/>
+<circle cx="472" cy="180" r="6.5" class="atributo"/>
+<text x="483.5" y="184.5" class="nome-atributo">tipo documento</text>
+<line x1="480" y1="240" x2="480" y2="205.5" class="linha"/>
+<circle cx="480" cy="199" r="6.5" class="atributo"/>
+<text x="491.5" y="203.5" class="nome-atributo">email faturamento</text>
+<line x1="488" y1="240" x2="488" y2="224.5" class="linha"/>
+<circle cx="488" cy="218" r="6.5" class="atributo"/>
+<text x="499.5" y="222.5" class="nome-atributo">ativo</text>
+<rect x="420" y="240" width="132" height="56" class="entidade"/>
+<text x="486" y="273" class="nome-entidade">cliente</text>
+<line x1="172" y1="440" x2="172" y2="367.5" class="linha"/>
+<circle cx="172" cy="361" r="6.5" class="identificador"/>
+<text x="183.5" y="365.5" class="nome-atributo">id</text>
+<line x1="180" y1="440" x2="180" y2="386.5" class="linha"/>
+<circle cx="180" cy="380" r="6.5" class="atributo"/>
+<text x="191.5" y="384.5" class="nome-atributo">public id</text>
+<line x1="188" y1="440" x2="188" y2="405.5" class="linha"/>
+<circle cx="188" cy="399" r="6.5" class="atributo"/>
+<text x="199.5" y="403.5" class="nome-atributo">data inicio</text>
+<line x1="196" y1="440" x2="196" y2="424.5" class="linha"/>
+<circle cx="196" cy="418" r="6.5" class="atributo"/>
+<text x="207.5" y="422.5" class="nome-atributo">data fim</text>
+<rect x="160" y="440" width="159" height="56" class="entidade"/>
+<text x="239.5" y="473" class="nome-entidade">cliente_fazenda</text>
+<line x1="488" y1="696" x2="488" y2="711.5" class="linha"/>
+<circle cx="488" cy="718" r="6.5" class="identificador"/>
+<text x="499.5" y="722.5" class="nome-atributo">id</text>
+<line x1="480" y1="696" x2="480" y2="730.5" class="linha"/>
+<circle cx="480" cy="737" r="6.5" class="atributo"/>
+<text x="491.5" y="741.5" class="nome-atributo">public id</text>
+<line x1="472" y1="696" x2="472" y2="749.5" class="linha"/>
+<circle cx="472" cy="756" r="6.5" class="atributo"/>
+<text x="483.5" y="760.5" class="nome-atributo">nome</text>
+<line x1="464" y1="696" x2="464" y2="768.5" class="linha"/>
+<circle cx="464" cy="775" r="6.5" class="atributo"/>
+<text x="475.5" y="779.5" class="nome-atributo">area ha</text>
+<line x1="456" y1="696" x2="456" y2="787.5" class="linha"/>
+<circle cx="456" cy="794" r="6.5" class="atributo"/>
+<text x="467.5" y="798.5" class="nome-atributo">area cultivavel</text>
+<line x1="448" y1="696" x2="448" y2="806.5" class="linha"/>
+<circle cx="448" cy="813" r="6.5" class="atributo"/>
+<text x="459.5" y="817.5" class="nome-atributo">latitude</text>
+<line x1="440" y1="696" x2="440" y2="825.5" class="linha"/>
+<circle cx="440" cy="832" r="6.5" class="atributo"/>
+<text x="451.5" y="836.5" class="nome-atributo">longitude</text>
+<line x1="432" y1="696" x2="432" y2="844.5" class="linha"/>
+<circle cx="432" cy="851" r="6.5" class="atributo"/>
+<text x="443.5" y="855.5" class="nome-atributo">ativo</text>
+<rect x="420" y="640" width="132" height="56" class="entidade"/>
+<text x="486" y="673" class="nome-entidade">fazenda</text>
+<line x1="848" y1="696" x2="848" y2="711.5" class="linha"/>
+<circle cx="848" cy="718" r="6.5" class="identificador"/>
+<text x="859.5" y="722.5" class="nome-atributo">id</text>
+<line x1="840" y1="696" x2="840" y2="730.5" class="linha"/>
+<circle cx="840" cy="737" r="6.5" class="atributo"/>
+<text x="851.5" y="741.5" class="nome-atributo">public id</text>
+<line x1="832" y1="696" x2="832" y2="749.5" class="linha"/>
+<circle cx="832" cy="756" r="6.5" class="atributo"/>
+<text x="843.5" y="760.5" class="nome-atributo">codigo lpt</text>
+<line x1="824" y1="696" x2="824" y2="768.5" class="linha"/>
+<circle cx="824" cy="775" r="6.5" class="atributo"/>
+<text x="835.5" y="779.5" class="nome-atributo">nome</text>
+<line x1="816" y1="696" x2="816" y2="787.5" class="linha"/>
+<circle cx="816" cy="794" r="6.5" class="atributo"/>
+<text x="827.5" y="798.5" class="nome-atributo">numero talhao</text>
+<line x1="808" y1="696" x2="808" y2="806.5" class="linha"/>
+<circle cx="808" cy="813" r="6.5" class="atributo"/>
+<text x="819.5" y="817.5" class="nome-atributo">area ha</text>
+<line x1="800" y1="696" x2="800" y2="825.5" class="linha"/>
+<circle cx="800" cy="832" r="6.5" class="atributo"/>
+<text x="811.5" y="836.5" class="nome-atributo">area cultivavel</text>
+<line x1="792" y1="696" x2="792" y2="844.5" class="linha"/>
+<circle cx="792" cy="851" r="6.5" class="atributo"/>
+<text x="803.5" y="855.5" class="nome-atributo">irrigacao</text>
+<rect x="780" y="640" width="132" height="56" class="entidade"/>
+<text x="846" y="673" class="nome-entidade">talhao</text>
+<line x1="1192" y1="696" x2="1192" y2="711.5" class="linha"/>
+<circle cx="1192" cy="718" r="6.5" class="identificador"/>
+<text x="1203.5" y="722.5" class="nome-atributo">id</text>
+<line x1="1184" y1="696" x2="1184" y2="730.5" class="linha"/>
+<circle cx="1184" cy="737" r="6.5" class="atributo"/>
+<text x="1195.5" y="741.5" class="nome-atributo">public id</text>
+<line x1="1176" y1="696" x2="1176" y2="749.5" class="linha"/>
+<circle cx="1176" cy="756" r="6.5" class="atributo"/>
+<text x="1187.5" y="760.5" class="nome-atributo">nome</text>
+<line x1="1168" y1="696" x2="1168" y2="768.5" class="linha"/>
+<circle cx="1168" cy="775" r="6.5" class="atributo"/>
+<text x="1179.5" y="779.5" class="nome-atributo">ativo</text>
+<line x1="1160" y1="696" x2="1160" y2="787.5" class="linha"/>
+<circle cx="1160" cy="794" r="6.5" class="atributo"/>
+<text x="1171.5" y="798.5" class="nome-atributo">created at</text>
+<line x1="1152" y1="696" x2="1152" y2="806.5" class="linha"/>
+<circle cx="1152" cy="813" r="6.5" class="atributo"/>
+<text x="1163.5" y="817.5" class="nome-atributo">updated at</text>
+<rect x="1140" y="640" width="132" height="56" class="entidade"/>
+<text x="1206" y="673" class="nome-entidade">grupo</text>
+<line x1="120" y1="696" x2="120" y2="711.5" class="linha"/>
+<circle cx="120" cy="718" r="6.5" class="identificador"/>
+<text x="131.5" y="722.5" class="nome-atributo">id</text>
+<line x1="112" y1="696" x2="112" y2="730.5" class="linha"/>
+<circle cx="112" cy="737" r="6.5" class="atributo"/>
+<text x="123.5" y="741.5" class="nome-atributo">nome</text>
+<line x1="104" y1="696" x2="104" y2="749.5" class="linha"/>
+<circle cx="104" cy="756" r="6.5" class="atributo"/>
+<text x="115.5" y="760.5" class="nome-atributo">grupo cultura</text>
+<line x1="96" y1="696" x2="96" y2="768.5" class="linha"/>
+<circle cx="96" cy="775" r="6.5" class="atributo"/>
+<text x="107.5" y="779.5" class="nome-atributo">precocidade</text>
+<line x1="88" y1="696" x2="88" y2="787.5" class="linha"/>
+<circle cx="88" cy="794" r="6.5" class="atributo"/>
+<text x="99.5" y="798.5" class="nome-atributo">ativo</text>
+<line x1="80" y1="696" x2="80" y2="806.5" class="linha"/>
+<circle cx="80" cy="813" r="6.5" class="atributo"/>
+<text x="91.5" y="817.5" class="nome-atributo">created at</text>
+<line x1="72" y1="696" x2="72" y2="825.5" class="linha"/>
+<circle cx="72" cy="832" r="6.5" class="atributo"/>
+<text x="83.5" y="836.5" class="nome-atributo">updated at</text>
+<rect x="60" y="640" width="132" height="56" class="entidade"/>
+<text x="126" y="673" class="nome-entidade">cultura</text>
+<line x1="792" y1="240" x2="792" y2="129.5" class="linha"/>
+<circle cx="792" cy="123" r="6.5" class="identificador"/>
+<text x="803.5" y="127.5" class="nome-atributo">id</text>
+<line x1="800" y1="240" x2="800" y2="148.5" class="linha"/>
+<circle cx="800" cy="142" r="6.5" class="atributo"/>
+<text x="811.5" y="146.5" class="nome-atributo">public id</text>
+<line x1="808" y1="240" x2="808" y2="167.5" class="linha"/>
+<circle cx="808" cy="161" r="6.5" class="atributo"/>
+<text x="819.5" y="165.5" class="nome-atributo">codigo</text>
+<line x1="816" y1="240" x2="816" y2="186.5" class="linha"/>
+<circle cx="816" cy="180" r="6.5" class="atributo"/>
+<text x="827.5" y="184.5" class="nome-atributo">apelido</text>
+<line x1="824" y1="240" x2="824" y2="205.5" class="linha"/>
+<circle cx="824" cy="199" r="6.5" class="atributo"/>
+<text x="835.5" y="203.5" class="nome-atributo">observacoes</text>
+<line x1="832" y1="240" x2="832" y2="224.5" class="linha"/>
+<circle cx="832" cy="218" r="6.5" class="atributo"/>
+<text x="843.5" y="222.5" class="nome-atributo">ativo</text>
+<rect x="780" y="240" width="132" height="56" class="entidade"/>
+<text x="846" y="273" class="nome-entidade">pedido</text>
+<line x1="1152" y1="240" x2="1152" y2="91.5" class="linha"/>
+<circle cx="1152" cy="85" r="6.5" class="identificador"/>
+<text x="1163.5" y="89.5" class="nome-atributo">id</text>
+<line x1="1160" y1="240" x2="1160" y2="110.5" class="linha"/>
+<circle cx="1160" cy="104" r="6.5" class="atributo"/>
+<text x="1171.5" y="108.5" class="nome-atributo">public id</text>
+<line x1="1168" y1="240" x2="1168" y2="129.5" class="linha"/>
+<circle cx="1168" cy="123" r="6.5" class="atributo"/>
+<text x="1179.5" y="127.5" class="nome-atributo">codigo demanda</text>
+<line x1="1176" y1="240" x2="1176" y2="148.5" class="linha"/>
+<circle cx="1176" cy="142" r="6.5" class="atributo"/>
+<text x="1187.5" y="146.5" class="nome-atributo">tipo</text>
+<line x1="1184" y1="240" x2="1184" y2="167.5" class="linha"/>
+<circle cx="1184" cy="161" r="6.5" class="atributo"/>
+<text x="1195.5" y="165.5" class="nome-atributo">status</text>
+<line x1="1192" y1="240" x2="1192" y2="186.5" class="linha"/>
+<circle cx="1192" cy="180" r="6.5" class="atributo"/>
+<text x="1203.5" y="184.5" class="nome-atributo">situacao dados</text>
+<line x1="1200" y1="240" x2="1200" y2="205.5" class="linha"/>
+<circle cx="1200" cy="199" r="6.5" class="atributo"/>
+<text x="1211.5" y="203.5" class="nome-atributo">situacao mapeamento</text>
+<line x1="1208" y1="240" x2="1208" y2="224.5" class="linha"/>
+<circle cx="1208" cy="218" r="6.5" class="atributo"/>
+<text x="1219.5" y="222.5" class="nome-atributo">retrabalho</text>
+<rect x="1140" y="240" width="150" height="56" class="entidade"/>
+<text x="1215" y="273" class="nome-entidade">demanda</text>
+<line x1="1512" y1="240" x2="1512" y2="129.5" class="linha"/>
+<circle cx="1512" cy="123" r="6.5" class="identificador"/>
+<text x="1523.5" y="127.5" class="nome-atributo">id</text>
+<line x1="1520" y1="240" x2="1520" y2="148.5" class="linha"/>
+<circle cx="1520" cy="142" r="6.5" class="atributo"/>
+<text x="1531.5" y="146.5" class="nome-atributo">status anterior</text>
+<line x1="1528" y1="240" x2="1528" y2="167.5" class="linha"/>
+<circle cx="1528" cy="161" r="6.5" class="atributo"/>
+<text x="1539.5" y="165.5" class="nome-atributo">status novo</text>
+<line x1="1536" y1="240" x2="1536" y2="186.5" class="linha"/>
+<circle cx="1536" cy="180" r="6.5" class="atributo"/>
+<text x="1547.5" y="184.5" class="nome-atributo">alterado em</text>
+<line x1="1544" y1="240" x2="1544" y2="205.5" class="linha"/>
+<circle cx="1544" cy="199" r="6.5" class="atributo"/>
+<text x="1555.5" y="203.5" class="nome-atributo">alterado por id</text>
+<line x1="1552" y1="240" x2="1552" y2="224.5" class="linha"/>
+<circle cx="1552" cy="218" r="6.5" class="atributo"/>
+<text x="1563.5" y="222.5" class="nome-atributo">alterado por nome</text>
+<rect x="1500" y="240" width="235" height="56" class="entidade"/>
+<text x="1617.5" y="273" class="nome-entidade">demanda_status_historico</text>
+<line x1="1560" y1="696" x2="1560" y2="711.5" class="linha"/>
+<circle cx="1560" cy="718" r="6.5" class="identificador"/>
+<text x="1571.5" y="722.5" class="nome-atributo">id</text>
+<line x1="1552" y1="696" x2="1552" y2="730.5" class="linha"/>
+<circle cx="1552" cy="737" r="6.5" class="atributo"/>
+<text x="1563.5" y="741.5" class="nome-atributo">public id</text>
+<line x1="1544" y1="696" x2="1544" y2="749.5" class="linha"/>
+<circle cx="1544" cy="756" r="6.5" class="atributo"/>
+<text x="1555.5" y="760.5" class="nome-atributo">codigo mapeamento</text>
+<line x1="1536" y1="696" x2="1536" y2="768.5" class="linha"/>
+<circle cx="1536" cy="775" r="6.5" class="atributo"/>
+<text x="1547.5" y="779.5" class="nome-atributo">fonte</text>
+<line x1="1528" y1="696" x2="1528" y2="787.5" class="linha"/>
+<circle cx="1528" cy="794" r="6.5" class="atributo"/>
+<text x="1539.5" y="798.5" class="nome-atributo">qualidade</text>
+<line x1="1520" y1="696" x2="1520" y2="806.5" class="linha"/>
+<circle cx="1520" cy="813" r="6.5" class="atributo"/>
+<text x="1531.5" y="817.5" class="nome-atributo">data imagem</text>
+<line x1="1512" y1="696" x2="1512" y2="825.5" class="linha"/>
+<circle cx="1512" cy="832" r="6.5" class="atributo"/>
+<text x="1523.5" y="836.5" class="nome-atributo">status</text>
+<rect x="1500" y="640" width="213" height="56" class="entidade"/>
+<text x="1606.5" y="673" class="nome-entidade">sensoriamento_remoto</text>
+</svg>
