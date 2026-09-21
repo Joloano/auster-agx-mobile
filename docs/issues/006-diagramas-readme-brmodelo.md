@@ -27,4 +27,4 @@ O recorte é o subdomínio que o aplicativo mobile consome pela API: `USUARIO`, 
 
 ## Status
 
-Em andamento.
+Concluída em 21 de setembro de 2026.

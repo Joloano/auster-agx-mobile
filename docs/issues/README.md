@@ -9,7 +9,7 @@ As issues deste projeto são versionadas como arquivos Markdown neste diretório
 | [003](003-offline-sync.md) | Offline-first e fila de sincronização | Concluída |
 | [004](004-gps-demanda.md) | Registrar localização via GPS | Concluída |
 | [005](005-revisao-documentacao-modelagem.md) | Revisão da documentação e dos modelos de dados | Concluída |
-| [006](006-diagramas-readme-brmodelo.md) | Diagramas conceitual e lógico do README no padrão brModelo | Em andamento |
+| [006](006-diagramas-readme-brmodelo.md) | Diagramas conceitual e lógico do README no padrão brModelo | Concluída |
 
 ## Publicar no GitHub Issues
 
