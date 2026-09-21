@@ -20,4 +20,4 @@ A execução de 21 de setembro de 2026 passou nos dois jobs, mas deixou quatro a
 
 ## Status
 
-Em andamento.
+Concluída em 21 de setembro de 2026.
