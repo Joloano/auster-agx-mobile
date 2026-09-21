@@ -1,0 +1,28 @@
+AusterAgX Mobile
+Copyright (c) 2026 Joloano
+
+A licença MIT em LICENSE cobre somente o código-fonte e a documentação
+escritos para este repositório. Os itens abaixo não são licenciados por ela e
+permanecem sob os termos dos respectivos titulares.
+
+Marca AUSTER e AusterAgX
+  O nome, a marca, os logotipos e a identidade visual da AUSTER Tecnologia,
+  incluindo os arquivos abaixo, pertencem à AUSTER Tecnologia. Seu uso aqui é
+  restrito a fins acadêmicos e não concede nenhum direito de reprodução.
+    - assets/branding/
+    - android/app/src/main/res/mipmap-*/ic_launcher.png
+    - android/app/src/main/res/drawable-*/ic_launcher_foreground.png
+
+API AusterAgX
+  A API, seus contratos REST, regras de negócio e dados pertencem à AUSTER
+  Tecnologia. Este repositório não contém código do backend: o
+  docker-compose.yml apenas constrói a API a partir de uma cópia local do
+  repositório oficial, que exige acesso próprio.
+
+Fontes tipográficas (SIL Open Font License 1.1)
+  - assets/fonts/Inter-Variable.ttf       -> assets/fonts/OFL-Inter.txt
+  - assets/fonts/BebasNeue-Regular.ttf    -> assets/fonts/OFL-BebasNeue.txt
+
+Capturas de tela
+  As imagens em docs/screenshots/ usam somente dados sintéticos de
+  demonstração. Nenhum dado real de cliente é versionado neste repositório.
