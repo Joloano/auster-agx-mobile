@@ -183,53 +183,21 @@ O aplicativo consome `/demandas/status-fluxo` para obter transições e pré-req
 
 ## Modelagem do banco de dados
 
-Os dados são documentados em três camadas para separar o domínio da API, sua implementação relacional e a estratégia de cache offline do aplicativo. A auditoria foi feita sobre JPA e Flyway sem alterar o backend oficial.
+Modelagem conceitual e lógica na notação do **brModelo**, restrita ao subdomínio que o aplicativo consome pela API AusterAgX. Os diagramas são gerados por [`scripts/gerar-modelos-er.mjs`](scripts/gerar-modelos-er.mjs) a partir do modelo auditado sobre o mapeamento JPA e as migrations Flyway do backend.
 
-### Modelo conceitual do domínio AusterAgX
+### Modelo Conceitual (MER)
 
-Derivado do [diagrama de classes](docs/diagrama-classes.md), o modelo representa **28 entidades persistentes**, **36 associações JPA** e **5 relacionamentos físicos adicionais** encontrados nas migrations, totalizando **41 relacionamentos auditados**. A vista segue a notação de Chen usada pelo [brModelo Web](https://app.brmodeloweb.com/main), com entidades, relacionamentos, chaves e cardinalidades mínimas/máximas.
+Entidades (`USUARIO`, `CLIENTE`, `CLIENTE_FAZENDA`, `FAZENDA`, `TALHAO`, `GRUPO`, `CULTURA`, `PEDIDO`, `DEMANDA`, `DEMANDA_STATUS_HISTORICO`, `SENSORIAMENTO_REMOTO`), atributos principais e cardinalidades (1:N, as N:N `fazenda × cultura`, `grupo × talhão`, `demanda × grupo` e `demanda × sensoriamento`, e os autorrelacionamentos de retrabalho e remapeamento).
 
-[![Modelo conceitual do domínio AusterAgX](docs/modelo-er/auster-agx-conceitual.png)](docs/modelo-er/auster-agx-conceitual.png)
+![Modelo Conceitual (MER)](docs/modelo-er/auster-agx-mer.png)
 
-**Artefatos:** [catálogo semântico](docs/modelo-er/auster-agx-dominio.md) · [matriz de cardinalidades](docs/modelo-er/auster-agx-cardinalidades.md) · [grafo JointJS para o brModelo Web](docs/modelo-er/auster-agx-brmodelo-web.json) · [DOT](docs/modelo-er/auster-agx-conceitual.dot) · [SVG](docs/modelo-er/auster-agx-conceitual.svg) · [PNG](docs/modelo-er/auster-agx-conceitual.png)
+### Modelo Lógico (DER)
 
-### Modelo lógico relacional do backend
+Esquema relacional com PKs, FKs, as tabelas associativas das relações N:N (`fazenda_cultura`, `grupo_talhao`, `demanda_grupo` e `demanda_sensoriamento_remoto`) e as FKs autorreferentes `demanda_origem_id` e `mapeamento_origem_id`. As colunas `representante_id` e `piloto_id` referenciam `colaborador`, que fica fora deste recorte.
 
-O modelo lógico explicita **35 tabelas**, **48 referências por FK** e **7 estruturas associativas ou de coleção**. Cada tabela destaca PK, FK, UK e `NOT NULL`; as linhas trazem a coluna de vínculo e as cardinalidades. Restrições ausentes nas migrations, como PK composta em `demanda_grupo`, não foram inventadas.
+![Modelo Lógico (DER)](docs/modelo-er/auster-agx-der.png)
 
-[![Modelo lógico relacional do AusterAgX](docs/modelo-er/auster-agx-logico.png)](docs/modelo-er/auster-agx-logico.png)
-
-**Artefatos:** [DOT](docs/modelo-er/auster-agx-logico.dot) · [SVG](docs/modelo-er/auster-agx-logico.svg) · [PNG](docs/modelo-er/auster-agx-logico.png) · [índice da modelagem](docs/modelo-er/README.md)
-
-### Modelo físico do cache SQLite
-
-O terceiro modelo reproduz as sete tabelas de `lib/data/local/app_database.dart`, incluindo tipos, chaves primárias, nulabilidade, valores padrão, `CHECK` e `AUTOINCREMENT`.
-
-[![Modelo físico do SQLite mobile](docs/modelo-er/auster-agx-mobile-fisico.png)](docs/modelo-er/auster-agx-mobile-fisico.png)
-
-**Artefatos:** [DDL](docs/modelo-er/auster-agx-mobile-fisico.sql) · [ER textual](docs/modelo-er/auster-agx-mobile-fisico.md) · [brModelo `.brM3`](docs/modelo-er/auster-agx-mobile-fisico.brM3) · [XML](docs/modelo-er/auster-agx-mobile-fisico.xml) · [PNG](docs/modelo-er/auster-agx-mobile-fisico.png)
-
-O DDL e o ER textual são extraídos de `lib/data/local/app_database.dart` pelo gerador, não escritos à mão.
-
-| Conceito | Persistência física offline |
-|---|---|
-| Resumo de demanda | `dashboard_items.payload`, um JSON por demanda |
-| Detalhe de demanda | `demanda_details.payload`, um JSON por demanda |
-| Histórico de status | `demanda_status_history.payload`, lista JSON por `demanda_id` |
-| Operação de sincronização | Uma linha em `sync_queue`, identificada por entidade e ID |
-| Captura de localização | Uma linha em `location_captures`, associada por `demanda_id` |
-| Resumo do dashboard | Snapshot único em `dashboard_overview` |
-| Regras de transição | Snapshot único em `status_fluxo` |
-
-O cache não declara `FOREIGN KEY`: os vínculos locais são lógicos e os payloads preservam o contrato da API. Tokens e o último perfil autenticado ficam no `flutter_secure_storage`, fora do SQLite.
-
-### Regeneração dos modelos
-
-```powershell
-node scripts/gerar-modelos-er.mjs
-```
-
-O gerador valida contagens, identificadores, cardinalidades, nulabilidade e unicidade do backend, confere o cache SQLite contra o código Dart e só então reescreve DOT, SVG, JSON, matriz de auditoria, DDL e ER textual. Divergência entre código e modelo interrompe a execução. A opção `--render` também atualiza os PNGs quando `sharp` está disponível.
+Modelo completo do domínio (28 entidades e 35 tabelas), matriz de cardinalidades e cache SQLite do aplicativo em [docs/modelo-er/README.md](docs/modelo-er/README.md).
 
 ---
 

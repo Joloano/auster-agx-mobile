@@ -8,7 +8,20 @@ Este diretório separa três visões que possuem responsabilidades diferentes:
 
 O backend oficial foi utilizado somente como fonte de verdade. Nenhuma regra de negócio ou estrutura do servidor foi duplicada no aplicativo.
 
-## Artefatos principais
+## Diagramas do README
+
+O README apresenta apenas dois diagramas, na notação visual do brModelo, restritos ao subdomínio que o aplicativo consome pela API: 11 entidades, 14 relacionamentos, 15 tabelas e 18 chaves estrangeiras.
+
+| Diagrama | Visualização | Fonte |
+|---|---|---|
+| Modelo Conceitual (MER), notação de Chen | [PNG](auster-agx-mer.png) ou [SVG](auster-agx-mer.svg) | [`scripts/diagramas-readme.mjs`](../../scripts/diagramas-readme.mjs) |
+| Modelo Lógico (DER) | [PNG](auster-agx-der.png) ou [SVG](auster-agx-der.svg) | [`scripts/diagramas-readme.mjs`](../../scripts/diagramas-readme.mjs) |
+
+O conteúdo dos dois diagramas vem do mesmo modelo validado que gera os artefatos completos. A posição de cada entidade é fixa no script; atributos, colunas, chaves e cardinalidades nunca são redigitados. A geração falha se um relacionamento ou FK do recorte ficar sem traçado ou mudar de extremidades.
+
+No MER, os atributos de endereço, geometria e observações estão resumidos; no DER eles aparecem como uma linha em itálico ao final da tabela. As colunas `representante_id` e `piloto_id` referenciam `colaborador`, que fica fora do recorte.
+
+## Artefatos completos
 
 | Visão | Visualização | Fonte editável | Apoio |
 |---|---|---|---|
@@ -53,7 +66,7 @@ O gerador valida contagens, identificadores, referências, cardinalidades, nulab
 node scripts/gerar-modelos-er.mjs
 ```
 
-O comando acima recria DOT, SVG, JSON, a matriz de auditoria, o DDL e o ER textual do cache sem dependências externas. A opção `--render` também atualiza os PNGs quando o pacote `sharp` está disponível em `node_modules` ou em `ER_TOOL_NODE_MODULES`:
+O comando acima recria DOT, SVG, JSON, a matriz de auditoria, o DDL, o ER textual do cache e os SVGs do MER e do DER do README sem dependências externas. A opção `--render` também atualiza os PNGs quando o pacote `sharp` está disponível em `node_modules` ou em `ER_TOOL_NODE_MODULES`:
 
 ```powershell
 node scripts/gerar-modelos-er.mjs --render
