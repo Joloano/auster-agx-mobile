@@ -1,0 +1,87 @@
+# Ambiente de desenvolvimento do AusterAgX Mobile: banco, API e massa de teste.
+#
+#   docker compose up -d --build
+#
+# A API é construída a partir de uma cópia local do repositório oficial
+# (github.com/AusterTec/AusterAgX), que exige acesso próprio. Nenhum código do
+# backend é versionado aqui. Por padrão o compose procura o backend na pasta
+# vizinha; defina AUSTERAGX_BACKEND_DIR (no shell ou em um .env na raiz) para
+# apontar outro caminho.
+
+name: auster-agx-mobile
+
+x-banco: &banco
+  POSTGRES_DB: ${POSTGRES_DB:-auster_agx}
+  POSTGRES_USER: ${POSTGRES_USER:-auster}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-auster_secret}
+
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      <<: *banco
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      # 5440 evita conflito com o compose do próprio backend, que usa a 5439.
+      - "${DB_PORT:-5440}:5432"
+    volumes:
+      - dados_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  api:
+    build:
+      context: ${AUSTERAGX_BACKEND_DIR:-../AusterAgX-Mobile-Reference/backend}
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      # O perfil dev aponta para localhost:5439; dentro da rede do compose o
+      # banco responde pelo nome do serviço.
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-auster_agx}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-auster}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-auster_secret}
+    ports:
+      - "${API_PORT:-8080}:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      # Readiness só fica UP depois do Flyway aplicar as migrations.
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health/readiness | grep -q UP"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  seed:
+    # Aplica o init.sql do backend somente quando o banco ainda não tem
+    # demandas. O script faz TRUNCATE; rodá-lo a cada subida apagaria o que foi
+    # alterado durante os testes.
+    image: postgres:16-alpine
+    environment:
+      PGHOST: db
+      PGDATABASE: ${POSTGRES_DB:-auster_agx}
+      PGUSER: ${POSTGRES_USER:-auster}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-auster_secret}
+    volumes:
+      - ${AUSTERAGX_BACKEND_DIR:-../AusterAgX-Mobile-Reference/backend}/init.sql:/seed/init.sql:ro
+    command:
+      - sh
+      - -c
+      - |
+        total=$$(psql -tAc "SELECT count(*) FROM demanda")
+        if [ "$$total" -eq 0 ]; then
+          psql -v ON_ERROR_STOP=1 -q -f /seed/init.sql && echo "Massa de teste aplicada."
+        else
+          echo "Massa de teste preservada: $$total demandas no banco."
+        fi
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: "no"
+
+volumes:
+  dados_postgres:
