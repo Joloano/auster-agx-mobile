@@ -2,15 +2,17 @@
 
 Este guia cobre a preparação do aplicativo Flutter, a conexão com a API AusterAgX existente, a execução em emulador ou celular Android e a geração de pacotes de distribuição.
 
-> Este repositório contém somente o cliente mobile. O backend oficial deve estar disponível separadamente; não é necessário copiar regras de negócio nem banco transacional para executar o aplicativo.
+> Este repositório contém somente o cliente mobile. O backend AusterAgX mora no repositório oficial da AusterTec; o `docker-compose.yml` daqui apenas o constrói a partir de uma cópia local.
 
 ## Pré-requisitos
 
 - Git.
-- Flutter com Dart compatível com `sdk: >=3.3.0 <4.0.0`.
+- Flutter 3.38.4 ou superior (desenvolvido e validado na CI com 3.47.4), que traz o Dart 3.11+ exigido pelo `pubspec.lock`.
 - Android SDK e um emulador ou dispositivo Android.
 - JDK 17 para o build Android.
-- Uma instância acessível da API AusterAgX.
+- Docker Desktop, para subir banco, API e massa de teste localmente.
+- Cópia local do repositório `github.com/AusterTec/AusterAgX` (exige acesso da AusterTec) ou outra instância acessível da API.
+- Projeto em um caminho sem acentos e fora de pastas sincronizadas, por exemplo `C:\dev\auster-agx-mobile`. Veja a [solução de problemas](#o-build-android-recusa-o-caminho-do-projeto).
 - No Windows, Modo de Desenvolvedor habilitado para a criação dos links simbólicos usados pelos plugins Flutter.
 
 Verifique o ambiente:
@@ -29,6 +31,56 @@ git clone https://github.com/Joloano/auster-agx-mobile.git
 cd auster-agx-mobile
 flutter pub get
 ```
+
+## Subir o ambiente local
+
+O `docker-compose.yml` sobe três serviços:
+
+| Serviço | O que faz |
+|---|---|
+| `db` | Postgres 16 com PostGIS, publicado na porta `5440` para não conflitar com o compose do próprio backend |
+| `api` | API AusterAgX construída a partir de `AUSTERAGX_BACKEND_DIR`, em `http://localhost:8080` |
+| `seed` | Aplica o `init.sql` do backend somente quando o banco ainda não tem demandas |
+
+Por padrão o backend é procurado em `..\AusterAgX-Mobile-Reference\backend`. Para outro caminho, copie o `.env.example` para `.env` e descomente `AUSTERAGX_BACKEND_DIR`.
+
+O jeito mais curto é o script, que sobe o ambiente, espera a API e a massa de teste e executa o app:
+
+```powershell
+.\scripts\dev\subir-ambiente.ps1                  # emulador
+.\scripts\dev\subir-ambiente.ps1 -Alvo celular    # APK apontando para o IP Wi-Fi
+```
+
+Se o PowerShell bloquear scripts, rode uma vez `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
+
+Para controlar só o ambiente:
+
+```powershell
+docker compose up -d --build     # sobe banco, API e massa de teste
+docker compose logs -f api       # acompanha a API
+docker compose down              # para, preservando os dados
+docker compose down -v           # apaga o banco; a massa de teste volta na próxima subida
+```
+
+O primeiro `--build` compila o backend com Maven e leva alguns minutos. A partir do segundo, use `-SemBuild` no script quando o backend não mudou.
+
+Contas da massa de teste, todas com a senha `123456`:
+
+| Usuário | Perfil |
+|---|---|
+| `matheus@austertec.com` | `SUPER_ADMIN` |
+| `bruno.carvalho@austertec.com` | `USUARIO_TECNICO_PRESCRICAO` |
+| `carla.nogueira@austertec.com` | `USUARIO_CONSULTOR_CTV` (somente consulta) |
+| `ana.ferreira@austertec.com` | `USUARIO_GESTOR_ADMINISTRATIVO` |
+| `diego.ramos@austertec.com` | `USUARIO_ASSISTENTE_ATV` |
+
+Para testar a troca obrigatória de senha:
+
+```powershell
+docker compose exec db psql -U auster -d auster_agx -c "UPDATE usuario SET deve_alterar_senha = true WHERE email = 'diego.ramos@austertec.com';"
+```
+
+Quando algo não conectar, `.\scripts\dev\diagnosticar-api.ps1` confere API, login, massa de teste e dispositivos e diz em qual etapa está o problema.
 
 ## Configurar a API
 
@@ -52,8 +104,20 @@ O arquivo `.env.example` documenta os valores locais, mas o aplicativo não carr
 
 ## Executar no emulador Android
 
-1. Inicie a API AusterAgX na porta configurada.
-2. Abra um emulador Android.
+Se `flutter emulators` não listar nenhum emulador, instale o pacote do emulador e uma imagem de sistema, e crie o AVD usado pelo script:
+
+```powershell
+$sdkbin = "$env:ANDROID_HOME\cmdline-tools\latest\bin"
+& "$sdkbin\sdkmanager.bat" --licenses
+& "$sdkbin\sdkmanager.bat" "emulator" "system-images;android-35;google_apis;x86_64"
+& "$sdkbin\avdmanager.bat" create avd -n auster_test -k "system-images;android-35;google_apis;x86_64" -d pixel_7
+emulator -accel-check
+```
+
+Depois:
+
+1. Inicie o ambiente local ou outra instância da API.
+2. Abra o emulador com `flutter emulators --launch auster_test`.
 3. Confira o identificador com `flutter devices`.
 4. Execute:
 
@@ -62,6 +126,8 @@ flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8080
 ```
 
 `10.0.2.2` é o endereço do computador host visto pelo emulador Android padrão. `localhost` dentro do emulador aponta para o próprio aparelho virtual.
+
+Prefira `10.0.2.2` a `adb reverse tcp:8080 tcp:8080`: o redirecionamento do adb atende bem uma requisição por vez, mas engasga quando o dashboard dispara várias em paralelo, e o app acusa timeout mesmo com a API respondendo rápido.
 
 ## Executar em celular Android
 
@@ -85,6 +151,17 @@ flutter run -d ID_DO_DISPOSITIVO --dart-define=API_BASE_URL=http://IP_DO_COMPUTA
 
 O endereço `10.0.2.2` funciona somente no emulador. Em celular físico, use um IP alcançável pelo aparelho.
 
+### Liberar a API para a rede Wi-Fi
+
+O celular acessa a API pelo IP do computador na rede local, então o Windows precisa aceitar conexões na porta `8080`. Em um PowerShell **como administrador**:
+
+```powershell
+Set-NetConnectionProfile -InterfaceAlias "Wi-Fi" -NetworkCategory Private
+New-NetFirewallRule -DisplayName "AusterAgX API 8080" -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow -Profile Private
+```
+
+Marque como privada apenas a rede de casa. Confira no navegador do celular: `http://IP_DO_COMPUTADOR:8080/actuator/health` deve mostrar `"status":"UP"`. Redes institucionais costumam isolar os aparelhos entre si; nesse caso, use o roteador do próprio celular.
+
 ## Gerar e instalar APK de desenvolvimento
 
 ```powershell
@@ -93,6 +170,14 @@ adb install -r build\app\outputs\flutter-apk\app-debug.apk
 ```
 
 O manifesto Android libera tráfego HTTP apenas no build `debug`. Para produção, use HTTPS.
+
+Sem cabo ou sem depuração USB, gere só para arm64 (o APK cai para menos da metade do tamanho) e envie o arquivo para o celular por Drive, WhatsApp ou e-mail:
+
+```powershell
+flutter build apk --debug --target-platform android-arm64 --dart-define=API_BASE_URL=http://IP_DO_COMPUTADOR:8080
+```
+
+O endereço da API fica gravado no APK: se o IP do computador mudar, gere o APK de novo. O `subir-ambiente.ps1 -Alvo celular` faz esse build com o IP atual do Wi-Fi.
 
 ## Configurar assinatura de produção
 
@@ -129,7 +214,11 @@ Sem todas as propriedades ou sem o arquivo de chave, o build falha explicitament
 ```powershell
 flutter analyze
 flutter test
+node scripts/gerar-modelos-er.mjs
+git status --short docs/modelo-er
 ```
+
+A última linha deve sair vazia: é a mesma verificação que a CI faz em cada push.
 
 Quando as dependências já estiverem resolvidas e não for desejado executar `pub get` novamente:
 
@@ -143,6 +232,40 @@ flutter test --no-pub
 ### Flutter informa que plugins exigem links simbólicos
 
 Habilite o Modo de Desenvolvedor do Windows e execute novamente `flutter pub get`.
+
+### O build Android recusa o caminho do projeto
+
+`Your project path contains non-ASCII characters` aparece quando o projeto está em uma pasta com acento, como `Área de Trabalho`. A solução definitiva é mover o projeto para um caminho só com ASCII e fora do OneDrive, por exemplo `C:\dev\auster-agx-mobile`. Como paliativo, desative a verificação só na sua máquina, sem alterar o repositório:
+
+```powershell
+Add-Content "$env:USERPROFILE\.gradle\gradle.properties" "`nandroid.overridePathCheck=true"
+```
+
+### O app acusa timeout no emulador, mas a API responde rápido
+
+Remova redirecionamentos antigos com `adb reverse --remove-all` e rode o app com `API_BASE_URL=http://10.0.2.2:8080`.
+
+### O `flutter run` perde a conexão logo após instalar
+
+Mensagens como `Error connecting to the service protocol` ou `Lost connection to device` indicam o servidor do adb em estado ruim. Reinicie-o e rode de novo:
+
+```powershell
+adb kill-server
+adb start-server
+adb devices
+```
+
+### O `adb devices` não lista o celular
+
+Confira, nesta ordem: **Depuração USB** ligada nas Opções do desenvolvedor, cabo em modo **Transferência de arquivos**, aviso "Permitir depuração USB?" aceito no celular, e um cabo que transmita dados. Se ainda assim não aparecer, instale o APK sem adb, como descrito acima.
+
+### A API falha com `Migration checksum mismatch`
+
+O volume do Postgres foi migrado com uma versão antiga de alguma migration. Em banco de desenvolvimento, recrie o volume: `docker compose down -v` e suba de novo. A massa de teste é reaplicada automaticamente.
+
+### O backend rodado fora do Docker falha com `cannot find symbol`
+
+`mvnw spring-boot:run -pl auster-erp` compila só o `auster-erp` e usa versões antigas de `auster-auth` e `auster-core` do `~/.m2`. Rode `.\mvnw.cmd install -DskipTests` na raiz do backend antes, ou use o `docker compose`, que compila os três módulos.
 
 ### O celular não alcança a API
 

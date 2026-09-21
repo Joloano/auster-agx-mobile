@@ -10,9 +10,9 @@
 ![Riverpod](https://img.shields.io/badge/estado-Riverpod-00ADEF)
 ![API REST](https://img.shields.io/badge/integra%C3%A7%C3%A3o-API%20REST-0261BD)
 ![Offline first](https://img.shields.io/badge/opera%C3%A7%C3%A3o-offline--first-00A36C)
-![Tests](https://img.shields.io/badge/testes-43%20aprovados-brightgreen)
+[![CI](https://github.com/Joloano/auster-agx-mobile/actions/workflows/ci.yml/badge.svg)](https://github.com/Joloano/auster-agx-mobile/actions/workflows/ci.yml)
 ![Versão](https://img.shields.io/badge/vers%C3%A3o-0.1.0%2B1-lightgrey)
-![Licença](https://img.shields.io/badge/uso-acad%C3%AAmico-lightgrey)
+[![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)](LICENSE)
 
 Aplicativo **Android em Flutter/Dart** para acompanhamento operacional de demandas agrícolas do AusterAgX. Oferece autenticação JWT, dashboard, consulta e atualização autorizada de demandas, cache SQLite isolado por usuário, fila de sincronização e captura local de GPS.
 
@@ -73,8 +73,9 @@ Capturas reais dos widgets Flutter em viewport mobile de 390 × 844 pontos, usan
 | **Conectividade** | `connectivity_plus`, política de falhas transitórias e sincronização automática |
 | **Recursos nativos** | `geolocator` e `permission_handler` para captura GPS e permissões Android |
 | **Interface** | Identidade AUSTER, logo oficial, Inter e Bebas Neue |
-| **Qualidade** | `flutter_test`, Mocktail, Flutter Lints e 43 testes automatizados |
+| **Qualidade** | `flutter_test`, Mocktail, Flutter Lints, 43 testes automatizados e CI no GitHub Actions |
 | **Modelagem** | brModelo Web, brModelo desktop e Mermaid |
+| **Ambiente** | Docker Compose (Postgres/PostGIS, API AusterAgX e massa de teste) e scripts PowerShell |
 
 ---
 
@@ -205,12 +206,13 @@ Modelo completo do domínio (28 entidades e 35 tabelas), matriz de cardinalidade
 
 | Requisito | Versão | Observação |
 |---|---|---|
-| Flutter SDK | 3.x no canal stable | `flutter doctor` sem erros para Android |
-| Dart SDK | `>=3.3.0 <4.0.0` | Acompanha o Flutter |
+| Flutter SDK | 3.38.4 ou superior, canal stable | Desenvolvido e validado na CI com 3.47.4 |
+| Dart SDK | 3.11 ou superior | Acompanha o Flutter; exigido pelas dependências do `pubspec.lock` |
 | Android SDK | API 21 ou superior | Android Studio ou command-line tools |
 | JDK | 17 | Exigido pelo Android Gradle Plugin |
 | Node.js | 18 ou superior | Somente para regenerar os modelos ER |
-| API AusterAgX | Instância acessível | O aplicativo não embarca dados de demonstração |
+| Docker Desktop | Com Docker Compose v2 | Sobe banco, API e massa de teste localmente |
+| Backend AusterAgX | Cópia local de `github.com/AusterTec/AusterAgX` | Exige acesso da AusterTec; o código não é versionado aqui |
 
 ---
 
@@ -225,6 +227,24 @@ git clone https://github.com/Joloano/auster-agx-mobile.git
 cd auster-agx-mobile
 flutter pub get
 ```
+
+### Ambiente completo com um comando
+
+Com a cópia do backend em `..\AusterAgX-Mobile-Reference\backend` (ou outro caminho em `AUSTERAGX_BACKEND_DIR`, no `.env`):
+
+```powershell
+.\scripts\dev\subir-ambiente.ps1                  # banco + API + massa de teste + app no emulador
+.\scripts\dev\subir-ambiente.ps1 -Alvo celular    # mesmo ambiente + APK apontando para o IP Wi-Fi
+.\scripts\dev\diagnosticar-api.ps1                # confere API, login, massa de teste e dispositivos
+```
+
+Para subir só o ambiente, sem o app: `docker compose up -d --build`. A massa de teste do backend é aplicada apenas quando o banco está vazio, e a API fica em `http://localhost:8080`.
+
+| Usuário (senha `123456`) | Perfil | No aplicativo |
+|---|---|---|
+| `matheus@austertec.com` | `SUPER_ADMIN` | Consulta e altera status, dados e mapeamento |
+| `bruno.carvalho@austertec.com` | `USUARIO_TECNICO_PRESCRICAO` | Consulta e altera status, dados e mapeamento |
+| `carla.nogueira@austertec.com` | `USUARIO_CONSULTOR_CTV` | Somente consulta |
 
 ### App mobile no emulador Android
 
@@ -249,7 +269,7 @@ Computador, celular e API devem estar na mesma rede. `10.0.2.2` funciona apenas 
 | `API_TIMEOUT_MS` | Timeout HTTP em milissegundos; padrão `10000` |
 | `ALLOW_INSECURE_HTTP` | `true` em debug e `false` em release por padrão |
 
-O valor de `API_BASE_URL` deve ser uma origem sem caminho, query, fragmento ou credenciais. O app não inclui usuários de demonstração: use uma conta válida do ambiente AusterAgX. Se a senha for provisória, a troca será exigida automaticamente.
+O valor de `API_BASE_URL` deve ser uma origem sem caminho, query, fragmento ou credenciais. O app não embarca usuários de demonstração: as contas acima vêm da massa de teste do backend. Se a senha for provisória, a troca será exigida automaticamente.
 
 ### APK de desenvolvimento
 
@@ -291,6 +311,8 @@ flutter test
 
 A suíte cobre configuração segura da API, SQLite, isolamento de usuário, fila offline, tradução de erros, refresh JWT, sincronização, repositórios, mapeamento dos DTOs reais e proteção das rotas/widgets de autenticação.
 
+A [CI](.github/workflows/ci.yml) roda em todo push para `main` e em pull requests: `flutter analyze`, `flutter test` e a regeneração dos modelos de dados, que falha se algum artefato de `docs/modelo-er` estiver desatualizado.
+
 ---
 
 ## Demonstração acadêmica
@@ -311,23 +333,28 @@ A suíte cobre configuração segura da API, SQLite, isolamento de usuário, fil
 ## Estrutura do repositório
 
 ```text
-android/            projeto, permissões, ícones e assinatura Android
-assets/             logo oficial e fontes AUSTER
-docs/               contratos, segurança, issues, diagramas e screenshots
-docs/modelo-er/     modelos conceitual, lógico e físico e seus artefatos
-docs/issues/        issues do MVP versionadas junto do código
-lib/                código Dart do aplicativo
-scripts/            gerador dos modelos ER e publicação do repositório
-test/               testes unitários e de widgets
-.env.example        referência das opções locais de API
-.gitattributes      normalização de quebras de linha e arquivos binários
+.github/workflows/    integração contínua: análise, testes e modelos em dia
+android/              projeto, permissões, ícones e assinatura Android
+assets/               logo oficial e fontes AUSTER
+docs/                 contratos, segurança, issues, diagramas e screenshots
+docs/modelo-er/       modelos conceitual, lógico e físico e seus artefatos
+docs/issues/          issues do MVP versionadas junto do código
+lib/                  código Dart do aplicativo
+scripts/              gerador dos modelos ER e publicação do repositório
+scripts/dev/          subida do ambiente local e diagnóstico da API
+test/                 testes unitários e de widgets
+.env.example          opções do app e do docker compose
+.gitattributes        normalização de quebras de linha e arquivos binários
 analysis_options.yaml regras de lint aplicadas ao código Dart
-INSTALACAO.md       guia completo de ambiente e execução
-README.md           apresentação e documentação principal
-pubspec.yaml        dependências, assets e metadados Flutter
+docker-compose.yml    banco, API AusterAgX e massa de teste para desenvolvimento
+INSTALACAO.md         guia completo de ambiente e execução
+LICENSE               licença MIT do código
+NOTICE                o que fica fora da licença: marca, API e fontes
+README.md             apresentação e documentação principal
+pubspec.yaml          dependências, assets e metadados Flutter
 ```
 
-Como este repositório é exclusivamente mobile, o projeto Flutter permanece na raiz. Backend e banco transacional não são copiados para pastas locais: o aplicativo consome a API AusterAgX já mantida pelo sistema oficial.
+O repositório contém um único sistema, o aplicativo, por isso o projeto Flutter fica na raiz, como gera o `flutter create`. O backend não é copiado para cá: o `docker-compose.yml` constrói a API a partir da cópia local do repositório oficial da AusterTec.
 
 ---
 
@@ -347,4 +374,4 @@ Como este repositório é exclusivamente mobile, o projeto Flutter permanece na 
 
 Projeto acadêmico desenvolvido por **Joloano** ([@Joloano](https://github.com/Joloano)) no Colégio Politécnico da UFSM.
 
-O código deste repositório é disponibilizado para fins de estudo e avaliação acadêmica. A marca AUSTER, a identidade visual, a API AusterAgX e os dados operacionais pertencem à AUSTER Tecnologia e não são licenciados por este repositório. Nenhum dado real de cliente é versionado aqui.
+O código deste repositório é distribuído sob a [licença MIT](LICENSE). A licença cobre somente o código e a documentação escritos para o projeto: a marca AUSTER, a identidade visual, os ícones, a API AusterAgX e as fontes sob SIL OFL 1.1 ficam fora dela, como detalha o [NOTICE](NOTICE). Nenhum dado real de cliente é versionado aqui.
