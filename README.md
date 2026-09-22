@@ -252,6 +252,15 @@ Para subir só o ambiente, sem o app: `docker compose up -d --build`. A massa de
 flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8080
 ```
 
+Se o Pixel 8 não aceitar digitação, habilite **Enable keyboard input** nas configurações avançadas do AVD e execute:
+
+```powershell
+adb shell settings put secure show_ime_with_hard_keyboard 1
+adb shell ime set com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME
+```
+
+ANRs de `System UI` após um Quick Boot indicam snapshot instável. Use **Cold Boot Now** no Device Manager antes de recriar ou apagar o AVD. O procedimento completo está em [Solução de problemas](INSTALACAO.md#o-teclado-não-responde-no-emulador).
+
 ### App mobile em celular físico
 
 ```powershell

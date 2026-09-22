@@ -251,6 +251,26 @@ Habilite o Modo de Desenvolvedor do Windows e execute novamente `flutter pub get
 Add-Content "$env:USERPROFILE\.gradle\gradle.properties" "`nandroid.overridePathCheck=true"
 ```
 
+### O teclado não responde no emulador
+
+1. No Device Manager do Android Studio, abra **Edit** no AVD, acesse **Show Advanced Settings** e mantenha **Enable keyboard input** habilitado.
+2. Permita que o teclado virtual apareça mesmo quando o emulador detectar o teclado físico e selecione o Gboard:
+
+```powershell
+adb shell settings put secure show_ime_with_hard_keyboard 1
+adb shell ime set com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME
+```
+
+3. Se aparecer `Process system isn't responding` ou `System UI isn't responding`, escolha **Wait**. Se o aviso retornar, execute **Cold Boot Now** no menu do AVD. Isso descarta somente o snapshot rápido e preserva aplicativos e dados.
+
+Também é possível fazer o cold boot pelo terminal, substituindo o nome do AVD:
+
+```powershell
+emulator -avd NOME_DO_AVD -no-snapshot-load
+```
+
+Evite **Wipe Data** como primeira tentativa, pois ele apaga o estado do aparelho virtual e normalmente não é necessário para recuperar o teclado.
+
 ### O app acusa timeout no emulador, mas a API responde rápido
 
 Remova redirecionamentos antigos com `adb reverse --remove-all` e rode o app com `API_BASE_URL=http://10.0.2.2:8080`.
