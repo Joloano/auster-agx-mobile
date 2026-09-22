@@ -1,7 +1,7 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart' as permissions;
 
-import '../../../core/errors/app_exception.dart';
+import '../../core/errors/app_exception.dart';
 import '../local/app_database.dart';
 import '../models/location_capture.dart';
 
