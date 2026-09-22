@@ -30,6 +30,7 @@ void main() {
       ),
       tokenStorage: tokenStore,
       sessionEvents: sessionEvents,
+      retryDelay: Duration.zero,
     );
   });
 
@@ -116,6 +117,61 @@ void main() {
     expect(refreshCalls, 1);
     expect(tokenStore.saved?.accessToken, 'new-access-token');
     expect(tokenStore.saved?.refreshToken, 'new-refresh-token');
+  });
+
+  test('repete leitura uma vez quando a falha e transitoria', () async {
+    var calls = 0;
+    client.dio.httpClientAdapter = _StubAdapter((options) {
+      calls++;
+      if (calls == 1) {
+        throw DioException.connectionError(
+          requestOptions: options,
+          reason: 'conexao interrompida',
+        );
+      }
+      return _jsonResponse(200, {'ok': true});
+    });
+
+    final response = await client.dio.get<Map<String, dynamic>>('/protected');
+
+    expect(response.data, {'ok': true});
+    expect(calls, 2);
+  });
+
+  test('nao repete escrita quando a falha e transitoria', () async {
+    var calls = 0;
+    client.dio.httpClientAdapter = _StubAdapter((options) {
+      calls++;
+      throw DioException.connectionError(
+        requestOptions: options,
+        reason: 'conexao interrompida',
+      );
+    });
+
+    await expectLater(
+      client.dio.patch<void>('/protected', data: {'status': 'AGENDADA'}),
+      throwsA(isA<DioException>()),
+    );
+
+    expect(calls, 1);
+  });
+
+  test('limita a uma repeticao quando a leitura continua falhando', () async {
+    var calls = 0;
+    client.dio.httpClientAdapter = _StubAdapter((options) {
+      calls++;
+      throw DioException.connectionError(
+        requestOptions: options,
+        reason: 'conexao interrompida',
+      );
+    });
+
+    await expectLater(
+      client.dio.get<void>('/protected'),
+      throwsA(isA<DioException>()),
+    );
+
+    expect(calls, 2);
   });
 }
 

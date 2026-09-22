@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../core/auth/auth_session_events.dart';
 import '../../core/config/app_config.dart';
 import '../../core/errors/app_exception.dart';
+import '../../core/network/api_failure_policy.dart';
 import '../models/auth_tokens.dart';
 import 'token_storage.dart';
 
@@ -11,8 +12,12 @@ class ApiClient {
     required AppConfig config,
     required TokenStore tokenStorage,
     required AuthSessionEvents sessionEvents,
+    Duration retryDelay = const Duration(milliseconds: 350),
+    int maxReadRetries = 1,
   })  : _sessionEvents = sessionEvents,
         _tokenStorage = tokenStorage,
+        _retryDelay = retryDelay,
+        _maxReadRetries = maxReadRetries,
         dio = Dio(
           BaseOptions(
             baseUrl: config.apiBaseUrl,
@@ -22,6 +27,13 @@ class ApiClient {
             headers: const {'Accept': 'application/json'},
           ),
         ) {
+    if (maxReadRetries < 0) {
+      throw ArgumentError.value(
+        maxReadRetries,
+        'maxReadRetries',
+        'must not be negative',
+      );
+    }
     dio.interceptors.add(
       InterceptorsWrapper(onRequest: _onRequest, onError: _onError),
     );
@@ -30,7 +42,11 @@ class ApiClient {
   final Dio dio;
   final TokenStore _tokenStorage;
   final AuthSessionEvents _sessionEvents;
+  final Duration _retryDelay;
+  final int _maxReadRetries;
   Future<void>? _refreshInFlight;
+
+  static const _retryCountKey = 'transientReadRetryCount';
 
   Future<void> _onRequest(
     RequestOptions options,
@@ -86,7 +102,34 @@ class ApiClient {
       }
     }
 
+    if (_shouldRetryRead(error)) {
+      request.extra[_retryCountKey] =
+          (request.extra[_retryCountKey] as int? ?? 0) + 1;
+      if (_retryDelay > Duration.zero) {
+        await Future<void>.delayed(_retryDelay);
+      }
+      try {
+        final response = await dio.fetch<dynamic>(request);
+        handler.resolve(response);
+      } on DioException catch (retryError) {
+        handler.reject(retryError);
+      } catch (retryError) {
+        handler.reject(
+          DioException(requestOptions: request, error: retryError),
+        );
+      }
+      return;
+    }
+
     handler.next(error);
+  }
+
+  bool _shouldRetryRead(DioException error) {
+    final method = error.requestOptions.method.toUpperCase();
+    if (method != 'GET' && method != 'HEAD') return false;
+
+    final retries = error.requestOptions.extra[_retryCountKey] as int? ?? 0;
+    return retries < _maxReadRetries && ApiFailurePolicy.isTransient(error);
   }
 
   Future<void> _refreshTokens() {

@@ -33,7 +33,7 @@ class AppConfig {
     );
     const timeoutMs = int.fromEnvironment(
       'API_TIMEOUT_MS',
-      defaultValue: 10000,
+      defaultValue: 30000,
     );
     const allowInsecureHttp = bool.fromEnvironment(
       'ALLOW_INSECURE_HTTP',
