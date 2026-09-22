@@ -114,6 +114,16 @@ $sdkbin = "$env:ANDROID_HOME\cmdline-tools\latest\bin"
 emulator -accel-check
 ```
 
+O `avdmanager` cria o AVD com `hw.keyboard=no` no `config.ini`. Com isso, o Android nem registra um teclado físico e o teclado do computador não digita nos campos do app. O `scripts/dev/subir-ambiente.ps1` corrige o arquivo e reinicia o emulador a frio quando precisa. Para corrigir à mão:
+
+```powershell
+$config = "$env:USERPROFILE\.android\avd\auster_test.avd\config.ini"
+(Get-Content $config) -replace '^hw\.keyboard\s*=.*', 'hw.keyboard=yes' | Set-Content $config
+emulator -avd auster_test -no-snapshot-load
+```
+
+Para conferir, `adb shell dumpsys input` deve listar um teclado físico, como `AT Translated Set 2 keyboard`.
+
 Depois:
 
 1. Inicie o ambiente local ou outra instância da API.

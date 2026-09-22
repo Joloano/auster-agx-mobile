@@ -5,7 +5,8 @@ Sobe o ambiente de desenvolvimento do AusterAgX Mobile.
 .DESCRIPTION
 1. Sobe banco, API e massa de teste com o docker-compose.yml da raiz.
 2. Espera a API ficar pronta e a massa de teste existir.
-3. Emulador: sobe o AVD, se preciso, e executa o app com flutter run.
+3. Emulador: habilita o teclado fisico no AVD, sobe o emulador, se preciso,
+   e executa o app com flutter run.
    Celular: gera o APK de debug apontando para o IP Wi-Fi do computador e
    instala pelo cabo quando houver um aparelho conectado.
 
@@ -96,6 +97,53 @@ function EmuladorOnline {
     return ((& $adb devices) -join "`n") -match 'emulator-\d+\s+device'
 }
 
+function ArquivoConfigAvd {
+    $pastas = @()
+    if ($env:ANDROID_AVD_HOME) { $pastas += $env:ANDROID_AVD_HOME }
+    if ($env:ANDROID_USER_HOME) { $pastas += (Join-Path $env:ANDROID_USER_HOME 'avd') }
+    $pastas += (Join-Path $env:USERPROFILE '.android\avd')
+    foreach ($pasta in $pastas) {
+        $ini = Join-Path $pasta "$Emulador.ini"
+        if (-not (Test-Path -LiteralPath $ini)) { continue }
+        # O <nome>.ini aponta para a pasta real do AVD, que pode estar fora do padrao.
+        $caminho = Select-String -LiteralPath $ini -Pattern '^path=(.+)$' | Select-Object -First 1
+        $pastaAvd = if ($caminho) { $caminho.Matches[0].Groups[1].Value.Trim() } else { Join-Path $pasta "$Emulador.avd" }
+        $config = Join-Path $pastaAvd 'config.ini'
+        if (Test-Path -LiteralPath $config) { return $config }
+    }
+    return $null
+}
+
+function GarantirTecladoFisico {
+    # O avdmanager cria o AVD com hw.keyboard=no. Assim o Android nem registra um
+    # teclado fisico e o teclado do computador nao digita nos campos do app.
+    # Devolve $true quando precisou alterar o config.ini.
+    $config = ArquivoConfigAvd
+    if (-not $config) {
+        Aviso "config.ini do AVD $Emulador nao encontrado; o teclado do computador pode nao funcionar no emulador."
+        return $false
+    }
+    $linhas = @(Get-Content -LiteralPath $config)
+    $alterou = $false
+    $novas = foreach ($linha in $linhas) {
+        if ($linha -match '^\s*hw\.keyboard\s*=') {
+            if ($linha -notmatch '=\s*yes\s*$') { $alterou = $true }
+            'hw.keyboard=yes'
+        } else {
+            $linha
+        }
+    }
+    if (-not ($linhas -match '^\s*hw\.keyboard\s*=')) {
+        $novas = @($novas) + 'hw.keyboard=yes'
+        $alterou = $true
+    }
+    if ($alterou) {
+        [System.IO.File]::WriteAllLines($config, [string[]] $novas)
+        Ok "teclado fisico habilitado em $config"
+    }
+    return $alterou
+}
+
 function CelularConectado {
     foreach ($linha in (& $adb devices)) {
         if ($linha -match '^(\S+)\s+device$' -and $Matches[1] -notlike 'emulator-*') {
@@ -144,12 +192,22 @@ if (-not (Test-Path $adb)) {
 
 if ($Alvo -eq 'emulador') {
     Etapa '2. Emulador Android'
+    $tecladoAlterado = GarantirTecladoFisico
+    if ($tecladoAlterado -and (EmuladorOnline)) {
+        # A configuracao de hardware so vale num boot novo do emulador.
+        Write-Host '  reiniciando o emulador para aplicar o teclado fisico...'
+        & $adb emu kill *> $null
+        [void] (Aguardar { -not (EmuladorOnline) } 60 'o emulador fechar')
+    }
     if (-not (EmuladorOnline)) {
         if (-not (Test-Path $emuladorExe)) {
             Falhar "emulador nao encontrado em $emuladorExe. Veja a secao de emulador no INSTALACAO.md."
         }
+        $argumentosEmulador = @('-avd', $Emulador)
+        # O snapshot guarda o hardware antigo; depois da troca, o boot precisa ser a frio.
+        if ($tecladoAlterado) { $argumentosEmulador += '-no-snapshot-load' }
         Write-Host "  subindo o AVD $Emulador..."
-        Start-Process -FilePath $emuladorExe -ArgumentList @('-avd', $Emulador)
+        Start-Process -FilePath $emuladorExe -ArgumentList $argumentosEmulador
         if (-not (Aguardar { EmuladorOnline } 180 'o emulador conectar ao adb')) {
             Falhar "o emulador $Emulador nao ficou online. Confira o nome com: flutter emulators"
         }
