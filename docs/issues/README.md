@@ -12,7 +12,7 @@ As issues deste projeto são versionadas como arquivos Markdown neste diretório
 | [006](006-diagramas-readme-brmodelo.md) | Diagramas conceitual e lógico do README no padrão brModelo | Concluída |
 | [007](007-infraestrutura-desenvolvimento.md) | Licença, ambiente com um comando, scripts versionados e CI | Concluída |
 | [008](008-ci-node24-ubuntu-fixo.md) | CI em Node.js 24 e com imagem do Ubuntu fixa | Concluída |
-| [009](009-teclado-fisico-emulador.md) | Teclado do computador no emulador Android | Aberta |
+| [009](009-teclado-fisico-emulador.md) | Teclado do computador no emulador Android | Concluída |
 
 ## Publicar no GitHub Issues
 

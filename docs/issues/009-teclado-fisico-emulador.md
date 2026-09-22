@@ -19,4 +19,4 @@ Com `hw.keyboard=yes` e um boot a frio, o `dumpsys input` passa a listar `AT Tra
 
 ## Status
 
-Aberta em 22 de setembro de 2026.
+Concluída em 22 de setembro de 2026.
