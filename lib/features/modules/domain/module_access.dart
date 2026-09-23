@@ -85,3 +85,20 @@ bool canCreateFarmOrField(String profile) {
     'USUARIO_ASSISTENTE_ATV',
   }.contains(profile);
 }
+
+bool canCreateOrder(String profile) {
+  return const {
+    'SUPER_ADMIN',
+    'USUARIO_TECNICO_PRESCRICAO',
+    'USUARIO_CONSULTOR_CTV',
+    'USUARIO_GESTOR_ADMINISTRATIVO',
+  }.contains(profile);
+}
+
+bool canUpdateOrder(String profile) {
+  return const {
+    'SUPER_ADMIN',
+    'USUARIO_TECNICO_PRESCRICAO',
+    'USUARIO_GESTOR_ADMINISTRATIVO',
+  }.contains(profile);
+}

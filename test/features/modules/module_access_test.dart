@@ -28,4 +28,17 @@ void main() {
     expect(canCreateDemanda('USUARIO_CONSULTOR_CTV'), isTrue);
     expect(canCreateDemanda('USUARIO_ASSISTENTE_ATV'), isFalse);
   });
+
+  test('pedidos seguem a leitura administrativa do sistema web', () {
+    expect(
+      canAccessModule('USUARIO_GESTOR_ADMINISTRATIVO', AppModuleId.pedidos),
+      isTrue,
+    );
+    expect(
+      canAccessModule('USUARIO_CONSULTOR_CTV', AppModuleId.pedidos),
+      isFalse,
+    );
+    expect(canCreateOrder('USUARIO_CONSULTOR_CTV'), isTrue);
+    expect(canUpdateOrder('USUARIO_CONSULTOR_CTV'), isFalse);
+  });
 }

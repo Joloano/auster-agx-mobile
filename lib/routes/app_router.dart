@@ -10,6 +10,9 @@ import '../features/authentication/presentation/login_screen.dart';
 import '../features/authentication/presentation/profile_screen.dart';
 import '../features/authentication/presentation/reset_password_screen.dart';
 import '../features/authentication/presentation/users_screen.dart';
+import '../features/commercial/presentation/new_demand_screen.dart';
+import '../features/commercial/presentation/order_details_screen.dart';
+import '../features/commercial/presentation/orders_screen.dart';
 import '../features/dashboard/presentation/dashboard_screen.dart';
 import '../features/demandas/presentation/demanda_details_screen.dart';
 import '../features/demandas/presentation/demandas_screen.dart';
@@ -66,6 +69,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           user.perfil != 'SUPER_ADMIN') {
         return '/modulos';
       }
+      if (currentLocation == '/demandas/nova' &&
+          !canCreateDemanda(user.perfil)) {
+        return '/modulos';
+      }
+      if (currentLocation.startsWith('/demandas') &&
+          currentLocation != '/demandas/nova' &&
+          !canAccessModule(user.perfil, AppModuleId.demandas)) {
+        return '/modulos';
+      }
+      if (currentLocation.startsWith('/modulos/pedidos') &&
+          !canAccessModule(user.perfil, AppModuleId.pedidos)) {
+        return '/modulos';
+      }
       final ruralLocation = currentLocation.startsWith('/modulos/fazendas') ||
           currentLocation.startsWith('/modulos/talhoes');
       if (ruralLocation &&
@@ -113,6 +129,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 builder: (context, state) => const DemandasScreen(),
                 routes: [
                   GoRoute(
+                    path: 'nova',
+                    builder: (context, state) => NewDemandScreen(
+                      initialOrderId: state.uri.queryParameters['pedidoId'],
+                    ),
+                  ),
+                  GoRoute(
                     path: ':id',
                     builder: (context, state) {
                       final id = state.pathParameters['id']!;
@@ -157,6 +179,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                         path: ':id',
                         builder: (context, state) => FarmDetailsScreen(
                           farmId: state.pathParameters['id']!,
+                        ),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'pedidos',
+                    builder: (context, state) => const OrdersScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) => OrderDetailsScreen(
+                          orderId: state.pathParameters['id']!,
                         ),
                       ),
                     ],

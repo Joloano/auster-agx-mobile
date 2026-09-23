@@ -30,6 +30,14 @@ const mobileModuleCatalog = <MobileModuleDefinition>[
     section: 'Operação',
   ),
   MobileModuleDefinition(
+    id: AppModuleId.pedidos,
+    title: 'Pedidos',
+    subtitle: 'Contratos e demandas relacionadas',
+    path: '/modulos/pedidos',
+    icon: Icons.receipt_long_rounded,
+    section: 'Operação',
+  ),
+  MobileModuleDefinition(
     id: AppModuleId.fazendas,
     title: 'Fazendas',
     subtitle: 'Propriedades, talhões e equipes',

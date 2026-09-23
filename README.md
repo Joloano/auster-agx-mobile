@@ -146,6 +146,13 @@ Capturas reais dos widgets Flutter em viewport mobile de 390 × 844 pontos, usan
    - Gestão de colaboradores, grupos de talhões, culturas e equipamentos associados à fazenda.
    - Paginação e pesquisa conectadas diretamente aos endpoints oficiais.
 
+12. **Pedidos e criação de demandas**
+   - Consulta, cadastro, edição e desativação de pedidos conforme as permissões da API.
+   - Criação de demandas Smart-N, Smart-Brake e Smart-Seeding vinculadas ao pedido.
+   - Sensoriamento inicial por drone ou satélite quando exigido pelo tipo da demanda.
+   - Edição do resumo, gestão de grupos e desativação no detalhe da demanda.
+   - Proteção de rotas equivalente aos perfis configurados no sistema web.
+
 ---
 
 ## Perfis de acesso
@@ -185,6 +192,7 @@ lib/
     authentication/            login e troca de senha
     dashboard/                 visão geral operacional
     demandas/                  lista e detalhe
+    commercial/                pedidos e criação/manutenção de demandas
     location/                  captura de localização
     modules/                   permissões e composição dos módulos mobile
     rural/                     clientes, fazendas, talhões e vínculos de campo

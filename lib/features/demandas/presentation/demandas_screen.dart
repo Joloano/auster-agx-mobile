@@ -8,7 +8,9 @@ import '../../../data/models/dashboard_models.dart';
 import '../../../data/models/demanda_status_rules.dart';
 import '../../../widgets/auster_error_state.dart';
 import '../../../widgets/auster_page_header.dart';
+import '../../authentication/presentation/auth_controller.dart';
 import '../../dashboard/providers/dashboard_providers.dart';
+import '../../modules/domain/module_access.dart';
 
 class DemandasScreen extends ConsumerWidget {
   const DemandasScreen({super.key});
@@ -16,6 +18,19 @@ class DemandasScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final demandas = ref.watch(dashboardDemandasProvider);
+    final profile = ref.watch(authControllerProvider).valueOrNull?.perfil ?? '';
+    final header = AusterPageHeader(
+      icon: Icons.assignment_rounded,
+      title: 'DEMANDAS',
+      subtitle: 'Acompanhamento operacional por etapa e status.',
+      trailing: canCreateDemanda(profile)
+          ? IconButton.filled(
+              tooltip: 'Criar demanda',
+              onPressed: () => context.go('/demandas/nova'),
+              icon: const Icon(Icons.add_task_rounded),
+            )
+          : null,
+    );
 
     return RefreshIndicator(
       onRefresh: () => _refreshDemandas(ref),
@@ -25,14 +40,10 @@ class DemandasScreen extends ConsumerWidget {
             return ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(16),
-              children: const [
-                AusterPageHeader(
-                  icon: Icons.assignment_rounded,
-                  title: 'DEMANDAS',
-                  subtitle: 'Acompanhamento operacional por etapa e status.',
-                ),
-                SizedBox(height: 48),
-                _CenteredMessage('Nenhuma demanda sincronizada.'),
+              children: [
+                header,
+                const SizedBox(height: 48),
+                const _CenteredMessage('Nenhuma demanda sincronizada.'),
               ],
             );
           }
@@ -40,11 +51,7 @@ class DemandasScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              const AusterPageHeader(
-                icon: Icons.assignment_rounded,
-                title: 'DEMANDAS',
-                subtitle: 'Acompanhamento operacional por etapa e status.',
-              ),
+              header,
               const SizedBox(height: 22),
               for (final grupo in [
                 ...grupoOperacionalOrder,
@@ -98,11 +105,7 @@ class DemandasScreen extends ConsumerWidget {
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.all(16),
           children: [
-            const AusterPageHeader(
-              icon: Icons.assignment_rounded,
-              title: 'DEMANDAS',
-              subtitle: 'Acompanhamento operacional por etapa e status.',
-            ),
+            header,
             const SizedBox(height: 48),
             AusterErrorState(
               message: userFacingErrorMessage(error),
