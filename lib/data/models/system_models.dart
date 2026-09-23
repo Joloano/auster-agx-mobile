@@ -62,7 +62,7 @@ class RemoteSensing {
 class RemoteSensingUpdateInput {
   const RemoteSensingUpdateInput({
     required this.source,
-    required this.imageDate,
+    this.imageDate,
     this.pilotId,
     this.satellite,
     this.quality,
@@ -72,7 +72,7 @@ class RemoteSensingUpdateInput {
   });
 
   final String source;
-  final String imageDate;
+  final String? imageDate;
   final String? pilotId;
   final String? satellite;
   final String? quality;
@@ -82,7 +82,7 @@ class RemoteSensingUpdateInput {
 
   JsonMap toJson() => _withoutNulls({
         'fonte': source,
-        'dataImagem': imageDate,
+        'dataImagem': _text(imageDate),
         'pilotoId': _text(pilotId),
         'satelite': _text(satellite),
         'qualidade': _text(quality),

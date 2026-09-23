@@ -57,4 +57,18 @@ void main() {
     expect(canManageAgronomicData('USUARIO_TECNICO_PRESCRICAO'), isTrue);
     expect(canManageAgronomicData('USUARIO_GESTOR_ADMINISTRATIVO'), isFalse);
   });
+
+  test('operações de mapeamento respeitam os papéis da API', () {
+    expect(canManageMappingData('SUPER_ADMIN'), isTrue);
+    expect(canManageMappingData('USUARIO_TECNICO_PRESCRICAO'), isTrue);
+    expect(canManageMappingData('USUARIO_ASSISTENTE_ATV'), isFalse);
+    expect(canOperateMapping('USUARIO_ASSISTENTE_ATV'), isTrue);
+    expect(canOperateMapping('USUARIO_CONSULTOR_CTV'), isFalse);
+  });
+
+  test('somente perfis administrativos gerenciam reports', () {
+    expect(canManageFeedback('SUPER_ADMIN'), isTrue);
+    expect(canManageFeedback('USUARIO_TECNICO_PRESCRICAO'), isTrue);
+    expect(canManageFeedback('USUARIO_GESTOR_ADMINISTRATIVO'), isFalse);
+  });
 }

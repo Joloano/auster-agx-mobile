@@ -97,7 +97,7 @@ class DemandCreateInput {
 class RemoteSensingCreateInput {
   const RemoteSensingCreateInput({
     required this.source,
-    required this.imageDate,
+    this.imageDate,
     this.pilotId,
     this.satellite,
     this.originMappingId,
@@ -108,7 +108,7 @@ class RemoteSensingCreateInput {
   });
 
   final String source;
-  final String imageDate;
+  final String? imageDate;
   final String? pilotId;
   final String? satellite;
   final String? originMappingId;
@@ -119,7 +119,7 @@ class RemoteSensingCreateInput {
 
   JsonMap toJson() => {
         'fonte': source,
-        'dataImagem': imageDate,
+        if (_hasText(imageDate)) 'dataImagem': imageDate,
         if (_hasText(pilotId)) 'pilotoId': pilotId,
         if (_hasText(satellite)) 'satelite': satellite,
         if (_hasText(originMappingId)) 'mapeamentoOrigemId': originMappingId,

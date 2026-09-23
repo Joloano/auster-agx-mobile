@@ -26,6 +26,9 @@ import '../features/rural/presentation/farm_details_screen.dart';
 import '../features/rural/presentation/farms_screen.dart';
 import '../features/rural/presentation/field_details_screen.dart';
 import '../features/shell/app_shell.dart';
+import '../features/system/presentation/audit_screen.dart';
+import '../features/system/presentation/help_screen.dart';
+import '../features/system/presentation/mapping_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final routerRefresh = _RouterRefreshNotifier();
@@ -90,6 +93,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       }
       if (currentLocation.startsWith('/modulos/estadios-fenologicos') &&
           !canAccessModule(user.perfil, AppModuleId.estadiosFenologicos)) {
+        return '/modulos';
+      }
+      if (currentLocation.startsWith('/modulos/mapeamento') &&
+          !canAccessModule(user.perfil, AppModuleId.mapeamento)) {
+        return '/modulos';
+      }
+      if (currentLocation.startsWith('/modulos/auditoria') &&
+          !canAccessModule(user.perfil, AppModuleId.auditoria)) {
+        return '/modulos';
+      }
+      if (currentLocation.startsWith('/modulos/ajuda') &&
+          !canAccessModule(user.perfil, AppModuleId.ajuda)) {
         return '/modulos';
       }
       final ruralLocation = currentLocation.startsWith('/modulos/fazendas') ||
@@ -213,6 +228,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     path: 'estadios-fenologicos',
                     builder: (context, state) =>
                         const PhenologicalStagesScreen(),
+                  ),
+                  GoRoute(
+                    path: 'mapeamento',
+                    builder: (context, state) => MappingScreen(
+                      initialRemoteSensingId:
+                          state.uri.queryParameters['sensoriamentoId'],
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'auditoria',
+                    builder: (context, state) => const AuditScreen(),
+                  ),
+                  GoRoute(
+                    path: 'ajuda',
+                    builder: (context, state) => const HelpScreen(),
                   ),
                   GoRoute(
                     path: 'talhoes/:id',

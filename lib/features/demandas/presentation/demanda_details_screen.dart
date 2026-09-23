@@ -610,6 +610,10 @@ class _SensoriamentoSection extends StatelessWidget {
                     sensoriamento.status.replaceAll('_', ' '),
                   ].whereType<String>().join(' · '),
                 ),
+                trailing: const Icon(Icons.chevron_right_rounded),
+                onTap: () => context.go(
+                  '/modulos/mapeamento?sensoriamentoId=${sensoriamento.id}',
+                ),
               ),
         ],
       ),
