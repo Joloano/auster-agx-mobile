@@ -163,15 +163,16 @@ lib/
     network/                   conectividade e política de falhas
   data/
     local/                     SQLite e isolamento por usuário
-    models/                    DTOs e modelos imutáveis
+    models/                    DTOs, paginação e modelos imutáveis
     repositorios/              coordenação API/cache
-    services/                  clientes REST, tokens, GPS e usuário
+    services/                  clientes REST, operações, tokens, GPS e usuário
     sync/                      fila e serviço de sincronização
   features/
     authentication/            login e troca de senha
     dashboard/                 visão geral operacional
     demandas/                  lista e detalhe
     location/                  captura de localização
+    modules/                   permissões e composição dos módulos mobile
     shell/                     navegação principal
   widgets/                     componentes AUSTER compartilhados
 ```
