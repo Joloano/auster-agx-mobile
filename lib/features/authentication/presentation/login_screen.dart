@@ -100,6 +100,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     : const Icon(Icons.login_rounded),
                 label: Text(auth.isLoading ? 'Entrando...' : 'Entrar'),
               ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: auth.isLoading
+                      ? null
+                      : () => context.go('/esqueci-senha'),
+                  child: const Text('Esqueci minha senha'),
+                ),
+              ),
               if (auth.hasError) ...[
                 const SizedBox(height: 16),
                 AuthErrorMessage(

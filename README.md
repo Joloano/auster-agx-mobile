@@ -87,6 +87,8 @@ Capturas reais dos widgets Flutter em viewport mobile de 390 × 844 pontos, usan
    - Renovação coordenada de token para impedir múltiplos refreshes concorrentes.
    - Logout com revogação do refresh token no backend.
    - Restauração offline somente depois de uma sessão validada anteriormente.
+   - Recuperação e redefinição de senha com resposta neutra para não revelar contas cadastradas.
+   - Edição do próprio perfil com substituição atômica do JWT quando o e-mail muda.
 
 2. **Troca obrigatória de senha**
    - Bloqueio da navegação operacional quando `deveAlterarSenha = true`.
@@ -131,6 +133,11 @@ Capturas reais dos widgets Flutter em viewport mobile de 390 × 844 pontos, usan
    - Logo bicolor oficial, azul `#0261BD` e verde `#00B37B`.
    - Bebas Neue nos títulos e Inter no restante da interface.
    - Launcher Android gerado a partir do símbolo oficial.
+
+10. **Conta e administração**
+   - Central de módulos filtrada pelo perfil autenticado.
+   - Consulta, criação, edição, ativação e desativação de usuários pelo `SUPER_ADMIN`.
+   - Redefinição administrativa de senha temporária e troca de senha da própria conta.
 
 ---
 

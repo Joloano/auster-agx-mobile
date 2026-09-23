@@ -52,4 +52,8 @@ class AuthController extends AsyncNotifier<AuthUser?> {
         );
     state = AsyncData(user);
   }
+
+  void applyUser(AuthUser user) {
+    state = AsyncData(user);
+  }
 }

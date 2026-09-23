@@ -7,7 +7,7 @@ import '../../widgets/auster_logo.dart';
 import '../../widgets/sync_status_bar.dart';
 import '../authentication/presentation/auth_controller.dart';
 
-const _branchPaths = ['/dashboard', '/demandas'];
+const _branchPaths = ['/dashboard', '/demandas', '/modulos'];
 
 class AppShell extends ConsumerWidget {
   const AppShell({required this.navigationShell, super.key});
@@ -27,6 +27,10 @@ class AppShell extends ConsumerWidget {
             PopupMenuButton<String>(
               tooltip: 'Conta',
               onSelected: (value) async {
+                if (value == 'profile') {
+                  context.go('/modulos/perfil');
+                  return;
+                }
                 if (value != 'logout') return;
                 await ref.read(authControllerProvider.notifier).logout();
                 if (context.mounted) context.go('/login');
@@ -50,6 +54,16 @@ class AppShell extends ConsumerWidget {
                   ),
                 ),
                 const PopupMenuDivider(),
+                const PopupMenuItem<String>(
+                  value: 'profile',
+                  child: Row(
+                    children: [
+                      Icon(Icons.account_circle_rounded, size: 20),
+                      SizedBox(width: 10),
+                      Text('Meu perfil'),
+                    ],
+                  ),
+                ),
                 const PopupMenuItem<String>(
                   value: 'logout',
                   child: Row(
@@ -101,6 +115,11 @@ class AppShell extends ConsumerWidget {
                 icon: Icon(Icons.assignment_outlined),
                 selectedIcon: Icon(Icons.assignment),
                 label: 'Demandas',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.apps_outlined),
+                selectedIcon: Icon(Icons.apps_rounded),
+                label: 'Módulos',
               ),
             ],
           ),

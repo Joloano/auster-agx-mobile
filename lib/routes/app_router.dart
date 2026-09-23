@@ -5,10 +5,15 @@ import 'package:go_router/go_router.dart';
 import '../features/authentication/presentation/auth_controller.dart';
 import '../features/authentication/presentation/auth_loading_screen.dart';
 import '../features/authentication/presentation/change_password_screen.dart';
+import '../features/authentication/presentation/forgot_password_screen.dart';
 import '../features/authentication/presentation/login_screen.dart';
+import '../features/authentication/presentation/profile_screen.dart';
+import '../features/authentication/presentation/reset_password_screen.dart';
+import '../features/authentication/presentation/users_screen.dart';
 import '../features/dashboard/presentation/dashboard_screen.dart';
 import '../features/demandas/presentation/demanda_details_screen.dart';
 import '../features/demandas/presentation/demandas_screen.dart';
+import '../features/modules/presentation/modules_screen.dart';
 import '../features/shell/app_shell.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -25,7 +30,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final currentLocation = state.matchedLocation;
       final isLoading = currentLocation == '/loading';
       final isLogin = currentLocation == '/login';
+      final isForgotPassword = currentLocation == '/esqueci-senha';
+      final isResetPassword = currentLocation == '/redefinir-senha';
       final isChangePassword = currentLocation == '/change-password';
+      final isPublicAuth = isLogin || isForgotPassword || isResetPassword;
 
       if (auth.isLoading) {
         if (isLoading) return null;
@@ -36,7 +44,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       }
       final user = auth.valueOrNull;
       final authenticated = user != null;
-      if (!authenticated && !isLogin) return '/login';
+      if (!authenticated && !isPublicAuth) return '/login';
       if (!authenticated) return null;
 
       if (user.deveAlterarSenha && !isChangePassword) {
@@ -45,8 +53,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       if (!user.deveAlterarSenha && isLoading) {
         return _safeRedirectTarget(state) ?? '/dashboard';
       }
-      if (!user.deveAlterarSenha && (isLogin || isChangePassword)) {
+      if (!user.deveAlterarSenha && (isPublicAuth || isChangePassword)) {
         return '/dashboard';
+      }
+      if (currentLocation.startsWith('/modulos/usuarios') &&
+          user.perfil != 'SUPER_ADMIN') {
+        return '/modulos';
       }
       return null;
     },
@@ -56,6 +68,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const AuthLoadingScreen(),
       ),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(
+        path: '/esqueci-senha',
+        builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: '/redefinir-senha',
+        builder: (context, state) => ResetPasswordScreen(
+          initialToken: state.uri.queryParameters['token'],
+        ),
+      ),
       GoRoute(
         path: '/change-password',
         builder: (context, state) => const ChangePasswordScreen(),
@@ -84,6 +106,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       final id = state.pathParameters['id']!;
                       return DemandaDetailsScreen(demandaId: id);
                     },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/modulos',
+                builder: (context, state) => const ModulesScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'usuarios',
+                    builder: (context, state) => const UsersScreen(),
+                  ),
+                  GoRoute(
+                    path: 'perfil',
+                    builder: (context, state) => const ProfileScreen(),
                   ),
                 ],
               ),
