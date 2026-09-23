@@ -8,8 +8,8 @@ import '../../../core/errors/user_facing_error.dart';
 import '../../../data/models/demanda_models.dart';
 import '../../../data/models/demanda_status_rules.dart';
 import '../../../data/models/location_capture.dart';
-import '../../../data/repositorios/demanda_repository.dart';
 import '../../../data/sync/sync_providers.dart';
+import '../../../widgets/auster_error_state.dart';
 import '../../../widgets/auster_page_header.dart';
 import '../../../widgets/auster_section_card.dart';
 import '../../authentication/presentation/auth_controller.dart';
@@ -34,8 +34,10 @@ class DemandaDetailsScreen extends ConsumerWidget {
     return detail.when(
       data: (data) {
         if (data == null) {
-          return const _CenteredMessage(
+          return _errorPage(
+            context,
             'Demanda não encontrada no cache local. Sincronize online primeiro.',
+            () => _refreshDetails(ref),
           );
         }
         return ListView(
@@ -76,8 +78,54 @@ class DemandaDetailsScreen extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => _CenteredMessage(userFacingErrorMessage(error)),
+      error: (error, _) => _errorPage(
+        context,
+        userFacingErrorMessage(error),
+        () => _refreshDetails(ref),
+      ),
     );
+  }
+
+  Widget _errorPage(
+    BuildContext context,
+    String message,
+    Future<void> Function() onRetry,
+  ) {
+    return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(16),
+      children: [
+        AusterPageHeader(
+          leading: IconButton(
+            tooltip: 'Voltar para demandas',
+            onPressed: () => context.go('/demandas'),
+            icon: const Icon(Icons.arrow_back_rounded),
+            style: IconButton.styleFrom(
+              foregroundColor: AusterColors.primary700,
+              backgroundColor: Colors.white,
+              side: const BorderSide(color: AusterColors.neutral300),
+            ),
+          ),
+          icon: Icons.assignment_rounded,
+          title: 'DETALHE DA DEMANDA',
+          subtitle: 'Informações operacionais e registros de campo.',
+        ),
+        const SizedBox(height: 48),
+        AusterErrorState(message: message, onRetry: onRetry),
+      ],
+    );
+  }
+
+  Future<void> _refreshDetails(WidgetRef ref) async {
+    final detail = ref.refresh(demandaDetailProvider(demandaId).future);
+    final history =
+        ref.refresh(demandaHistoricoStatusProvider(demandaId).future);
+    final statusFlow = ref.refresh(demandaStatusFluxoProvider.future);
+    try {
+      await Future.wait<Object?>([detail, history, statusFlow]);
+    } catch (_) {
+      // Os providers mantêm os erros para a própria tela apresentar.
+    }
   }
 }
 
@@ -207,137 +255,156 @@ class _StatusActions extends ConsumerWidget {
       );
     }
 
-    return FutureBuilder<DemandaRepository>(
-      future: ref.watch(demandaRepositoryProvider.future),
-      builder: (context, repositorySnapshot) {
-        return FutureBuilder<StatusFluxo?>(
-          future: repositorySnapshot.data?.loadStatusFluxo(),
-          builder: (context, fluxoSnapshot) {
-            final fluxo = fluxoSnapshot.data;
-            final metodoMapeamento = _metodoMapeamento(detail);
-            final next = fluxo == null
-                ? const <String>[]
-                : proximosStatusValidos(
-                    status: detail.demanda.statusChave,
-                    situacaoDados: detail.demanda.situacaoDados,
-                    situacaoMapeamento: detail.demanda.situacaoMapeamento,
-                    tipo: detail.demanda.tipo,
-                    metodoMapeamento: metodoMapeamento,
-                    statusFluxo: fluxo,
-                  );
-            final blocked = fluxo == null
-                ? const <String>[]
-                : (fluxo.transicoesValidas[detail.demanda.statusChave] ??
-                        const <String>[])
-                    .where((status) => !next.contains(status))
-                    .toList();
-            return AusterSectionCard(
-              title: 'GESTÃO DE STATUS',
-              icon: Icons.rule_rounded,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Próximo status',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 10),
-                  if (next.isEmpty)
-                    const Text('Nenhuma transição disponível agora.')
-                  else
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        for (final status in next)
-                          ActionChip(
-                            avatar: const Icon(Icons.swap_horiz),
-                            label: Text(statusDemandaLabel(status)),
-                            onPressed: repositorySnapshot.hasData
-                                ? () => _updateStatus(context, ref, status)
-                                : null,
-                          ),
-                      ],
-                    ),
-                  if (blocked.isNotEmpty) ...[
-                    const SizedBox(height: 10),
-                    for (final status in blocked)
-                      Text(
-                        '${statusDemandaLabel(status)} bloqueado: '
-                        '${bloqueioParaStatus(
-                              proximoStatus: status,
-                              situacaoDados: detail.demanda.situacaoDados,
-                              situacaoMapeamento:
-                                  detail.demanda.situacaoMapeamento,
-                              tipo: detail.demanda.tipo,
-                              metodoMapeamento: metodoMapeamento,
-                              statusFluxo: fluxo!,
-                            ) ?? "regra do backend"}',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                  ],
-                  const Divider(height: 24),
-                  Text(
-                    'Situação dos dados',
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      for (final situacao in situacaoDadosValues)
-                        ChoiceChip(
-                          label: Text(situacaoDadosLabel(situacao)),
-                          selected: detail.demanda.situacaoDados == situacao,
-                          onSelected: detail.demanda.situacaoDados == situacao
-                              ? null
-                              : (_) => _updateFields(
-                                    context,
-                                    ref,
-                                    situacaoDados: situacao,
-                                  ),
-                        ),
-                    ],
-                  ),
-                  if (!demandaSemMapeamento(
-                    tipo: detail.demanda.tipo,
-                    metodoMapeamento: metodoMapeamento,
-                  )) ...[
-                    const SizedBox(height: 16),
-                    Text(
-                      'Situação do mapeamento',
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        for (final situacao in situacaoMapeamentoValues)
-                          ChoiceChip(
-                            label: Text(situacaoMapeamentoLabel(situacao)),
-                            selected:
-                                detail.demanda.situacaoMapeamento == situacao,
-                            onSelected:
-                                detail.demanda.situacaoMapeamento == situacao
-                                    ? null
-                                    : (_) => _updateFields(
-                                          context,
-                                          ref,
-                                          situacaoMapeamento: situacao,
-                                        ),
-                          ),
-                      ],
-                    ),
-                  ],
-                ],
-              ),
-            );
-          },
-        );
-      },
+    final fluxoState = ref.watch(demandaStatusFluxoProvider);
+    return fluxoState.when(
+      data: (fluxo) => _buildStatusCard(context, ref, fluxo),
+      loading: () => const AusterSectionCard(
+        title: 'GESTÃO DE STATUS',
+        icon: Icons.rule_rounded,
+        child: LinearProgressIndicator(),
+      ),
+      error: (error, _) => AusterSectionCard(
+        title: 'GESTÃO DE STATUS',
+        icon: Icons.rule_rounded,
+        child: AusterErrorState(
+          message: userFacingErrorMessage(error),
+          compact: true,
+          onRetry: () => _refreshStatusFlow(ref),
+        ),
+      ),
     );
+  }
+
+  Widget _buildStatusCard(
+    BuildContext context,
+    WidgetRef ref,
+    StatusFluxo? fluxo,
+  ) {
+    final metodoMapeamento = _metodoMapeamento(detail);
+    final next = fluxo == null
+        ? const <String>[]
+        : proximosStatusValidos(
+            status: detail.demanda.statusChave,
+            situacaoDados: detail.demanda.situacaoDados,
+            situacaoMapeamento: detail.demanda.situacaoMapeamento,
+            tipo: detail.demanda.tipo,
+            metodoMapeamento: metodoMapeamento,
+            statusFluxo: fluxo,
+          );
+    final blocked = fluxo == null
+        ? const <String>[]
+        : (fluxo.transicoesValidas[detail.demanda.statusChave] ??
+                const <String>[])
+            .where((status) => !next.contains(status))
+            .toList();
+
+    return AusterSectionCard(
+      title: 'GESTÃO DE STATUS',
+      icon: Icons.rule_rounded,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Próximo status',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(height: 10),
+          if (next.isEmpty)
+            const Text('Nenhuma transição disponível agora.')
+          else
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final status in next)
+                  ActionChip(
+                    avatar: const Icon(Icons.swap_horiz),
+                    label: Text(statusDemandaLabel(status)),
+                    onPressed: () => _updateStatus(context, ref, status),
+                  ),
+              ],
+            ),
+          if (blocked.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            for (final status in blocked)
+              Text(
+                '${statusDemandaLabel(status)} bloqueado: '
+                '${bloqueioParaStatus(
+                      proximoStatus: status,
+                      situacaoDados: detail.demanda.situacaoDados,
+                      situacaoMapeamento: detail.demanda.situacaoMapeamento,
+                      tipo: detail.demanda.tipo,
+                      metodoMapeamento: metodoMapeamento,
+                      statusFluxo: fluxo!,
+                    ) ?? "regra do backend"}',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+          ],
+          const Divider(height: 24),
+          Text(
+            'Situação dos dados',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final situacao in situacaoDadosValues)
+                ChoiceChip(
+                  label: Text(situacaoDadosLabel(situacao)),
+                  selected: detail.demanda.situacaoDados == situacao,
+                  onSelected: detail.demanda.situacaoDados == situacao
+                      ? null
+                      : (_) => _updateFields(
+                            context,
+                            ref,
+                            situacaoDados: situacao,
+                          ),
+                ),
+            ],
+          ),
+          if (!demandaSemMapeamento(
+            tipo: detail.demanda.tipo,
+            metodoMapeamento: metodoMapeamento,
+          )) ...[
+            const SizedBox(height: 16),
+            Text(
+              'Situação do mapeamento',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final situacao in situacaoMapeamentoValues)
+                  ChoiceChip(
+                    label: Text(situacaoMapeamentoLabel(situacao)),
+                    selected: detail.demanda.situacaoMapeamento == situacao,
+                    onSelected: detail.demanda.situacaoMapeamento == situacao
+                        ? null
+                        : (_) => _updateFields(
+                              context,
+                              ref,
+                              situacaoMapeamento: situacao,
+                            ),
+                  ),
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Future<void> _refreshStatusFlow(WidgetRef ref) async {
+    final request = ref.refresh(demandaStatusFluxoProvider.future);
+    try {
+      await request;
+    } catch (_) {
+      // O provider mantém o erro para a própria seção apresentar.
+    }
   }
 
   Future<void> _updateStatus(
@@ -728,22 +795,6 @@ class _InfoRow extends StatelessWidget {
           ),
           Expanded(child: Text(value.isEmpty ? '-' : value)),
         ],
-      ),
-    );
-  }
-}
-
-class _CenteredMessage extends StatelessWidget {
-  const _CenteredMessage(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Text(text, textAlign: TextAlign.center),
       ),
     );
   }

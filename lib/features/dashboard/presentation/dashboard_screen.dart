@@ -8,6 +8,7 @@ import '../../../core/auth/roles.dart';
 import '../../../core/errors/user_facing_error.dart';
 import '../../../data/models/dashboard_models.dart';
 import '../../../data/models/demanda_status_rules.dart';
+import '../../../widgets/auster_error_state.dart';
 import '../../authentication/presentation/auth_controller.dart';
 import '../providers/dashboard_providers.dart';
 
@@ -21,10 +22,7 @@ class DashboardScreen extends ConsumerWidget {
     final auth = ref.watch(authControllerProvider).valueOrNull;
 
     return RefreshIndicator(
-      onRefresh: () async {
-        ref.invalidate(dashboardOverviewProvider);
-        ref.invalidate(dashboardDemandasProvider);
-      },
+      onRefresh: () => _refreshDashboard(ref),
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -67,8 +65,11 @@ class DashboardScreen extends ConsumerWidget {
                     ],
                   ),
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, _) =>
-                _EmptyState(text: userFacingErrorMessage(error)),
+            error: (error, _) => AusterErrorState(
+              message: userFacingErrorMessage(error),
+              compact: true,
+              onRetry: () => _refreshOverview(ref),
+            ),
           ),
           const SizedBox(height: 24),
           Row(
@@ -93,12 +94,43 @@ class DashboardScreen extends ConsumerWidget {
               padding: EdgeInsets.all(24),
               child: Center(child: CircularProgressIndicator()),
             ),
-            error: (error, _) =>
-                _EmptyState(text: userFacingErrorMessage(error)),
+            error: (error, _) => AusterErrorState(
+              message: userFacingErrorMessage(error),
+              compact: true,
+              onRetry: () => _refreshDemandas(ref),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _refreshDashboard(WidgetRef ref) async {
+    final overview = ref.refresh(dashboardOverviewProvider.future);
+    final demandas = ref.refresh(dashboardDemandasProvider.future);
+    try {
+      await Future.wait([overview, demandas]);
+    } catch (_) {
+      // Cada provider mantém o erro para o respectivo estado visual.
+    }
+  }
+
+  Future<void> _refreshOverview(WidgetRef ref) async {
+    final request = ref.refresh(dashboardOverviewProvider.future);
+    try {
+      await request;
+    } catch (_) {
+      // O provider mantém o erro para a própria seção apresentar.
+    }
+  }
+
+  Future<void> _refreshDemandas(WidgetRef ref) async {
+    final request = ref.refresh(dashboardDemandasProvider.future);
+    try {
+      await request;
+    } catch (_) {
+      // O provider mantém o erro para a própria seção apresentar.
+    }
   }
 }
 

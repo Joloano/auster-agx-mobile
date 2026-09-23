@@ -6,6 +6,7 @@ import '../../../core/app_theme.dart';
 import '../../../core/errors/user_facing_error.dart';
 import '../../../data/models/dashboard_models.dart';
 import '../../../data/models/demanda_status_rules.dart';
+import '../../../widgets/auster_error_state.dart';
 import '../../../widgets/auster_page_header.dart';
 import '../../dashboard/providers/dashboard_providers.dart';
 
@@ -17,11 +18,23 @@ class DemandasScreen extends ConsumerWidget {
     final demandas = ref.watch(dashboardDemandasProvider);
 
     return RefreshIndicator(
-      onRefresh: () async => ref.invalidate(dashboardDemandasProvider),
+      onRefresh: () => _refreshDemandas(ref),
       child: demandas.when(
         data: (items) {
           if (items.isEmpty) {
-            return const _CenteredMessage('Nenhuma demanda sincronizada.');
+            return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(16),
+              children: const [
+                AusterPageHeader(
+                  icon: Icons.assignment_rounded,
+                  title: 'DEMANDAS',
+                  subtitle: 'Acompanhamento operacional por etapa e status.',
+                ),
+                SizedBox(height: 48),
+                _CenteredMessage('Nenhuma demanda sincronizada.'),
+              ],
+            );
           }
           final grouped = _groupByGrupoOperacional(items);
           return ListView(
@@ -81,9 +94,33 @@ class DemandasScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, _) => _CenteredMessage(userFacingErrorMessage(error)),
+        error: (error, _) => ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(16),
+          children: [
+            const AusterPageHeader(
+              icon: Icons.assignment_rounded,
+              title: 'DEMANDAS',
+              subtitle: 'Acompanhamento operacional por etapa e status.',
+            ),
+            const SizedBox(height: 48),
+            AusterErrorState(
+              message: userFacingErrorMessage(error),
+              onRetry: () => _refreshDemandas(ref),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  Future<void> _refreshDemandas(WidgetRef ref) async {
+    final request = ref.refresh(dashboardDemandasProvider.future);
+    try {
+      await request;
+    } catch (_) {
+      // O provider mantém o erro para a própria tela apresentar.
+    }
   }
 
   Map<String, List<DashboardDemandItem>> _groupByGrupoOperacional(

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
 import '../../../data/models/demanda_models.dart';
+import '../../../data/models/demanda_status_rules.dart';
 import '../../../data/repositorios/demanda_repository.dart';
 import '../../../data/services/demandas_api.dart';
 import '../../authentication/providers/current_user_provider.dart';
@@ -35,4 +36,9 @@ final demandaHistoricoStatusProvider =
         (ref, id) async {
   final repository = await ref.watch(demandaRepositoryProvider.future);
   return repository.loadHistoricoStatus(id);
+});
+
+final demandaStatusFluxoProvider = FutureProvider<StatusFluxo?>((ref) async {
+  final repository = await ref.watch(demandaRepositoryProvider.future);
+  return repository.loadStatusFluxo();
 });
