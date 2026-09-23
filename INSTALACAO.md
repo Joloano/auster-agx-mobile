@@ -89,7 +89,7 @@ O aplicativo lê a configuração em tempo de compilação por `--dart-define`.
 | Variável | Padrão | Finalidade |
 |---|---|---|
 | `API_BASE_URL` | `http://10.0.2.2:8080` | Origem da API, sem caminho, query ou credenciais |
-| `API_TIMEOUT_MS` | `10000` | Timeout HTTP em milissegundos |
+| `API_TIMEOUT_MS` | `30000` | Timeout HTTP em milissegundos |
 | `ALLOW_INSECURE_HTTP` | `true` em debug; `false` em release | Libera HTTP explicitamente para desenvolvimento |
 
 Endereços usuais:
@@ -101,6 +101,8 @@ Endereços usuais:
 | Produção | `https://api.exemplo.com` |
 
 O arquivo `.env.example` documenta os valores locais, mas o aplicativo não carrega `.env` em tempo de execução. Passe as opções por `--dart-define`.
+
+O cliente repete uma única vez apenas leituras `GET`/`HEAD` que falhem por timeout, conexão ou indisponibilidade transitória. Requisições de escrita não são repetidas automaticamente. Se as duas tentativas de leitura falharem, use **Tentar novamente** na própria tela depois de restabelecer a API.
 
 ## Executar no emulador Android
 
@@ -273,7 +275,7 @@ Evite **Wipe Data** como primeira tentativa, pois ele apaga o estado do aparelho
 
 ### O app acusa timeout no emulador, mas a API responde rápido
 
-Remova redirecionamentos antigos com `adb reverse --remove-all` e rode o app com `API_BASE_URL=http://10.0.2.2:8080`.
+Remova redirecionamentos antigos com `adb reverse --remove-all` e rode o app com `API_BASE_URL=http://10.0.2.2:8080`. Aguarde a API terminar de iniciar e toque em **Tentar novamente**; não é necessário reiniciar o aplicativo. Se persistir, execute `.\scripts\dev\diagnosticar-api.ps1` para separar falha de rota, autenticação ou massa de teste.
 
 ### O `flutter run` perde a conexão logo após instalar
 

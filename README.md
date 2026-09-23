@@ -73,7 +73,7 @@ Capturas reais dos widgets Flutter em viewport mobile de 390 × 844 pontos, usan
 | **Conectividade** | `connectivity_plus`, política de falhas transitórias e sincronização automática |
 | **Recursos nativos** | `geolocator` e `permission_handler` para captura GPS e permissões Android |
 | **Interface** | Identidade AUSTER, logo oficial, Inter e Bebas Neue |
-| **Qualidade** | `flutter_test`, Mocktail, Flutter Lints, 43 testes automatizados e CI no GitHub Actions |
+| **Qualidade** | `flutter_test`, Mocktail, Flutter Lints, 47 testes automatizados e CI no GitHub Actions |
 | **Modelagem** | brModelo Web, brModelo desktop e Mermaid |
 | **Ambiente** | Docker Compose (Postgres/PostGIS, API AusterAgX e massa de teste) e scripts PowerShell |
 
@@ -275,10 +275,12 @@ Computador, celular e API devem estar na mesma rede. `10.0.2.2` funciona apenas 
 | Opção | Descrição |
 |---|---|
 | `API_BASE_URL` | Origem HTTP(S) do backend; padrão `http://10.0.2.2:8080` |
-| `API_TIMEOUT_MS` | Timeout HTTP em milissegundos; padrão `10000` |
+| `API_TIMEOUT_MS` | Timeout HTTP em milissegundos; padrão `30000` |
 | `ALLOW_INSECURE_HTTP` | `true` em debug e `false` em release por padrão |
 
 O valor de `API_BASE_URL` deve ser uma origem sem caminho, query, fragmento ou credenciais. O app não embarca usuários de demonstração: as contas acima vêm da massa de teste do backend. Se a senha for provisória, a troca será exigida automaticamente.
+
+Falhas transitórias em leituras `GET`/`HEAD` recebem uma única nova tentativa automática. Escritas e sincronizações não são repetidas pelo cliente HTTP, evitando operações duplicadas; quando uma leitura ainda falhar, Dashboard, Demandas e Detalhe oferecem **Tentar novamente** sem exigir que o aplicativo seja reiniciado.
 
 ### APK de desenvolvimento
 
@@ -308,17 +310,17 @@ Builds release exigem HTTPS e assinatura privada configurada. Consulte [a seçã
 
 ## Testes automatizados
 
-Baseline validada em **20 de setembro de 2026**:
+Baseline validada em **23 de setembro de 2026**:
 
 - `flutter analyze --no-pub`: **nenhuma ocorrência**.
-- `flutter test --no-pub`: **43 testes aprovados**.
+- `flutter test --no-pub`: **47 testes aprovados**.
 
 ```powershell
 flutter analyze
 flutter test
 ```
 
-A suíte cobre configuração segura da API, SQLite, isolamento de usuário, fila offline, tradução de erros, refresh JWT, sincronização, repositórios, mapeamento dos DTOs reais e proteção das rotas/widgets de autenticação.
+A suíte cobre configuração segura da API, SQLite, isolamento de usuário, fila offline, tradução de erros, retry seguro de leituras, recuperação visual, refresh JWT, sincronização, repositórios, mapeamento dos DTOs reais e proteção das rotas/widgets de autenticação.
 
 A [CI](.github/workflows/ci.yml) roda em todo push para `main` e em pull requests: `flutter analyze`, `flutter test` e a regeneração dos modelos de dados, que falha se algum artefato de `docs/modelo-er` estiver desatualizado.
 
