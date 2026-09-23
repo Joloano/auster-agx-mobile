@@ -41,4 +41,20 @@ void main() {
     expect(canCreateOrder('USUARIO_CONSULTOR_CTV'), isTrue);
     expect(canUpdateOrder('USUARIO_CONSULTOR_CTV'), isFalse);
   });
+
+  test('catálogos agronômicos respeitam leitura e escrita por perfil', () {
+    expect(
+      canAccessModule('USUARIO_CONSULTOR_CTV', AppModuleId.culturas),
+      isTrue,
+    );
+    expect(
+      canAccessModule(
+        'USUARIO_GESTOR_ADMINISTRATIVO',
+        AppModuleId.estadiosFenologicos,
+      ),
+      isTrue,
+    );
+    expect(canManageAgronomicData('USUARIO_TECNICO_PRESCRICAO'), isTrue);
+    expect(canManageAgronomicData('USUARIO_GESTOR_ADMINISTRATIVO'), isFalse);
+  });
 }

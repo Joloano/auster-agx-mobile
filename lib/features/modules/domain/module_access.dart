@@ -77,6 +77,10 @@ bool canManageRuralData(String profile) {
   return profile == 'SUPER_ADMIN' || profile == 'USUARIO_TECNICO_PRESCRICAO';
 }
 
+bool canManageAgronomicData(String profile) {
+  return profile == 'SUPER_ADMIN' || profile == 'USUARIO_TECNICO_PRESCRICAO';
+}
+
 bool canCreateFarmOrField(String profile) {
   return const {
     'SUPER_ADMIN',

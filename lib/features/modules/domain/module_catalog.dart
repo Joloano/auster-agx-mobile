@@ -46,6 +46,22 @@ const mobileModuleCatalog = <MobileModuleDefinition>[
     section: 'Campo',
   ),
   MobileModuleDefinition(
+    id: AppModuleId.culturas,
+    title: 'Culturas',
+    subtitle: 'Cultivares e serviços atendidos',
+    path: '/modulos/culturas',
+    icon: Icons.nature_rounded,
+    section: 'Agronomia',
+  ),
+  MobileModuleDefinition(
+    id: AppModuleId.estadiosFenologicos,
+    title: 'Estádios fenológicos',
+    subtitle: 'Catálogo agronômico por cultura',
+    path: '/modulos/estadios-fenologicos',
+    icon: Icons.timeline_rounded,
+    section: 'Agronomia',
+  ),
+  MobileModuleDefinition(
     id: AppModuleId.usuarios,
     title: 'Usuários',
     subtitle: 'Contas, perfis e acessos',

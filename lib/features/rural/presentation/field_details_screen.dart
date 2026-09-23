@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/errors/user_facing_error.dart';
+import '../../../data/models/agronomic_models.dart';
 import '../../../data/models/rural_models.dart';
 import '../../../widgets/auster_error_state.dart';
 import '../../../widgets/auster_key_value_list.dart';
@@ -10,6 +11,8 @@ import '../../../widgets/auster_page_header.dart';
 import '../../../widgets/auster_record_form.dart';
 import '../../../widgets/auster_section_card.dart';
 import '../../authentication/presentation/auth_controller.dart';
+import '../../agronomic/presentation/field_agronomic_sections.dart';
+import '../../agronomic/providers/agronomic_providers.dart';
 import '../../modules/domain/module_access.dart';
 import '../providers/rural_providers.dart';
 import 'farm_details_screen.dart';
@@ -34,8 +37,13 @@ class _FieldDetailsScreenState extends ConsumerState<FieldDetailsScreen> {
 
   Future<_FieldDetailsData> _load() async {
     final api = ref.read(ruralApiProvider);
+    final agronomicApi = ref.read(agronomicApiProvider);
     final fieldFuture = api.getField(widget.fieldId);
     final groupsFuture = api.listGroups();
+    final culturesFuture = agronomicApi.listCultures();
+    final cultivationsFuture = agronomicApi.listCultivations(widget.fieldId);
+    final previousCropsFuture = agronomicApi.listPreviousCrops(widget.fieldId);
+    final soilDataFuture = agronomicApi.listSoilData(widget.fieldId);
     final field = await fieldFuture;
     final groups = (await groupsFuture)
         .where(
@@ -44,7 +52,34 @@ class _FieldDetailsScreenState extends ConsumerState<FieldDetailsScreen> {
           ),
         )
         .toList(growable: false);
-    return _FieldDetailsData(field: field, groups: groups);
+    var cultures = const <Culture>[];
+    var cultivations = const <Cultivation>[];
+    var previousCrops = const <PreviousCrop>[];
+    var soilData = const <SoilData>[];
+    Object? agronomicError;
+    try {
+      final results = await Future.wait<Object>([
+        culturesFuture,
+        cultivationsFuture,
+        previousCropsFuture,
+        soilDataFuture,
+      ]);
+      cultures = results[0] as List<Culture>;
+      cultivations = results[1] as List<Cultivation>;
+      previousCrops = results[2] as List<PreviousCrop>;
+      soilData = results[3] as List<SoilData>;
+    } catch (error) {
+      agronomicError = error;
+    }
+    return _FieldDetailsData(
+      field: field,
+      groups: groups,
+      cultures: cultures,
+      cultivations: cultivations,
+      previousCrops: previousCrops,
+      soilData: soilData,
+      agronomicError: agronomicError,
+    );
   }
 
   Future<void> _refresh() async {
@@ -147,6 +182,27 @@ class _FieldDetailsScreenState extends ConsumerState<FieldDetailsScreen> {
                           .toList(growable: false),
                     ),
             ),
+            const SizedBox(height: 12),
+            if (data.agronomicError == null)
+              FieldAgronomicSections(
+                fieldId: data.field.id,
+                cultures: data.cultures,
+                cultivations: data.cultivations,
+                previousCrops: data.previousCrops,
+                soilData: data.soilData,
+                canManage: canManage,
+                onChanged: _refresh,
+              )
+            else
+              AusterSectionCard(
+                title: 'Dados agronômicos',
+                icon: Icons.grass_rounded,
+                child: AusterErrorState(
+                  message: userFacingErrorMessage(data.agronomicError!),
+                  compact: true,
+                  onRetry: _refresh,
+                ),
+              ),
             if (data.field.boundaryGeoJson != null) ...[
               const SizedBox(height: 12),
               AusterSectionCard(
@@ -217,8 +273,21 @@ class _FieldDetailsScreenState extends ConsumerState<FieldDetailsScreen> {
 }
 
 class _FieldDetailsData {
-  const _FieldDetailsData({required this.field, required this.groups});
+  const _FieldDetailsData({
+    required this.field,
+    required this.groups,
+    required this.cultures,
+    required this.cultivations,
+    required this.previousCrops,
+    required this.soilData,
+    required this.agronomicError,
+  });
 
   final FieldPlot field;
   final List<FieldGroup> groups;
+  final List<Culture> cultures;
+  final List<Cultivation> cultivations;
+  final List<PreviousCrop> previousCrops;
+  final List<SoilData> soilData;
+  final Object? agronomicError;
 }

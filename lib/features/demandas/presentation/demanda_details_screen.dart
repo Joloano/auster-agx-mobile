@@ -13,6 +13,7 @@ import '../../../widgets/auster_error_state.dart';
 import '../../../widgets/auster_page_header.dart';
 import '../../../widgets/auster_section_card.dart';
 import '../../authentication/presentation/auth_controller.dart';
+import '../../agronomic/presentation/demand_agronomic_sections.dart';
 import '../../commercial/presentation/demand_management_section.dart';
 import '../../dashboard/providers/dashboard_providers.dart';
 import '../../location/providers/location_providers.dart';
@@ -74,6 +75,12 @@ class DemandaDetailsScreen extends ConsumerWidget {
             _ResumoSection(detail: data),
             const SizedBox(height: 12),
             _ContextoSection(detail: data),
+            const SizedBox(height: 12),
+            DemandAgronomicSections(
+              demandId: data.demanda.id,
+              demandType: data.demanda.tipo,
+              canManage: canManage,
+            ),
             const SizedBox(height: 12),
             _SensoriamentoSection(detail: data),
             const SizedBox(height: 12),

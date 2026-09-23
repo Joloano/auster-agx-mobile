@@ -153,6 +153,13 @@ Capturas reais dos widgets Flutter em viewport mobile de 390 × 844 pontos, usan
    - Edição do resumo, gestão de grupos e desativação no detalhe da demanda.
    - Proteção de rotas equivalente aos perfis configurados no sistema web.
 
+13. **Gestão agronômica**
+   - Catálogos de culturas e estádios fenológicos com filtros e permissões por perfil.
+   - Cultivos, culturas antecessoras e dados de solo integrados ao detalhe do talhão.
+   - Adubações em taxa fixa e manejo de nitrogênio nas demandas Smart-N.
+   - Prescrições completas de manejo para Smart-Brake e Smart-Seeding.
+   - Leitura para perfis administrativos e escrita restrita a superadmin e técnico de prescrição.
+
 ---
 
 ## Perfis de acesso
@@ -190,6 +197,7 @@ lib/
     sync/                      fila e serviço de sincronização
   features/
     authentication/            login e troca de senha
+    agronomic/                 culturas, solo, adubações e prescrições
     dashboard/                 visão geral operacional
     demandas/                  lista e detalhe
     commercial/                pedidos e criação/manutenção de demandas

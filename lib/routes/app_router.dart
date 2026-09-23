@@ -10,6 +10,8 @@ import '../features/authentication/presentation/login_screen.dart';
 import '../features/authentication/presentation/profile_screen.dart';
 import '../features/authentication/presentation/reset_password_screen.dart';
 import '../features/authentication/presentation/users_screen.dart';
+import '../features/agronomic/presentation/cultures_screen.dart';
+import '../features/agronomic/presentation/phenological_stages_screen.dart';
 import '../features/commercial/presentation/new_demand_screen.dart';
 import '../features/commercial/presentation/order_details_screen.dart';
 import '../features/commercial/presentation/orders_screen.dart';
@@ -80,6 +82,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       }
       if (currentLocation.startsWith('/modulos/pedidos') &&
           !canAccessModule(user.perfil, AppModuleId.pedidos)) {
+        return '/modulos';
+      }
+      if (currentLocation.startsWith('/modulos/culturas') &&
+          !canAccessModule(user.perfil, AppModuleId.culturas)) {
+        return '/modulos';
+      }
+      if (currentLocation.startsWith('/modulos/estadios-fenologicos') &&
+          !canAccessModule(user.perfil, AppModuleId.estadiosFenologicos)) {
         return '/modulos';
       }
       final ruralLocation = currentLocation.startsWith('/modulos/fazendas') ||
@@ -194,6 +204,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                         ),
                       ),
                     ],
+                  ),
+                  GoRoute(
+                    path: 'culturas',
+                    builder: (context, state) => const CulturesScreen(),
+                  ),
+                  GoRoute(
+                    path: 'estadios-fenologicos',
+                    builder: (context, state) =>
+                        const PhenologicalStagesScreen(),
                   ),
                   GoRoute(
                     path: 'talhoes/:id',
