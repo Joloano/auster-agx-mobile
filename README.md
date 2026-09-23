@@ -139,6 +139,13 @@ Capturas reais dos widgets Flutter em viewport mobile de 390 × 844 pontos, usan
    - Consulta, criação, edição, ativação e desativação de usuários pelo `SUPER_ADMIN`.
    - Redefinição administrativa de senha temporária e troca de senha da própria conta.
 
+11. **Clientes e operação de campo**
+   - Cadastro, edição, consulta e desativação de clientes conforme o perfil autenticado.
+   - Cadastro e manutenção de fazendas e talhões com áreas, coordenadas e contorno GeoJSON.
+   - Vínculos entre clientes e fazendas com data de início e encerramento.
+   - Gestão de colaboradores, grupos de talhões, culturas e equipamentos associados à fazenda.
+   - Paginação e pesquisa conectadas diretamente aos endpoints oficiais.
+
 ---
 
 ## Perfis de acesso
@@ -180,6 +187,7 @@ lib/
     demandas/                  lista e detalhe
     location/                  captura de localização
     modules/                   permissões e composição dos módulos mobile
+    rural/                     clientes, fazendas, talhões e vínculos de campo
     shell/                     navegação principal
   widgets/                     componentes AUSTER compartilhados
 ```

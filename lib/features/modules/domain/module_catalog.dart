@@ -22,6 +22,22 @@ class MobileModuleDefinition {
 
 const mobileModuleCatalog = <MobileModuleDefinition>[
   MobileModuleDefinition(
+    id: AppModuleId.clientes,
+    title: 'Clientes',
+    subtitle: 'Carteiras, contatos e vínculos',
+    path: '/modulos/clientes',
+    icon: Icons.people_alt_rounded,
+    section: 'Operação',
+  ),
+  MobileModuleDefinition(
+    id: AppModuleId.fazendas,
+    title: 'Fazendas',
+    subtitle: 'Propriedades, talhões e equipes',
+    path: '/modulos/fazendas',
+    icon: Icons.agriculture_rounded,
+    section: 'Campo',
+  ),
+  MobileModuleDefinition(
     id: AppModuleId.usuarios,
     title: 'Usuários',
     subtitle: 'Contas, perfis e acessos',

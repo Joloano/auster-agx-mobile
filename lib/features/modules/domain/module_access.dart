@@ -55,3 +55,33 @@ bool canAccessModule(String profile, AppModuleId module) {
 bool canCreateDemanda(String profile) {
   return demandaCreationProfiles.contains(profile);
 }
+
+bool canCreateClient(String profile) {
+  return const {
+    'SUPER_ADMIN',
+    'USUARIO_TECNICO_PRESCRICAO',
+    'USUARIO_CONSULTOR_CTV',
+    'USUARIO_GESTOR_ADMINISTRATIVO',
+  }.contains(profile);
+}
+
+bool canUpdateClient(String profile) {
+  return const {
+    'SUPER_ADMIN',
+    'USUARIO_TECNICO_PRESCRICAO',
+    'USUARIO_GESTOR_ADMINISTRATIVO',
+  }.contains(profile);
+}
+
+bool canManageRuralData(String profile) {
+  return profile == 'SUPER_ADMIN' || profile == 'USUARIO_TECNICO_PRESCRICAO';
+}
+
+bool canCreateFarmOrField(String profile) {
+  return const {
+    'SUPER_ADMIN',
+    'USUARIO_TECNICO_PRESCRICAO',
+    'USUARIO_CONSULTOR_CTV',
+    'USUARIO_ASSISTENTE_ATV',
+  }.contains(profile);
+}

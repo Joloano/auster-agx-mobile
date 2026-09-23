@@ -14,6 +14,12 @@ import '../features/dashboard/presentation/dashboard_screen.dart';
 import '../features/demandas/presentation/demanda_details_screen.dart';
 import '../features/demandas/presentation/demandas_screen.dart';
 import '../features/modules/presentation/modules_screen.dart';
+import '../features/modules/domain/module_access.dart';
+import '../features/rural/presentation/client_details_screen.dart';
+import '../features/rural/presentation/clients_screen.dart';
+import '../features/rural/presentation/farm_details_screen.dart';
+import '../features/rural/presentation/farms_screen.dart';
+import '../features/rural/presentation/field_details_screen.dart';
 import '../features/shell/app_shell.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -58,6 +64,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       }
       if (currentLocation.startsWith('/modulos/usuarios') &&
           user.perfil != 'SUPER_ADMIN') {
+        return '/modulos';
+      }
+      final ruralLocation = currentLocation.startsWith('/modulos/fazendas') ||
+          currentLocation.startsWith('/modulos/talhoes');
+      if (ruralLocation &&
+          !canAccessModule(user.perfil, AppModuleId.fazendas)) {
         return '/modulos';
       }
       return null;
@@ -124,6 +136,36 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'perfil',
                     builder: (context, state) => const ProfileScreen(),
+                  ),
+                  GoRoute(
+                    path: 'clientes',
+                    builder: (context, state) => const ClientsScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) => ClientDetailsScreen(
+                          clientId: state.pathParameters['id']!,
+                        ),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'fazendas',
+                    builder: (context, state) => const FarmsScreen(),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        builder: (context, state) => FarmDetailsScreen(
+                          farmId: state.pathParameters['id']!,
+                        ),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'talhoes/:id',
+                    builder: (context, state) => FieldDetailsScreen(
+                      fieldId: state.pathParameters['id']!,
+                    ),
                   ),
                 ],
               ),
