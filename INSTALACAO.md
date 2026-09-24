@@ -112,24 +112,22 @@ Se `flutter emulators` não listar nenhum emulador, instale o pacote do emulador
 $sdkbin = "$env:ANDROID_HOME\cmdline-tools\latest\bin"
 & "$sdkbin\sdkmanager.bat" --licenses
 & "$sdkbin\sdkmanager.bat" "emulator" "system-images;android-35;google_apis;x86_64"
-& "$sdkbin\avdmanager.bat" create avd -n auster_test -k "system-images;android-35;google_apis;x86_64" -d pixel_7
+& "$sdkbin\avdmanager.bat" create avd -n Pixel_8 -k "system-images;android-35;google_apis;x86_64" -d pixel_8
 emulator -accel-check
 ```
 
-O `avdmanager` cria o AVD com `hw.keyboard=no` no `config.ini`. Com isso, o Android nem registra um teclado físico e o teclado do computador não digita nos campos do app. O `scripts/dev/subir-ambiente.ps1` corrige o arquivo e reinicia o emulador a frio quando precisa. Para corrigir à mão:
+O `scripts/dev/subir-ambiente.ps1` prepara o Pixel 8 com teclado físico, 3 GB de RAM, 2 núcleos, WHPX, GPU do host e Quick Boot. Na Intel HD Graphics 620 validada, ele persiste `ForceGpuHost=on`, desliga SwiftShader e Vulkan e aplica o mesmo perfil quando o AVD é aberto diretamente pelo Android Studio. Execute:
 
 ```powershell
-$config = "$env:USERPROFILE\.android\avd\auster_test.avd\config.ini"
-(Get-Content $config) -replace '^hw\.keyboard\s*=.*', 'hw.keyboard=yes' | Set-Content $config
-emulator -avd auster_test -no-snapshot-load
+.\scripts\dev\subir-ambiente.ps1 -SemBuild
 ```
 
-Para conferir, `adb shell dumpsys input` deve listar um teclado físico, como `AT Translated Set 2 keyboard`.
+Quando o perfil muda, o primeiro boot ignora o snapshot antigo. Os próximos usam Quick Boot normalmente. Para conferir, `adb shell dumpsys input` deve listar um teclado físico e `adb shell dumpsys SurfaceFlinger` deve mostrar o fabricante da GPU, não `SwiftShader`.
 
 Depois:
 
 1. Inicie o ambiente local ou outra instância da API.
-2. Abra o emulador com `flutter emulators --launch auster_test`.
+2. Abra o emulador pelo script acima ou pelo AVD `Pixel_8` no Device Manager.
 3. Confira o identificador com `flutter devices`.
 4. Execute:
 
@@ -256,14 +254,15 @@ Add-Content "$env:USERPROFILE\.gradle\gradle.properties" "`nandroid.overridePath
 ### O teclado não responde no emulador
 
 1. No Device Manager do Android Studio, abra **Edit** no AVD, acesse **Show Advanced Settings** e mantenha **Enable keyboard input** habilitado.
-2. Permita que o teclado virtual apareça mesmo quando o emulador detectar o teclado físico e selecione o Gboard:
+2. Mantenha o Gboard recolhido enquanto usa o teclado do computador. Essa combinação evita disputa de foco e reduz ANRs do System UI em máquinas com poucos núcleos:
 
 ```powershell
-adb shell settings put secure show_ime_with_hard_keyboard 1
-adb shell ime set com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME
+adb shell settings put secure show_ime_with_hard_keyboard 0
 ```
 
-3. Se aparecer `Process system isn't responding` ou `System UI isn't responding`, escolha **Wait**. Se o aviso retornar, execute **Cold Boot Now** no menu do AVD. Isso descarta somente o snapshot rápido e preserva aplicativos e dados.
+3. Rode `.\scripts\dev\subir-ambiente.ps1 -SemBuild`; o script também corrige `hw.keyboard=yes` no AVD.
+4. Se aparecer `Process system isn't responding` ou `System UI isn't responding` no primeiro boot completo, escolha **Wait**. Aguarde a interface estabilizar e feche o emulador normalmente para salvar um Quick Boot saudável.
+5. Se o aviso retornar em todo boot, execute **Cold Boot Now** uma vez no menu do AVD. Isso descarta somente o snapshot rápido e preserva aplicativos e dados.
 
 Também é possível fazer o cold boot pelo terminal, substituindo o nome do AVD:
 
@@ -272,6 +271,26 @@ emulator -avd NOME_DO_AVD -no-snapshot-load
 ```
 
 Evite **Wipe Data** como primeira tentativa, pois ele apaga o estado do aparelho virtual e normalmente não é necessário para recuperar o teclado.
+
+### A captura do emulador aparece com uma borda verde
+
+Ela é o indicador de atualização de superfícies do Android, não parte da interface AUSTER. O script o desliga automaticamente. Para corrigir uma sessão já aberta:
+
+```powershell
+adb shell settings put global show_hw_screen_updates 0
+adb shell setprop debug.sf.showupdates 0
+adb shell setprop debug.hwui.show_dirty_regions false
+```
+
+### O log mostra falha ao migrar o armazenamento seguro no AVD
+
+Depois de trocar a versão do plugin ou restaurar um snapshot antigo, o Keystore do emulador pode não conseguir descriptografar a sessão anterior. Em ambiente de desenvolvimento, limpe apenas os dados locais do aplicativo e entre novamente:
+
+```powershell
+adb shell pm clear br.com.austertec.auster_agx_mobile
+```
+
+Isso não altera banco, API ou massa de teste. Em um aparelho real, não limpe os dados sem antes confirmar que o usuário pode autenticar novamente.
 
 ### O app acusa timeout no emulador, mas a API responde rápido
 

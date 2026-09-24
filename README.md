@@ -14,7 +14,7 @@
 ![Versão](https://img.shields.io/badge/vers%C3%A3o-0.1.0%2B1-lightgrey)
 [![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)](LICENSE)
 
-Aplicativo **Android em Flutter/Dart** para acompanhamento operacional de demandas agrícolas do AusterAgX. Oferece autenticação JWT, dashboard, consulta e atualização autorizada de demandas, cache SQLite isolado por usuário, fila de sincronização e captura local de GPS.
+Aplicativo **Android em Flutter/Dart** para a operação do AusterAgX. Reúne autenticação, dashboard, demandas, clientes, fazendas, talhões, pedidos, gestão agronômica, mapeamentos, auditoria e suporte, além de cache SQLite isolado por usuário, fila de sincronização e captura local de GPS.
 
 O cliente mobile reutiliza a **API AusterAgX existente**. Autorização, transições de status e validações de negócio continuam no backend oficial; o aplicativo não duplica a base transacional nem cria regras paralelas.
 
@@ -41,19 +41,24 @@ O cliente mobile reutiliza a **API AusterAgX existente**. Autorização, transi�
 
 ## Preview
 
-Capturas reais dos widgets Flutter em viewport mobile de 390 × 844 pontos, usando dados controlados de demonstração.
+Capturas reais da build Android executada em um Pixel 8 (1080 × 2400), conectada à API e à massa local de demonstração.
 
-| Dashboard operacional | Demandas por etapa e status |
+| Dashboard operacional | Módulos por perfil |
 |:---:|:---:|
-| <img src="docs/screenshots/mobile-dashboard.png" alt="Dashboard operacional do AusterAgX Mobile" width="280"> | <img src="docs/screenshots/mobile-demandas.png" alt="Lista de demandas do AusterAgX Mobile" width="280"> |
+| <img src="docs/screenshots/mobile-dashboard.png" alt="Dashboard operacional do AusterAgX Mobile" width="280"> | <img src="docs/screenshots/mobile-modulos.png" alt="Módulos do AusterAgX Mobile" width="280"> |
+
+| Mapeamentos | Auditoria |
+|:---:|:---:|
+| <img src="docs/screenshots/mobile-mapeamentos.png" alt="Mapeamentos do AusterAgX Mobile" width="280"> | <img src="docs/screenshots/mobile-auditoria.png" alt="Auditoria do AusterAgX Mobile" width="280"> |
 
 <details>
 <summary><strong>Ver o fluxo completo de telas</strong></summary>
 
 <p align="center">
   <img src="docs/screenshots/mobile-login.png" alt="Login do AusterAgX Mobile" width="190">
-  <img src="docs/screenshots/mobile-troca-senha.png" alt="Troca obrigatória de senha" width="190">
+  <img src="docs/screenshots/mobile-demandas.png" alt="Lista de demandas do AusterAgX Mobile" width="190">
   <img src="docs/screenshots/mobile-detalhe-demanda.png" alt="Detalhe de demanda com status e GPS" width="190">
+  <img src="docs/screenshots/mobile-ajuda.png" alt="Central de ajuda do AusterAgX Mobile" width="190">
 </p>
 
 </details>
@@ -71,9 +76,9 @@ Capturas reais dos widgets Flutter em viewport mobile de 390 × 844 pontos, usan
 | **Persistência** | SQLite via `sqlite3` e `sqlite3_flutter_libs`, cache por usuário e fila offline |
 | **Segurança** | `flutter_secure_storage`, validação de origem da API e assinatura release obrigatória |
 | **Conectividade** | `connectivity_plus`, política de falhas transitórias e sincronização automática |
-| **Recursos nativos** | `geolocator` e `permission_handler` para captura GPS e permissões Android |
+| **Recursos nativos** | `geolocator`, `permission_handler`, `file_picker` e `url_launcher` para GPS, permissões, anexos e integrações Android |
 | **Interface** | Identidade AUSTER, logo oficial, Inter e Bebas Neue |
-| **Qualidade** | `flutter_test`, Mocktail, Flutter Lints, 47 testes automatizados e CI no GitHub Actions |
+| **Qualidade** | `flutter_test`, Mocktail, Flutter Lints, 74 testes automatizados e CI no GitHub Actions |
 | **Modelagem** | brModelo Web, brModelo desktop e Mermaid |
 | **Ambiente** | Docker Compose (Postgres/PostGIS, API AusterAgX e massa de teste) e scripts PowerShell |
 
@@ -160,6 +165,12 @@ Capturas reais dos widgets Flutter em viewport mobile de 390 × 844 pontos, usan
    - Prescrições completas de manejo para Smart-Brake e Smart-Seeding.
    - Leitura para perfis administrativos e escrita restrita a superadmin e técnico de prescrição.
 
+14. **Mapeamentos, auditoria e suporte**
+   - Mapeamentos por drone ou satélite com criação, remapeamento, planejamento de voo, upload, conclusão, download e desativação conforme o perfil.
+   - Filtros de fonte e pendência, paginação e detalhamento integrados aos contratos oficiais de sensoriamento remoto.
+   - Auditoria administrativa em registros, usuários e timeline, com período seguro de 30 dias, filtros e exportação CSV.
+   - Reports de problema, melhoria e novo recurso, com evidência opcional, Google Drive e gestão administrativa de status e issue.
+
 ---
 
 ## Perfis de acesso
@@ -205,6 +216,7 @@ lib/
     modules/                   permissões e composição dos módulos mobile
     rural/                     clientes, fazendas, talhões e vínculos de campo
     shell/                     navegação principal
+    system/                    mapeamentos, auditoria, arquivos e suporte
   widgets/                     componentes AUSTER compartilhados
 ```
 
@@ -280,18 +292,19 @@ Para subir só o ambiente, sem o app: `docker compose up -d --build`. A massa de
 
 ### App mobile no emulador Android
 
+O script usa o AVD `Pixel_8`, habilita teclado físico, WHPX, 3 GB de RAM, Quick Boot e GPU do host. Na Intel HD Graphics 620 validada, ele também persiste as flags oficiais do emulador para que a aceleração funcione ao iniciar pelo Device Manager do Android Studio.
+
+```powershell
+.\scripts\dev\subir-ambiente.ps1 -SemBuild
+```
+
+Para executar apenas o Flutter em um emulador já aberto:
+
 ```powershell
 flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8080
 ```
 
-Se o Pixel 8 não aceitar digitação, habilite **Enable keyboard input** nas configurações avançadas do AVD e execute:
-
-```powershell
-adb shell settings put secure show_ime_with_hard_keyboard 1
-adb shell ime set com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME
-```
-
-ANRs de `System UI` após um Quick Boot indicam snapshot instável. Use **Cold Boot Now** no Device Manager antes de recriar ou apagar o AVD. O procedimento completo está em [Solução de problemas](INSTALACAO.md#o-teclado-não-responde-no-emulador).
+O teclado do computador permanece ativo com o Gboard recolhido, evitando disputa de foco. O procedimento completo para teclado, GPU e recuperação de snapshot está em [Solução de problemas](INSTALACAO.md#o-teclado-não-responde-no-emulador).
 
 ### App mobile em celular físico
 
@@ -342,17 +355,17 @@ Builds release exigem HTTPS e assinatura privada configurada. Consulte [a seçã
 
 ## Testes automatizados
 
-Baseline validada em **23 de setembro de 2026**:
+Baseline validada em **24 de setembro de 2026**:
 
 - `flutter analyze --no-pub`: **nenhuma ocorrência**.
-- `flutter test --no-pub`: **47 testes aprovados**.
+- `flutter test --no-pub`: **74 testes aprovados**.
 
 ```powershell
 flutter analyze
 flutter test
 ```
 
-A suíte cobre configuração segura da API, SQLite, isolamento de usuário, fila offline, tradução de erros, retry seguro de leituras, recuperação visual, refresh JWT, sincronização, repositórios, mapeamento dos DTOs reais e proteção das rotas/widgets de autenticação.
+A suíte cobre configuração segura da API, SQLite, isolamento de usuário, fila offline, tradução de erros, retry seguro de leituras, rotas públicas sem bloqueio do Keystore, refresh JWT, sincronização, contratos rurais, comerciais, agronômicos e de sistema, permissões por perfil e proteção dos fluxos de autenticação.
 
 A [CI](.github/workflows/ci.yml) roda em todo push para `main` e em pull requests: `flutter analyze`, `flutter test` e a regeneração dos modelos de dados, que falha se algum artefato de `docs/modelo-er` estiver desatualizado.
 
@@ -370,6 +383,7 @@ A [CI](.github/workflows/ci.yml) roda em todo push para `main` e em pull request
 8. Conferir a operação pendente e o estado otimista no app.
 9. Restabelecer a conexão e sincronizar com o servidor.
 10. Capturar a localização GPS no detalhe da demanda.
+11. Consultar mapeamentos, auditoria e reports pela central de módulos.
 
 ---
 
@@ -404,7 +418,7 @@ O repositório contém um único sistema, o aplicativo, por isso o projeto Flutt
 ## Segurança e integridade
 
 - O mobile não altera tabelas, migrations ou regras do AusterAgX oficial.
-- DTOs enviados respeitam os contratos aceitos por `/auth`, `/dashboard` e `/demandas`.
+- DTOs enviados respeitam os contratos REST existentes; o aplicativo não replica validações transacionais do backend.
 - Transições são obtidas de `/demandas/status-fluxo` e novamente validadas pelo servidor.
 - Tokens e perfil mínimo ficam no armazenamento seguro do sistema.
 - Bancos, filas e capturas GPS são isolados por usuário no dispositivo.

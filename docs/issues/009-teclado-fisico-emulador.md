@@ -6,7 +6,7 @@ Fazer o teclado do computador digitar nos campos do app quando ele roda no emula
 
 ## Motivação
 
-O AVD `auster_test`, criado pelo `avdmanager` como descreve o `INSTALACAO.md`, vem com `hw.keyboard=no` no `config.ini`. Com esse valor o Android nem registra um teclado físico: `adb shell dumpsys input` não lista nenhum, e o teclado do computador não digita no login nem nos outros campos. Só o teclado virtual da tela funciona.
+O AVD `Pixel_8`, quando criado pelo `avdmanager`, pode vir com `hw.keyboard=no` no `config.ini`. Com esse valor o Android nem registra um teclado físico: `adb shell dumpsys input` não lista nenhum, e o teclado do computador não digita no login nem nos outros campos. Só o teclado virtual da tela funciona.
 
 Com `hw.keyboard=yes` e um boot a frio, o `dumpsys input` passa a listar `AT Translated Set 2 keyboard` e a digitação volta a funcionar.
 
@@ -15,8 +15,9 @@ Com `hw.keyboard=yes` e um boot a frio, o `dumpsys input` passa a listar `AT Tra
 - `scripts/dev/subir-ambiente.ps1` localiza o `config.ini` do AVD (respeitando `ANDROID_AVD_HOME`, `ANDROID_USER_HOME` e o `path=` do `<nome>.ini`) e grava `hw.keyboard=yes` quando o valor for outro ou estiver ausente.
 - Quando o arquivo muda, o emulador sobe com `-no-snapshot-load`, porque o snapshot guarda o hardware antigo; se ele já estiver aberto, o script o fecha com `adb emu kill` antes.
 - Sem mudança no arquivo, o fluxo continua igual, com o boot rápido pelo snapshot.
+- O Gboard permanece recolhido (`show_ime_with_hard_keyboard=0`) enquanto o teclado físico está ativo, evitando disputa de foco.
 - O `INSTALACAO.md` explica o problema e mostra a correção manual.
 
 ## Status
 
-Concluída em 22 de setembro de 2026.
+Concluída em 22 de setembro de 2026 e ampliada com o perfil acelerado do Pixel 8 em 24 de setembro de 2026.
