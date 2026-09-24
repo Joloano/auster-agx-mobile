@@ -39,6 +39,23 @@ void main() {
     await sessionEvents.dispose();
   });
 
+  test('nao consulta armazenamento seguro nas rotas publicas', () async {
+    client.dio.httpClientAdapter = _StubAdapter((options) {
+      return _jsonResponse(200, {'ok': true});
+    });
+
+    await client.dio.post<Map<String, dynamic>>(
+      '/auth/login',
+      data: {'email': 'admin@auster.test', 'senha': 'segredo'},
+    );
+    await client.dio.post<Map<String, dynamic>>(
+      '/auth/refresh',
+      data: {'refreshToken': 'token'},
+    );
+
+    expect(tokenStore.accessTokenReadCount, 0);
+  });
+
   test('preserva credenciais quando refresh falha por conexao', () async {
     var expirationEvents = 0;
     final subscription = sessionEvents.sessionExpired.listen(
@@ -208,6 +225,7 @@ class _MemoryTokenStore implements TokenStore {
 
   AuthTokens? saved;
   int clearCount = 0;
+  int accessTokenReadCount = 0;
 
   @override
   Future<void> clear() async {
@@ -219,7 +237,10 @@ class _MemoryTokenStore implements TokenStore {
   Future<AuthTokens?> read() async => saved;
 
   @override
-  Future<String?> readAccessToken() async => saved?.accessToken;
+  Future<String?> readAccessToken() async {
+    accessTokenReadCount++;
+    return saved?.accessToken;
+  }
 
   @override
   Future<String?> readRefreshToken() async => saved?.refreshToken;

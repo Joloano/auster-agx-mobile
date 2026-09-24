@@ -52,8 +52,12 @@ class ApiClient {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    if (_isPublicAuthRoute(options.path)) {
+      handler.next(options);
+      return;
+    }
     final accessToken = await _tokenStorage.readAccessToken();
-    if (accessToken != null && !_isPublicAuthRoute(options.path)) {
+    if (accessToken != null) {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
     handler.next(options);
