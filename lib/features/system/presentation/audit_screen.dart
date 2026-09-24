@@ -32,13 +32,20 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
   String? _entityId;
   String? _userId;
   String? _action;
-  String? _from;
-  String? _to;
+  late final String _defaultFrom;
+  late final String _defaultTo;
+  late String? _from;
+  late String? _to;
   int _page = 0;
 
   @override
   void initState() {
     super.initState();
+    final today = DateTime.now();
+    _defaultFrom = _apiDate(today.subtract(const Duration(days: 30)));
+    _defaultTo = _apiDate(today);
+    _from = _defaultFrom;
+    _to = _defaultTo;
     _future = _load();
   }
 
@@ -143,9 +150,9 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
                     ),
                   const Spacer(),
                   if (_hasFilters)
-                    const Chip(
-                      avatar: Icon(Icons.check_rounded, size: 16),
-                      label: Text('Filtrado'),
+                    Chip(
+                      avatar: const Icon(Icons.check_rounded, size: 16),
+                      label: Text(_filterLabel),
                     ),
                 ],
               ),
@@ -183,6 +190,16 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
         _from,
         _to,
       ].any((value) => value != null && value.isNotEmpty);
+
+  String get _filterLabel {
+    final onlyDefaultWindow = _entity == null &&
+        _entityId == null &&
+        _userId == null &&
+        _action == null &&
+        _from == _defaultFrom &&
+        _to == _defaultTo;
+    return onlyDefaultWindow ? 'Últimos 30 dias' : 'Filtrado';
+  }
 
   Widget _content(_AuditData data) {
     final page = data.page;
@@ -436,13 +453,31 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
       },
     );
     if (values == null) return;
+    final entity = _text(values['entidade']);
+    final entityId = _text(values['entidadeId']);
+    final userId = _text(values['usuarioId']);
+    final action = _text(values['acao']);
+    var from = _text(values['de']);
+    var to = _text(values['ate']);
+    if (entityId != null && entity == null) {
+      _showMessage('Selecione a entidade para filtrar pelo ID do registro.');
+      return;
+    }
+    if (from != null && to != null && from.compareTo(to) > 0) {
+      _showMessage('A data inicial deve ser anterior à data final.');
+      return;
+    }
+    if (entity == null && userId == null && from == null && to == null) {
+      from = _defaultFrom;
+      to = _defaultTo;
+    }
     setState(() {
-      _entity = _text(values['entidade']);
-      _entityId = _text(values['entidadeId']);
-      _userId = _text(values['usuarioId']);
-      _action = _text(values['acao']);
-      _from = _text(values['de']);
-      _to = _text(values['ate']);
+      _entity = entity;
+      _entityId = entityId;
+      _userId = userId;
+      _action = action;
+      _from = from;
+      _to = to;
       _page = 0;
       _future = _load();
     });
@@ -454,8 +489,8 @@ class _AuditScreenState extends ConsumerState<AuditScreen> {
       _entityId = null;
       _userId = null;
       _action = null;
-      _from = null;
-      _to = null;
+      _from = _defaultFrom;
+      _to = _defaultTo;
       _page = 0;
       _future = _load();
     });
@@ -599,6 +634,12 @@ enum _AuditView { records, users, timeline }
 String? _text(Object? value) {
   final text = value?.toString().trim();
   return text == null || text.isEmpty ? null : text;
+}
+
+String _apiDate(DateTime value) {
+  return '${value.year.toString().padLeft(4, '0')}-'
+      '${value.month.toString().padLeft(2, '0')}-'
+      '${value.day.toString().padLeft(2, '0')}';
 }
 
 String _actionLabel(String action) {
