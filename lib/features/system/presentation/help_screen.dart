@@ -496,7 +496,7 @@ class _FeedbackFormDialogState extends ConsumerState<_FeedbackFormDialog> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   String _type = 'MELHORIA';
-  PlatformFile? _attachment;
+  _SelectedAttachment? _attachment;
   bool _submitting = false;
   String? _error;
 
@@ -579,11 +579,11 @@ class _FeedbackFormDialogState extends ConsumerState<_FeedbackFormDialog> {
                     style: Theme.of(context).textTheme.titleSmall),
                 const SizedBox(height: 8),
                 if (_attachment != null) ...[
-                  if (_isImage(_attachment!.name) && _attachment!.bytes != null)
+                  if (_isImage(_attachment!.name))
                     ClipRRect(
                       borderRadius: BorderRadius.circular(6),
                       child: Image.memory(
-                        _attachment!.bytes!,
+                        _attachment!.bytes,
                         height: 160,
                         width: double.infinity,
                         fit: BoxFit.contain,
@@ -597,7 +597,7 @@ class _FeedbackFormDialogState extends ConsumerState<_FeedbackFormDialog> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    subtitle: Text(_fileSize(_attachment!.size)),
+                    subtitle: Text(_fileSize(_attachment!.bytes.length)),
                     trailing: IconButton(
                       tooltip: 'Remover anexo',
                       onPressed: _submitting
@@ -658,21 +658,15 @@ class _FeedbackFormDialogState extends ConsumerState<_FeedbackFormDialog> {
     try {
       final types = await ref.read(systemApiProvider).getAllowedFileTypes();
       final allowed = types['feedback'] ?? const [];
-      final result = await FilePicker.pickFiles(
+      final file = await FilePicker.pickFile(
         type: allowed.isEmpty ? FileType.any : FileType.custom,
         allowedExtensions: allowed.isEmpty ? null : allowed,
-        withData: true,
-        allowMultiple: false,
       );
-      if (result == null || !mounted) return;
-      if (result.files.single.bytes == null) {
-        setState(
-          () => _error = 'O Android não forneceu o conteúdo do arquivo.',
-        );
-        return;
-      }
+      if (file == null) return;
+      final bytes = await file.readAsBytes();
+      if (!mounted) return;
       setState(() {
-        _attachment = result.files.single;
+        _attachment = _SelectedAttachment(name: file.name, bytes: bytes);
         _error = null;
       });
     } catch (error) {
@@ -706,7 +700,7 @@ class _FeedbackFormDialogState extends ConsumerState<_FeedbackFormDialog> {
         final uploaded = await ref.read(systemApiProvider).uploadFile(
               type: 'feedback',
               fileName: attachment.name,
-              bytes: attachment.bytes!,
+              bytes: attachment.bytes,
             );
         attachmentKey = uploaded.key;
       }
@@ -728,6 +722,13 @@ class _FeedbackFormDialogState extends ConsumerState<_FeedbackFormDialog> {
       }
     }
   }
+}
+
+class _SelectedAttachment {
+  const _SelectedAttachment({required this.name, required this.bytes});
+
+  final String name;
+  final Uint8List bytes;
 }
 
 class _FeedbackDetailsDialog extends ConsumerStatefulWidget {

@@ -716,18 +716,12 @@ class _MappingScreenState extends ConsumerState<MappingScreen> {
     }
 
     final allowed = (await api.getAllowedFileTypes())[type] ?? const [];
-    final result = await FilePicker.pickFiles(
+    final file = await FilePicker.pickFile(
       type: allowed.isEmpty ? FileType.any : FileType.custom,
       allowedExtensions: allowed.isEmpty ? null : allowed,
-      withData: true,
-      allowMultiple: false,
     );
-    if (result == null) return null;
-    final file = result.files.single;
-    final bytes = file.bytes;
-    if (bytes == null) {
-      throw StateError('O Android não forneceu o conteúdo do arquivo.');
-    }
+    if (file == null) return null;
+    final bytes = await file.readAsBytes();
     final uploaded = await api.uploadFile(
       type: type,
       fileName: file.name,
