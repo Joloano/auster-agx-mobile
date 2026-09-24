@@ -91,7 +91,7 @@ if (-not (Test-Path $adb)) {
 $linhas = & $adb devices | Select-Object -Skip 1 | Where-Object { $_.Trim() }
 if (-not $linhas) {
     Write-Host '  Nenhum dispositivo conectado ao adb.'
-    Write-Host '  Emulador: flutter emulators --launch auster_test'
+    Write-Host '  Emulador: .\scripts\dev\subir-ambiente.ps1 -SemBuild'
     Write-Host '  Celular: ative a Depuracao USB e use Transferencia de arquivos no cabo, ou instale o APK sem adb.'
     exit 0
 }

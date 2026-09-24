@@ -5,8 +5,8 @@ Sobe o ambiente de desenvolvimento do AusterAgX Mobile.
 .DESCRIPTION
 1. Sobe banco, API e massa de teste com o docker-compose.yml da raiz.
 2. Espera a API ficar pronta e a massa de teste existir.
-3. Emulador: habilita o teclado fisico no AVD, sobe o emulador, se preciso,
-   e executa o app com flutter run.
+3. Emulador: otimiza o AVD para WHPX, GPU do host e teclado fisico, sobe o
+   emulador, se preciso, e executa o app com flutter run.
    Celular: gera o APK de debug apontando para o IP Wi-Fi do computador e
    instala pelo cabo quando houver um aparelho conectado.
 
@@ -21,7 +21,7 @@ param(
     [ValidateSet('emulador', 'celular')]
     [string] $Alvo = 'emulador',
 
-    [string] $Emulador = 'auster_test',
+    [string] $Emulador = 'Pixel_8',
 
     [string] $IpComputador,
 
@@ -30,6 +30,9 @@ param(
     [string] $FlutterSdk = 'C:\auster-mobile-tools\flutter',
 
     [string] $AndroidSdk = 'C:\auster-mobile-tools\android-sdk',
+
+    # Ignora o bloqueio remoto do emulador quando o driver local foi validado.
+    [switch] $ForcarGpuHost,
 
     # Pula o rebuild da imagem da API quando o backend nao mudou.
     [switch] $SemBuild
@@ -114,34 +117,104 @@ function ArquivoConfigAvd {
     return $null
 }
 
-function GarantirTecladoFisico {
-    # O avdmanager cria o AVD com hw.keyboard=no. Assim o Android nem registra um
-    # teclado fisico e o teclado do computador nao digita nos campos do app.
-    # Devolve $true quando precisou alterar o config.ini.
+function OtimizarAvd {
+    # Mantem o AVD na aceleracao nativa do Windows e fixa a renderizacao na GPU
+    # do host. Quando o perfil muda, o primeiro boot ignora o snapshot antigo;
+    # os proximos voltam a usar Quick Boot com a configuracao ja validada.
     $config = ArquivoConfigAvd
     if (-not $config) {
-        Aviso "config.ini do AVD $Emulador nao encontrado; o teclado do computador pode nao funcionar no emulador."
+        Aviso "config.ini do AVD $Emulador nao encontrado; os ajustes de desempenho nao foram aplicados."
         return $false
+    }
+
+    $ajustes = [ordered]@{
+        'hw.keyboard' = 'yes'
+        'hw.gpu.enabled' = 'yes'
+        'hw.gpu.mode' = 'host'
+        'hw.ramSize' = '3072'
+        'hw.cpu.ncore' = '2'
+        'showDeviceFrame' = 'no'
+        'fastboot.forceColdBoot' = 'no'
+        'fastboot.forceFastBoot' = 'yes'
     }
     $linhas = @(Get-Content -LiteralPath $config)
     $alterou = $false
+    $encontrados = @{}
     $novas = foreach ($linha in $linhas) {
-        if ($linha -match '^\s*hw\.keyboard\s*=') {
-            if ($linha -notmatch '=\s*yes\s*$') { $alterou = $true }
-            'hw.keyboard=yes'
-        } else {
-            $linha
+        $substituida = $false
+        foreach ($chave in $ajustes.Keys) {
+            if ($linha -match "^\s*$([regex]::Escape($chave))\s*=") {
+                $nova = "$chave=$($ajustes[$chave])"
+                if ($linha -ne $nova) { $alterou = $true }
+                $encontrados[$chave] = $true
+                $nova
+                $substituida = $true
+                break
+            }
         }
+        if (-not $substituida) { $linha }
     }
-    if (-not ($linhas -match '^\s*hw\.keyboard\s*=')) {
-        $novas = @($novas) + 'hw.keyboard=yes'
-        $alterou = $true
+    foreach ($chave in $ajustes.Keys) {
+        if (-not $encontrados.ContainsKey($chave)) {
+            $novas = @($novas) + "$chave=$($ajustes[$chave])"
+            $alterou = $true
+        }
     }
     if ($alterou) {
         [System.IO.File]::WriteAllLines($config, [string[]] $novas)
-        Ok "teclado fisico habilitado em $config"
+        Ok "AVD otimizado para WHPX, GPU do host e teclado fisico em $config"
     }
     return $alterou
+}
+
+function ConfigurarGpuHostGlobal {
+    # O Android Studio nao aceita os mesmos argumentos usados abaixo na linha
+    # de comando. Estas flags oficiais mantem a Intel HD 620 no renderizador do
+    # host mesmo quando o AVD e iniciado diretamente pelo Device Manager.
+    $pastaAndroid = Join-Path $env:USERPROFILE '.android'
+    $arquivo = Join-Path $pastaAndroid 'advancedFeatures.ini'
+    $backup = "$arquivo.auster-backup"
+    $ajustes = [ordered]@{
+        'ForceGpuHost' = 'on'
+        'ForceSwiftshader' = 'off'
+        'Vulkan' = 'off'
+    }
+    $linhas = if (Test-Path -LiteralPath $arquivo) {
+        @(Get-Content -LiteralPath $arquivo)
+    } else {
+        @()
+    }
+    $alterou = $false
+    $encontrados = @{}
+    $novas = foreach ($linha in $linhas) {
+        $substituida = $false
+        foreach ($chave in $ajustes.Keys) {
+            if ($linha -match "^\s*$([regex]::Escape($chave))\s*=") {
+                $nova = "$chave = $($ajustes[$chave])"
+                if ($linha -ne $nova) { $alterou = $true }
+                $encontrados[$chave] = $true
+                $nova
+                $substituida = $true
+                break
+            }
+        }
+        if (-not $substituida) { $linha }
+    }
+    foreach ($chave in $ajustes.Keys) {
+        if (-not $encontrados.ContainsKey($chave)) {
+            $novas = @($novas) + "$chave = $($ajustes[$chave])"
+            $alterou = $true
+        }
+    }
+    if (-not $alterou) { return }
+    if (-not (Test-Path -LiteralPath $pastaAndroid)) {
+        [void] (New-Item -ItemType Directory -Path $pastaAndroid)
+    }
+    if ((Test-Path -LiteralPath $arquivo) -and -not (Test-Path -LiteralPath $backup)) {
+        Copy-Item -LiteralPath $arquivo -Destination $backup
+    }
+    [System.IO.File]::WriteAllLines($arquivo, [string[]] $novas)
+    Ok "GPU do host persistida para o Android Studio em $arquivo"
 }
 
 function CelularConectado {
@@ -192,10 +265,20 @@ if (-not (Test-Path $adb)) {
 
 if ($Alvo -eq 'emulador') {
     Etapa '2. Emulador Android'
-    $tecladoAlterado = GarantirTecladoFisico
-    if ($tecladoAlterado -and (EmuladorOnline)) {
+    $avdAlterado = OtimizarAvd
+    $gpuIntel620 = $false
+    try {
+        $gpuIntel620 = [bool] (Get-CimInstance Win32_VideoController -ErrorAction Stop |
+            Where-Object { $_.Name -match 'Intel\(R\).*HD Graphics 620' } |
+            Select-Object -First 1)
+    } catch {
+        Aviso 'nao foi possivel identificar a GPU do host; sera respeitada a selecao padrao do emulador.'
+    }
+    $usarGpuHostForcada = $ForcarGpuHost -or $gpuIntel620
+    if ($usarGpuHostForcada) { ConfigurarGpuHostGlobal }
+    if ($avdAlterado -and (EmuladorOnline)) {
         # A configuracao de hardware so vale num boot novo do emulador.
-        Write-Host '  reiniciando o emulador para aplicar o teclado fisico...'
+        Write-Host '  reiniciando o emulador para aplicar o perfil de hardware...'
         & $adb emu kill *> $null
         [void] (Aguardar { -not (EmuladorOnline) } 60 'o emulador fechar')
     }
@@ -203,9 +286,27 @@ if ($Alvo -eq 'emulador') {
         if (-not (Test-Path $emuladorExe)) {
             Falhar "emulador nao encontrado em $emuladorExe. Veja a secao de emulador no INSTALACAO.md."
         }
-        $argumentosEmulador = @('-avd', $Emulador)
-        # O snapshot guarda o hardware antigo; depois da troca, o boot precisa ser a frio.
-        if ($tecladoAlterado) { $argumentosEmulador += '-no-snapshot-load' }
+        $argumentosEmulador = @(
+            '-avd', $Emulador,
+            '-accel', 'on',
+            '-gpu', 'host',
+            '-memory', '3072',
+            '-cores', '2'
+        )
+        if ($usarGpuHostForcada) {
+            # O servidor de flags do emulador 37 força SwiftShader na Intel HD
+            # 620, apesar de o driver OpenGL 4.5 funcionar corretamente.
+            $argumentosEmulador += @(
+                '-feature', 'ForceGpuHost',
+                '-feature', '-ForceSwiftshader',
+                '-feature', '-Vulkan'
+            )
+        }
+        if ($avdAlterado) {
+            # Descarta somente a leitura do snapshot antigo. O encerramento
+            # normal ainda salva um Quick Boot com o novo perfil de hardware.
+            $argumentosEmulador += '-no-snapshot-load'
+        }
         Write-Host "  subindo o AVD $Emulador..."
         Start-Process -FilePath $emuladorExe -ArgumentList $argumentosEmulador
         if (-not (Aguardar { EmuladorOnline } 180 'o emulador conectar ao adb')) {
@@ -214,7 +315,26 @@ if ($Alvo -eq 'emulador') {
     }
     $iniciou = Aguardar { ((& $adb shell getprop sys.boot_completed 2>$null) -join '').Trim() -eq '1' } 180 'o Android terminar de iniciar'
     if (-not $iniciou) { Falhar 'o Android do emulador nao terminou de iniciar.' }
+    Start-Sleep -Seconds 10
     & $adb shell setprop log.tag.EGL_emulation SILENT 2>$null
+    # O teclado do computador continua ativo sem manter o Gboard aberto, o que
+    # reduz travamentos do System UI em maquinas com poucos nucleos.
+    & $adb shell settings put secure show_ime_with_hard_keyboard 0 2>$null
+    & $adb shell settings put global window_animation_scale 0.5 2>$null
+    & $adb shell settings put global transition_animation_scale 0.5 2>$null
+    & $adb shell settings put global animator_duration_scale 0.5 2>$null
+    & $adb shell settings put global show_hw_screen_updates 0 2>$null
+    & $adb shell setprop debug.sf.showupdates 0 2>$null
+    & $adb shell setprop debug.hwui.show_dirty_regions false 2>$null
+    $renderer = ((& $adb shell dumpsys SurfaceFlinger 2>$null) |
+        Select-String '^GLES:' | Select-Object -First 1).Line
+    if ($renderer) {
+        if ($renderer -match 'SwiftShader') {
+            Aviso "renderizacao por software ativa: $renderer"
+        } else {
+            Ok "renderizacao acelerada ativa: $renderer"
+        }
+    }
     Ok 'emulador pronto'
 
     Etapa '3. App'
